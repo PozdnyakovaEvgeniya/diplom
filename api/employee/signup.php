@@ -26,6 +26,7 @@
         isset($employee->department_id) &&
         isset($employee->status) &&
         isset($employee->working_mode) &&
+        !$employee->findNumber() &&
         $employee->create()
     ) {
         http_response_code(200);

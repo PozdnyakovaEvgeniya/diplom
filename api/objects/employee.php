@@ -39,5 +39,20 @@
 
             return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->status, $this->working_mode, $password));
         }
+
+        function findNumber() {
+            $this->number=htmlspecialchars(strip_tags($this->number));
+
+            $query = "SELECT * FROM `employees` WHERE `number` = ? LIMIT 0,1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$this->number]);
+            $num = $stmt->rowCount();
+            
+            if ($num > 0) {
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            return false;
+        }
     }
 ?>

@@ -1,0 +1,49 @@
+<template>
+  <div class="login_page">
+    <form class="form" @submit="login">
+      <h4>Авторизация</h4>
+      <div class="form-field">
+        <span>Логин</span>
+        <input type="text" v-model="username" />
+      </div>
+      <div class="form-field">
+        <span>Пароль</span>
+        <input v-model="password" />
+      </div>
+      <div class="form-button">
+        <button @click="login">Войти</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+
+  methods: {
+    login(e) {
+      e.preventDefault();
+      let serchParams = new URLSearchParams();
+
+      serchParams.set("number", this.username);
+      serchParams.set("password", this.password);
+      fetch("http://localhost/api/employee/signup.php", {
+        method: "POST",
+        body: serchParams,
+      }).then((response) => {
+        console.log(response);
+      });
+    },
+  },
+};
+</script>
+
+<style></style>

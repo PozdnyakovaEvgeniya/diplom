@@ -4,7 +4,7 @@
       <h4>Авторизация</h4>
       <div class="form-field">
         <span>Логин</span>
-        <input type="text" v-model="username" />
+        <input type="text" v-model="number" />
       </div>
       <div class="form-field">
         <span>Пароль</span>
@@ -23,7 +23,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      username: "",
+      number: "",
       password: "",
     };
   },
@@ -33,9 +33,9 @@ export default {
       e.preventDefault();
       let serchParams = new URLSearchParams();
 
-      serchParams.set("number", this.username);
+      serchParams.set("number", this.number);
       serchParams.set("password", this.password);
-      fetch("http://localhost/api/employee/signup.php", {
+      fetch("http://localhost/api/employee/login.php", {
         method: "POST",
         body: serchParams,
       }).then((response) => {

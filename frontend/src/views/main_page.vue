@@ -9,6 +9,9 @@
         @rowClick="route"
       ></Table>
     </div>
+    <div class="container-button">
+      <button>Закрыть</button>
+    </div>
   </div>
 </template>
 

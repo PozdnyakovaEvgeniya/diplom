@@ -11,7 +11,7 @@
         {{ month }}
       </router-link>
     </div>
-    <router-view class="container" :key="$route.path"></router-view>
+      <router-view class="container" :key="$route.path"></router-view>
   </div>
 </template>
 
@@ -55,7 +55,7 @@ export default {
 :root {
   --grey: #e6e6fa;
   --white: #ffffff;
-  --purple: #9370db;
+  --purple:#9999f8;
   --black: #000000;
   --blackout: #F5F5F5B3;
 }
@@ -145,6 +145,7 @@ input {
 
 .content {
   padding: 20px;
+  height: calc(100% - 150px);
 }
 
 .form {
@@ -164,7 +165,13 @@ input {
   font-size: 13px;
 }
 
-.form-button {
-  justify-self: right;
+.form-button,
+.container-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.container-button {
+  padding: 20px;
 }
 </style>

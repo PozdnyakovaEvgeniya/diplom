@@ -58,6 +58,7 @@
 <style scoped>
     .table-wrapper {
         width: 100%;
+        height: calc(100vh - 192px);
         overflow: auto;
         border: 1px solid var(--grey);
         border-radius: 5px;
@@ -71,6 +72,9 @@
     .header {
         grid-row: 1/3;
         font-weight: 600;
+        position: sticky;
+        top: 0;
+        background: var(--white);
     }
 
     .cell {

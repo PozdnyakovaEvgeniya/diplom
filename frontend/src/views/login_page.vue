@@ -32,13 +32,13 @@ export default {
   methods: {
     login(e) {
       e.preventDefault();
-      let serchParams = new URLSearchParams();
+      let searchParams = new URLSearchParams();
 
-      serchParams.set("number", this.number);
-      serchParams.set("password", this.password);
+      searchParams.set("number", this.number);
+      searchParams.set("password", this.password);
       fetch("http://localhost/api/employee/login.php", {
         method: "POST",
-        body: serchParams,
+        body: searchParams,
       })
         .then((response) => {
           return response.json();

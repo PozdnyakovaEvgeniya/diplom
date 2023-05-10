@@ -1,9 +1,7 @@
 <template>
   <div class="header">
     <h1>{{ name }}</h1>
-    <div class="user">
-      Иванов И.И.      
-    </div>
+    <div class="user">Иванов И.И.</div>
   </div>
 </template>
 
@@ -11,6 +9,42 @@
 export default {
   props: {
     name: String,
+  },
+
+  created() {
+    let jwt = this.getCookie("jwt");
+
+    let searchParams = new URLSearchParams();
+    searchParams.set("jwt", jwt);
+    console.log(searchParams);
+
+    fetch("http://localhost/api/employee/validate_token.php", {
+      method: "POST",
+      body: searchParams,
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        console.log(json);
+      });
+  },
+
+  methods: {
+    getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let cookies = decodedCookie.split(";");
+      for (let cookie of cookies) {
+        while (cookie.charAt(0) == " ") {
+          cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(name) == 0) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return "";
+    },
   },
 };
 </script>

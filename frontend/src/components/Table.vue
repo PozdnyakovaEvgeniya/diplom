@@ -8,12 +8,15 @@
             >
                 {{ column.name }}
             </div>
-            <template v-for="(row, index1) in rows" :key="index1">
+            <template v-for="row in rows" :key="row[0].name">
                 <div 
-                    v-for="(item, index2) in row"
+                    v-for="(item, index) in row"
                     :class="'cell ' + item.id"
-                    :key="index2"
-                    @click="route"
+                    :key="index"
+                    :id="'row' + row[0].name"
+                    @mouseenter="hover('row' + row[0].name)"
+                    @mouseleave="unhover('row' + row[0].name)"
+                    @click="$emit('rowClick', row[0].name)"
                 >
                     {{ item.name }}
                 </div>
@@ -27,14 +30,28 @@
         props: {
             columns: Array,
             rows: Array,
-            selected: String,
+            selected: Boolean,
         },
 
         methods: {
-            route() {
+            hover(id) {
+                if (this.selected) {
+                    let cells = document.querySelectorAll('#' + id);
+                    for (let cell of cells) {
+                        cell.classList.add('hover');
+                    }
+                }                    
+            },
 
+            unhover(id) {
+                if (this.selected) {
+                    let cells = document.querySelectorAll('#' + id);
+                    for (let cell of cells) {
+                        cell.classList.remove('hover');
+                    }
+                }         
             }
-        }
+        },
     }
 </script>
 
@@ -42,12 +59,12 @@
     .table-wrapper {
         width: 100%;
         overflow: auto;
+        border: 1px solid var(--grey);
+        border-radius: 5px;
     }
 
     .table {
         display: grid;
-        border-left: 1px solid var(--grey);
-        border-top: 1px solid var(--grey);
         width: 100%;
     }
 
@@ -60,5 +77,11 @@
         border-right: 1px solid var(--grey);
         border-bottom: 1px solid var(--grey);
         padding: 5px;
+    }
+
+    .hover {
+        background-color: var(--grey);
+        border-color: var(--white);
+        cursor: pointer;
     }
 </style>

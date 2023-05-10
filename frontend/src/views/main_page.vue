@@ -2,7 +2,12 @@
   <div class="department_page">
     <Header :name="department"></Header>
     <div class="content">
-      <Table :columns="columns" :rows="rows" :link="'/employer/'"></Table>
+      <Table 
+        :columns="columns" 
+        :rows="rows" 
+        :selected="true" 
+        @rowClick="route"
+      ></Table>
     </div>
   </div>
 </template>
@@ -10,7 +15,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
-import json1 from "@/assets/json/employers.json";
+import json1 from "@/assets/json/employees.json";
 import json2 from "@/assets/json/hours.json";
 
 export default {
@@ -18,7 +23,7 @@ export default {
 
   data() {
     return {
-      employers: json1,
+      employees: json1,
       hours: json2,
       columns: [
         { id: "id", name: "Табельный номер" },
@@ -55,16 +60,16 @@ export default {
     },
 
     getData() {
-      for (let employer of this.employers) {
+      for (let employee of this.employees) {
         let date = new Date(
           this.$route.params.year,
           this.$route.params.month,
           1
         );
         let row = [
-          { id: "id", name: employer.id },
-          { id: "name", name: employer.name },
-          { id: "job_title", name: employer.job_title },
+          { id: "id", name: employee.id },
+          { id: "name", name: employee.name },
+          { id: "job_title", name: employee.job_title },
         ];
 
         while (this.$route.params.month == date.getMonth()) {
@@ -85,6 +90,11 @@ export default {
       }
 
       return num;
+    },
+
+    route(id) {
+      console.log(this.$route.path);
+      this.$router.push(`/employee/${id}`);
     },
 
     getDepartment() {

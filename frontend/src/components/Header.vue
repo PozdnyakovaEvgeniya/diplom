@@ -31,4 +31,8 @@ export default {
   gap: 10px;
   align-items: center;
 }
+
+button {
+  padding: 5px 10px;
+}
 </style>

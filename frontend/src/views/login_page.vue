@@ -8,7 +8,7 @@
       </div>
       <div class="form-field">
         <span>Пароль</span>
-        <input v-model="password" />
+        <input type="password" v-model="password" />
       </div>
       <div class="form-button">
         <button @click="login">Войти</button>
@@ -44,7 +44,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .login_page {
     width: 100vw;
     height: 100vh;
@@ -52,5 +52,9 @@ export default {
     justify-content: center;
     align-items: center;
     background: var(--blackout);
+  }
+
+  .form {
+    box-shadow: 0 6px 15px var(--black);
   }
 </style>

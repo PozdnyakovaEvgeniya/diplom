@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="nav">
+    <div v-if="$route.path != '/login'" class="nav">
       <h4>{{ now.getFullYear() }} год</h4>
       <router-link
         v-for="(month, index) in months"
@@ -80,7 +80,7 @@ button {
   background: var(--purple);
   color: var(--white);
   border: none;
-  padding: 5px 10px;
+  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -149,7 +149,6 @@ input {
 
 .form {
   border-radius: 5px;
-  border: 1px solid var(--grey);
   padding: 40px 50px;
   display: grid;
   gap: 20px;

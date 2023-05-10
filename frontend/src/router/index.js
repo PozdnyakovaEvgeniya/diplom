@@ -6,8 +6,8 @@ const routes = [
     component: () => import("@/views/main_page.vue"),
   },
   {
-    path: "/employer/:id",
-    component: () => import("@/views/employer_page.vue"),
+    path: "/employee/:id",
+    component: () => import("@/views/employee_page.vue"),
   },
   {
     path: "/login",

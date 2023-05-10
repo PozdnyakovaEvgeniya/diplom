@@ -1,11 +1,13 @@
 <?php
 
-error_reporting(E_ALL);
+  error_reporting(E_ALL);
 
-date_default_timezone_set("Asia/Omsk");
+  date_default_timezone_set("Asia/Omsk");
 
-$key = "igjsdlkghs;leigjlsdfkgnsdkf";
-$iss = "http://any-site.org";
-$aud = "http://any-site.com";
-$iat = 1356999524;
-$nbf = 1357000000;
+  $key = "igjsdlkghs;leigjlsdfkgnsdkf";
+  $iss = "http://any-site.org";
+  $aud = "http://any-site.com";
+  $iat = 1356999524;
+  $nbf = 1357000000;
+
+?>

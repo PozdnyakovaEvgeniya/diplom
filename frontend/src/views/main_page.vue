@@ -8,8 +8,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
 import json1 from "@/assets/json/employers.json";
@@ -90,10 +88,7 @@ export default {
     },
 
     getDepartment() {
-      axios.get("http://localhost/api/ind.php").then((response) => {
-        this.department = response.data[0];
-        console.log(response.data[0]);
-      });
+      
     },
   },
 };

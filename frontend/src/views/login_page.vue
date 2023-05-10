@@ -1,7 +1,7 @@
 <template>
   <div class="login_page">
     <form class="form" @submit="login">
-      <h4>Авторизация</h4>
+      <h4>Вход в систему</h4>
       <div class="form-field">
         <span>Логин</span>
         <input type="text" v-model="number" />
@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
@@ -46,4 +44,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+  .login_page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--blackout);
+  }
+</style>

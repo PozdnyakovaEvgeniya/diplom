@@ -48,7 +48,7 @@ export default {
 #app {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(90deg, var(--white) 50%, var(--grey) 50%);
+  background: linear-gradient(90deg, var(--white), var(--grey));
   overflow: hidden;
 }
 
@@ -57,6 +57,7 @@ export default {
   --white: #ffffff;
   --purple: #9370db;
   --black: #000000;
+  --blackout: #F5F5F5B3;
 }
 
 a {
@@ -71,13 +72,26 @@ h1 {
   color: var(--purple);
 }
 
+h4 {
+  font-size: 18px;
+}
+
 button {
   background: var(--purple);
   color: var(--white);
   border: none;
   padding: 5px 10px;
-  border-radius: 20px;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+input {
+  background: var(--grey);
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  width: 350px;
+  border-radius: 5px;
 }
 
 .wrapper {
@@ -85,7 +99,7 @@ button {
   height: 100vh;
   display: grid;
   grid-template-columns: 125px calc(100% - 125px);
-  border-radius: 32px;
+  border-radius: 12px;
   border: 2px solid var(--grey);
 }
 
@@ -96,7 +110,7 @@ button {
   display: grid;
   align-content: flex-start;
   background: var(--grey);
-  border-radius: 30px 0 0 30px;
+  border-radius: 10px 0 0 10px;
   border-right: 2px solid var(--grey);
 }
 
@@ -113,7 +127,7 @@ button {
 .nav a:hover,
 .nav .router-link-active {
   background: var(--white);
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .nav a.now {
@@ -121,7 +135,7 @@ button {
 }
 
 .container {
-  border-radius: 0 30px 30px 0;
+  border-radius: 0 10px 10px 0;
   background: var(--white);
 }
 
@@ -131,5 +145,27 @@ button {
 
 .content {
   padding: 20px;
+}
+
+.form {
+  border-radius: 5px;
+  border: 1px solid var(--grey);
+  padding: 40px 50px;
+  display: grid;
+  gap: 20px;
+  background: var(--white);
+}
+
+.form-field {
+  display: grid;
+  gap: 5px;
+}
+
+.form-field span {
+  font-size: 13px;
+}
+
+.form-button {
+  justify-self: right;
 }
 </style>

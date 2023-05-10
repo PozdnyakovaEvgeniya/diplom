@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 date_default_timezone_set("Asia/Omsk");
 
-$key = "your_secret_key";
+$key = "igjsdlkghs;leigjlsdfkgnsdkf";
 $iss = "http://any-site.org";
 $aud = "http://any-site.com";
 $iat = 1356999524;

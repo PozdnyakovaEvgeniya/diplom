@@ -11,7 +11,7 @@
         {{ month }}
       </router-link>
     </div>
-      <router-view class="container" :key="$route.path"></router-view>
+    <router-view class="container" :key="$route.path"></router-view>
   </div>
 </template>
 
@@ -20,17 +20,30 @@ export default {
   data() {
     return {
       now: new Date(),
-      months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+      months: [
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь",
+      ],
     };
   },
 
   methods: {
     setClass(year, month) {
       if (year == this.now.getFullYear() && month == this.now.getMonth()) {
-        return 'now';
+        return "now";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -55,9 +68,9 @@ export default {
 :root {
   --grey: #e6e6fa;
   --white: #ffffff;
-  --purple:#9999f8;
+  --purple: #9999f8;
   --black: #000000;
-  --blackout: #F5F5F5B3;
+  --blackout: #f5f5f5b3;
 }
 
 a {
@@ -173,5 +186,9 @@ input {
 
 .container-button {
   padding: 0 20px 20px;
+}
+
+.error {
+  color: red;
 }
 </style>

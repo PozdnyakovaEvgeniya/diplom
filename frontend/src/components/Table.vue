@@ -58,7 +58,6 @@
 <style scoped>
     .table-wrapper {
         width: 100%;
-        height: calc(100vh - 192px);
         overflow: auto;
         border: 1px solid var(--grey);
         border-radius: 5px;

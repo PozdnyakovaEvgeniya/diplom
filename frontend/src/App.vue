@@ -172,6 +172,6 @@ input {
 }
 
 .container-button {
-  padding: 20px;
+  padding: 0 20px 20px;
 }
 </style>

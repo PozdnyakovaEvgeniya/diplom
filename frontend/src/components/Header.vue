@@ -2,8 +2,7 @@
   <div class="header">
     <h1>{{ name }}</h1>
     <div class="user">
-      <router-link to="/account/:id">Иванов И.И.</router-link>      
-      <button>Выйти</button>
+      Иванов И.И.      
     </div>
   </div>
 </template>
@@ -30,6 +29,7 @@ export default {
   display: flex;
   gap: 10px;
   align-items: center;
+  color: var(--purple);
 }
 
 button {

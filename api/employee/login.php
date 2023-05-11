@@ -18,16 +18,18 @@
 	include_once "../libs/php-jwt/src/JWT.php";
 	use \Firebase\JWT\JWT;
 	
-	if ($employee_exists && password_verify($_POST['password'], $employee_exists['password'])) {
+	if ($employee_exists && password_verify($_POST['password'], $employee->password)) {
 		$token = array(
 			"iss" => $iss,
 			"aud" => $aud,
 			"iat" => $iat,
 			"nbf" => $nbf,
 			"data" => array(
-				"id" => $employee_exists['id'],
-				"number" => $employee_exists['number'],
-				"status" => $employee_exists['status'],
+				"id" => $employee->id,
+				"number" => $employee->number,
+				"status" => $employee->status,
+				"department_id" => $employee->department_id,
+				"short_name" => $employee->getShortName(),
 			)
 		);    
 		

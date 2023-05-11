@@ -49,10 +49,35 @@
       $num = $stmt->rowCount();
       
       if ($num > 0) {
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $this->id = $row['id'];
+        $this->number = $row['number'];
+        $this->surname = $row['surname'];
+        $this->name = $row['name'];
+        $this->patronymic = $row['patronymic'];
+        $this->job_title = $row['job_title'];
+        $this->department_id = $row['department_id'];
+        $this->status = $row['status'];
+        $this->working_mode = $row['working_mode'];
+        $this->password = $row['password'];
+
+        return true;
       }
 
       return false;
+    }
+
+    function getFullName() {
+      return $this->surname + " " + $this->name + " " + $this->patronymic;
+    }
+
+    function getShortName() {
+      // $this->surname = htmlspecialchars(strip_tags($this->surname));
+      // $this->name = htmlspecialchars(strip_tags($this->name));
+      // $this->patronymic = htmlspecialchars(strip_tags($this->patronymic));
+      // print_r($this->surname + " " + $this->name[0] + "." + $this->patronymic[0] + ".");
+      return $this->surname + " " + $this->name[0] + "." + $this->patronymic[0] + ".";
     }
   }
 ?>

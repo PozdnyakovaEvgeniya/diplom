@@ -2,23 +2,24 @@
     <div class="table-wrapper">
         <div class="table">
             <div 
-                v-for="(column, index) in columns"
-                :class="'cell header ' + column.id"
+                v-for="(header, index) in headers"
+                :class="'cell header ' + header.id"
                 :key="index"
             >
-                {{ column.name }}
+                {{ header.name }}
             </div>
-            <template v-for="row in rows" :key="row[0].name">
+            <template v-for="(elem, index1) in data" :key="elem[0].name">
                 <div 
-                    v-for="(item, index) in row"
+                    v-for="(item, index2) in elem"
                     :class="'cell ' + item.id"
-                    :key="index"
-                    :id="'row' + row[0].name"
-                    @mouseenter="hover('row' + row[0].name)"
-                    @mouseleave="unhover('row' + row[0].name)"
-                    @click="$emit('rowClick', row[0].name)"
+                    :key="index2"
+                    :id="elem[0].name ? 'elem' + elem[0].name : ''"
+                    @mouseenter="hover('elem' + elem[0].name)"
+                    @mouseleave="unhover('elem' + elem[0].name)"
+                    @click="$emit('rowClick', elem[0].name)"
                 >
-                    {{ item.name }}
+                    <input v-if="input && item.id == 'date'" type="text" :value="item.name">
+                    <template v-else>{{ item.name }}</template>                    
                 </div>
             </template>            
         </div>
@@ -28,9 +29,10 @@
 <script>
     export default {
         props: {
-            columns: Array,
-            rows: Array,
+            headers: Array,
+            data: Array,
             selected: Boolean,
+            input: Boolean,
         },
 
         methods: {
@@ -61,6 +63,8 @@
         overflow: auto;
         border: 1px solid var(--grey);
         border-radius: 5px;
+        height: auto;
+        max-height: calc(100vh - 170px);
     }
 
     .table {
@@ -86,5 +90,9 @@
         background-color: var(--grey);
         border-color: var(--white);
         cursor: pointer;
+    }
+
+    input {
+        width: 50px;
     }
 </style>

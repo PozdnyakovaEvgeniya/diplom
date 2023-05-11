@@ -98,7 +98,7 @@ button {
   cursor: pointer;
 }
 
-input {
+.form-field input {
   background: var(--grey);
   border: none;
   outline: none;

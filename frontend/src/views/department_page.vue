@@ -2,8 +2,8 @@
   <div class="department_page">
     <div class="content">
       <Table 
-        :columns="columns" 
-        :rows="rows" 
+        :headers="headers" 
+        :data="data" 
         :selected="true" 
         @rowClick="route"
       ></Table>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
 import json1 from "@/assets/json/employees.json";
 import json2 from "@/assets/json/hours.json";
@@ -27,12 +26,12 @@ export default {
     return {
       employees: json1,
       hours: json2,
-      columns: [
+      headers: [
         { id: "id", name: "Табельный номер" },
         { id: "name", name: "ФИО" },
         { id: "job_title", name: "Должность" },
       ],
-      rows: [],
+      data: [],
     };
   },
 
@@ -51,7 +50,7 @@ export default {
           this.normalizeNum(date.getDate()) +
           "." +
           this.normalizeNum(date.getMonth() + 1);
-        this.columns.push({ id: "date", name: newDate });
+        this.headers.push({ id: "date", name: newDate });
         date = new Date(
           date.getFullYear(),
           date.getMonth(),
@@ -67,21 +66,21 @@ export default {
           this.$route.params.month,
           1
         );
-        let row = [
+        let elem = [
           { id: "id", name: employee.id },
           { id: "name", name: employee.name },
           { id: "job_title", name: employee.job_title },
         ];
 
         while (this.$route.params.month == date.getMonth()) {
-          row.push({ id: "date", name: json2[0].time });
+          elem.push({ id: "date", name: json2[0].time });
           date = new Date(
             date.getFullYear(),
             date.getMonth(),
             date.getDate() + 1
           );
         }
-        this.rows.push(row);
+        this.data.push(elem);
       }
     },
 
@@ -105,8 +104,4 @@ export default {
 };
 </script>
 
-<style>
-  .table-wrapper {
-    height: calc(100vh - 170px);
-  }
-</style>
+<style scoped></style>

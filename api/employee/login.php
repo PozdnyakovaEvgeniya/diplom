@@ -17,6 +17,7 @@
 	include_once "../libs/php-jwt/src/SignatureInvalidException.php";
 	include_once "../libs/php-jwt/src/JWT.php";
 	use \Firebase\JWT\JWT;
+
 	
 	if ($employee_exists && password_verify($_POST['password'], $employee->password)) {
 		$token = array(

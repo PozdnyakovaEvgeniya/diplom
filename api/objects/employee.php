@@ -69,15 +69,11 @@
     }
 
     function getFullName() {
-      return $this->surname + " " + $this->name + " " + $this->patronymic;
+      return $this->surname." ".$this->name." ".$this->patronymic;
     }
 
     function getShortName() {
-      // $this->surname = htmlspecialchars(strip_tags($this->surname));
-      // $this->name = htmlspecialchars(strip_tags($this->name));
-      // $this->patronymic = htmlspecialchars(strip_tags($this->patronymic));
-      // print_r($this->surname + " " + $this->name[0] + "." + $this->patronymic[0] + ".");
-      return $this->surname + " " + $this->name[0] + "." + $this->patronymic[0] + ".";
+      return $this->surname." ".mb_substr($this->name, 0, 1).".".mb_substr($this->patronymic, 0, 1).".";
     }
   }
 ?>

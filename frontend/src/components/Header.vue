@@ -1,7 +1,10 @@
 <template>
   <div class="header">
     <h1>{{ name }}</h1>
-    <div class="user">Иванов И.И.</div>
+    <div class="user">
+      {{ short_name }}
+      <button>Выйти</button>
+    </div>
   </div>
 </template>
 
@@ -9,6 +12,12 @@
 export default {
   props: {
     name: String,
+  },
+
+  data() {
+    return {
+      short_name: "",
+    };
   },
 
   created() {
@@ -26,7 +35,7 @@ export default {
         return response.json();
       })
       .then((json) => {
-        console.log(json);
+        this.short_name = json.data.short_name;
       });
   },
 
@@ -63,7 +72,6 @@ export default {
   display: flex;
   gap: 10px;
   align-items: center;
-  color: var(--purple);
 }
 
 button {

@@ -34,6 +34,7 @@ export default {
 a {
   padding: 5px 10px;
   border: 1px solid var(--grey);
+  border-radius: 5px;
 }
 
 a:hover {

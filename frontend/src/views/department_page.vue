@@ -8,7 +8,7 @@
         @rowClick="route"
       ></Table>
     </div>
-    <div class="container-bottom">
+    <div class="content-bottom">
       <div></div>
       <button>Закрыть табель</button>
     </div>

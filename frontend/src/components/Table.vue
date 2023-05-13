@@ -19,6 +19,7 @@
           @click="$emit('rowClick', elem[0].name)"
         >
           <input
+            :data-date="item.date"
             v-if="item.input && item.id == 'date'"
             type="text"
             :value="item.name"
@@ -67,7 +68,7 @@ export default {
   border: 1px solid var(--grey);
   border-radius: 5px;
   height: auto;
-  max-height: calc(100vh - 170px);
+  max-height: calc(100vh - 181px);
 }
 
 .table {

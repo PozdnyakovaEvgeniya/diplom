@@ -29,6 +29,7 @@
 				"id" => $employee->id,
 				"number" => $employee->number,
 				"status" => $employee->status,
+				"job_title" => $employee->job_title,
 				"department_id" => $employee->department_id,
 				"short_name" => $employee->getShortName(),
 			)

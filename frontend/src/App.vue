@@ -107,16 +107,16 @@ button {
 
 input {
   background: var(--grey);
+  border-radius: 5px;
   border: none;
   outline: none;
-  padding: 2px;
+  padding: 2px 5px;
   width: 40px;
 }
 
 .form-field input {
   padding: 10px 20px;
   width: 350px;
-  border-radius: 5px;
 }
 
 .wrapper {
@@ -124,7 +124,7 @@ input {
   height: 100vh;
   display: grid;
   grid-template-columns: 125px calc(100% - 125px);
-  border-radius: 12px;
+  border-radius: 22px;
   border: 2px solid var(--grey);
 }
 
@@ -135,7 +135,7 @@ input {
   display: grid;
   align-content: flex-start;
   background: var(--grey);
-  border-radius: 10px 0 0 10px;
+  border-radius: 20px 0 0 20px;
   border-right: 2px solid var(--grey);
 }
 
@@ -160,7 +160,7 @@ input {
 }
 
 .container {
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 20px 20px 0;
   background: var(--white);
 }
 
@@ -178,6 +178,13 @@ input {
 .content {
   padding: 20px;
   height: calc(100% - 150px);
+}
+
+.content-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 20px;
+  align-items: center;
 }
 
 .form {
@@ -200,12 +207,6 @@ input {
 .form-button {
   display: flex;
   justify-content: flex-end;
-}
-
-.container-bottom {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px 20px;
 }
 
 .error {

@@ -2,8 +2,12 @@
   <div class="header">
     <h1>{{ name }}</h1>
     <div class="user">
-      {{ short_name }}
-      <button>Выйти</button>
+      <span>{{ short_name }}</span>
+      <span>{{ job_title }}</span>
+      <div class="dropdown">
+        <div>Сменить пароль</div>
+        <div @click="logout">Выйти</div>
+      </div>
     </div>
   </div>
 </template>
@@ -17,6 +21,7 @@ export default {
   data() {
     return {
       short_name: "",
+      job_title: "",
     };
   },
 
@@ -25,7 +30,6 @@ export default {
 
     let searchParams = new URLSearchParams();
     searchParams.set("jwt", jwt);
-    console.log(searchParams);
 
     fetch("http://localhost/api/employee/validate_token.php", {
       method: "POST",
@@ -36,6 +40,7 @@ export default {
       })
       .then((json) => {
         this.short_name = json.data.short_name;
+        this.job_title = json.data.job_title;
       });
   },
 
@@ -54,6 +59,8 @@ export default {
       }
       return "";
     },
+
+    logout() {},
   },
 };
 </script>
@@ -61,7 +68,7 @@ export default {
 <style scoped>
 .header {
   max-width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
   border-bottom: 2px solid var(--grey);
   display: flex;
   justify-content: space-between;
@@ -69,12 +76,37 @@ export default {
 }
 
 .user {
-  display: flex;
+  display: grid;
   gap: 10px;
-  align-items: center;
+  border: 1px solid var(--grey);
+  padding: 5px 15px;
+  border-radius: 5px;
+  position: relative;
 }
 
-button {
-  padding: 5px 10px;
+.user .dropdown {
+  display: none;
+  position: absolute;
+  top: 59px;
+  left: -1px;
+  z-index: 9;
+  background: var(--grey);
+  width: calc(100% + 2px);
+  border-radius: 5px;
+  border: 1px solid var(--grey);
+}
+
+.user:hover .dropdown {
+  display: grid;
+}
+
+.user .dropdown > div {
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.user .dropdown > div:hover {
+  background: var(--white);
+  border-radius: 5px;
 }
 </style>

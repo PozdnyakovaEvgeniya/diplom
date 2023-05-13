@@ -9,6 +9,10 @@
       </div>
       <Table :headers="headers" :data="data"></Table>
     </div>
+    <div class="content-bottom">
+      <div>Доступно часов отгула: {{ overtime }}</div>
+      <button>Сохранить</button>
+    </div>
   </div>
 </template>
 
@@ -28,6 +32,7 @@ export default {
       headers: [{ id: "name", name: "Часов" }],
       data: [],
       arr: ["Отработано по графику", "Переработано", "Отгул"],
+      overtime: 5,
     };
   },
 
@@ -65,7 +70,14 @@ export default {
         let input = item == "Отгул" ? true : false;
 
         while (this.$route.params.month == date.getMonth()) {
-          elem.push({ id: "date", name: json[0].time, input });
+          elem.push({
+            id: "date",
+            name: json[0].time,
+            input,
+            date: `${date.getFullYear()}-${this.normalizeNum(
+              date.getMonth()
+            )}-${this.normalizeNum(date.getDate())}`,
+          });
           date = new Date(
             date.getFullYear(),
             date.getMonth(),

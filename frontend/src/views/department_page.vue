@@ -1,14 +1,15 @@
 <template>
   <div class="department_page">
     <div class="content">
-      <Table 
-        :headers="headers" 
-        :data="data" 
-        :selected="true" 
+      <Table
+        :headers="headers"
+        :data="data"
+        :selected="true"
         @rowClick="route"
       ></Table>
     </div>
-    <div class="container-button">
+    <div class="container-bottom">
+      <div></div>
       <button>Закрыть табель</button>
     </div>
   </div>
@@ -94,12 +95,10 @@ export default {
 
     route(id) {
       console.log(this.$route.path);
-      this.$router.push({name: "employee", params: {id}});
+      this.$router.push({ name: "employee", params: { id } });
     },
 
-    getDepartment() {
-      
-    },
+    getDepartment() {},
   },
 };
 </script>

@@ -5,7 +5,7 @@
       <router-link
         v-for="(month, index) in months"
         :key="index"
-        :to="'/main/' + now.getFullYear() + '/' + index"
+        :to="setPath(now.getFullYear(), index)"
         :class="setClass(now.getFullYear(), index)"
       >
         {{ month }}
@@ -34,6 +34,7 @@ export default {
         "Ноябрь",
         "Декабрь",
       ],
+      path: "",
     };
   },
 
@@ -42,6 +43,12 @@ export default {
       if (year == this.now.getFullYear() && month == this.now.getMonth()) {
         return "now";
       }
+    },
+
+    setPath(year, month) {
+      return this.$route.path.includes("department")
+        ? `/main/${year}/${month}`
+        : `/main/${year}/${month}/employee/${this.$route.params.id}`;
     },
   },
 };
@@ -98,10 +105,15 @@ button {
   cursor: pointer;
 }
 
-.form-field input {
+input {
   background: var(--grey);
   border: none;
   outline: none;
+  padding: 2px;
+  width: 40px;
+}
+
+.form-field input {
   padding: 10px 20px;
   width: 350px;
   border-radius: 5px;
@@ -156,6 +168,13 @@ button {
   text-decoration: underline;
 }
 
+.content-header {
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .content {
   padding: 20px;
   height: calc(100% - 150px);
@@ -178,13 +197,14 @@ button {
   font-size: 13px;
 }
 
-.form-button,
-.container-button {
+.form-button {
   display: flex;
   justify-content: flex-end;
 }
 
-.container-button {
+.container-bottom {
+  display: flex;
+  justify-content: space-between;
   padding: 0 20px 20px;
 }
 

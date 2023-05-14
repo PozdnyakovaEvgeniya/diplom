@@ -106,7 +106,12 @@ export default {
         ];
 
         while (this.$route.params.month == date.getMonth()) {
-          elem.push({ id: "date", name: json2[0].time });
+          elem.push({
+            id: "date",
+            name:
+              date.getDay() == 6 || date.getDay() == 0 ? "В" : json2[0].time,
+            background: date.getDay() == 6 || date.getDay() == 0 ? true : false,
+          });
           date = new Date(
             date.getFullYear(),
             date.getMonth(),

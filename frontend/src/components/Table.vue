@@ -15,7 +15,7 @@
         <template v-for="item in elem" :key="item.id">
           <div
             v-if="!item.hidden"
-            :class="'cell ' + item.id"
+            :class="'cell ' + item.id + (item.background ? ' background' : '')"
             :id="selected ? 'elem' + elem[0].name : ''"
             @mouseenter="hover('elem' + elem[0].name)"
             @mouseleave="unhover('elem' + elem[0].name)"
@@ -98,5 +98,11 @@ export default {
   background-color: var(--grey);
   border-color: var(--white);
   cursor: pointer;
+}
+
+.background {
+  background: var(--grey);
+  border-right: 1px solid var(--white);
+  border-bottom: 1px solid var(--white);
 }
 </style>

@@ -48,6 +48,26 @@
       return $stmt;
     }
 
+    function readOne()
+    {
+      $query = "SELECT * FROM `employees` WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->id));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->number = $row["number"];
+      $this->surname = $row["surname"];
+      $this->name = $row["name"];
+      $this->patronymic = $row["patronymic"];
+      $this->job_title = $row["job_title"];
+      $this->department_id = $row["department_id"];
+      $this->status = $row["status"];
+      $this->working_mode = $row["working_mode"];
+      $this->overtime = $row["overtime"];
+      $this->password = $row["password"];
+    }
+
     function findNumber() {
       $this->number=htmlspecialchars(strip_tags($this->number));
 

@@ -5,12 +5,15 @@
         <Back
           :to="`/main/${$route.params.year}/${$route.params.month}/department`"
         ></Back>
-        <h4>Иванов Иван Иванович</h4>
+        <div class="employee">
+          <h4>{{ employee.name }}</h4>
+          <div>{{ employee.job_title }}</div>
+        </div>
       </div>
       <Table :headers="headers" :data="data"></Table>
     </div>
     <div class="content-bottom">
-      <div>Доступно часов отгула: {{ overtime }}</div>
+      <div>Доступно часов отгула: {{ employee.overtime }}</div>
       <button>Сохранить</button>
     </div>
   </div>
@@ -20,6 +23,7 @@
 import Table from "@/components/Table.vue";
 import json from "@/assets/json/hours.json";
 import Back from "@/components/Back.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -29,19 +33,32 @@ export default {
 
   data() {
     return {
+      employee: {},
       headers: [{ id: "name", name: "Часов" }],
       data: [],
       arr: ["Отработано по графику", "Переработано", "Отгул"],
-      overtime: 5,
     };
   },
 
   created() {
-    this.getDate();
-    this.getData();
+    this.getEmployee().then(() => {
+      this.getDate();
+      this.getData();
+    });
   },
 
   methods: {
+    async getEmployee() {
+      await axios
+        .get(
+          `http://localhost/api/employee/read_one.php?id=${this.$route.params.id}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.employee = response.data;
+        });
+    },
+
     getDate() {
       let date = new Date(this.$route.params.year, this.$route.params.month, 1);
 
@@ -99,4 +116,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.employee {
+  display: grid;
+  gap: 10px;
+}
+</style>

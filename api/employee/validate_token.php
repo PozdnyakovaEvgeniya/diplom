@@ -8,9 +8,10 @@
 	include_once "../libs/php-jwt/src/JWT.php";
 	include_once "../libs/php-jwt/src/Key.php";
   use \Firebase\JWT\JWT;
-  use \Firebase\JWT\Key; 
+  use \Firebase\JWT\Key;
 
-  $jwt = $_POST['jwt'];  
+	$data = json_decode(file_get_contents("php://input")); 
+  $jwt = $data->jwt;  
   
   if ($jwt) {    
     try {
@@ -20,7 +21,7 @@
       
       echo json_encode(array(
         "message" => "success",
-        "data" => $decoded->data
+        "user" => $decoded->data
       ));
     }
     

@@ -51,6 +51,13 @@ export default {
         : `/main/${year}/${month}/employee/${this.$route.params.id}`;
     },
   },
+
+  beforeCreate() {
+    console.log(localStorage.getItem("jwt"));
+    if (!localStorage.getItem("jwt")) {
+      this.$router.replace("/login");
+    }
+  },
 };
 </script>
 

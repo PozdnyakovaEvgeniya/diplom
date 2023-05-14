@@ -68,7 +68,7 @@ export default {
   border: 1px solid var(--grey);
   border-radius: 5px;
   height: auto;
-  max-height: calc(100vh - 181px);
+  max-height: calc(100vh - 178px);
 }
 
 .table {

@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -30,40 +32,23 @@ export default {
   },
 
   methods: {
-    login(e) {
+    async login(e) {
       e.preventDefault();
-      let searchParams = new URLSearchParams();
-
-      searchParams.set("number", this.number);
-      searchParams.set("password", this.password);
-      fetch("http://localhost/api/employee/login.php", {
-        method: "POST",
-        body: searchParams,
-      })
-        .then((response) => {
-          return response.json();
+      await axios
+        .post("http://localhost/api/employee/login.php", {
+          number: this.number,
+          password: this.password,
         })
-        .then((json) => {
-          if (json.message == "success") {
-            this.setCookie("jwt", json.jwt, 1);
-            this.$router.push({
-              name: "department",
-              params: {
-                year: this.now.getFullYear(),
-                month: this.now.getMonth(),
-              },
-            });
-          } else {
-            this.error = json.message;
-          }
+        .then((response) => {
+          localStorage.setItem("jwt", response.data.jwt);
+          this.$router.replace({
+            name: "department",
+            params: {
+              year: this.now.getFullYear(),
+              month: this.now.getMonth(),
+            },
+          });
         });
-    },
-
-    setCookie(cname, cvalue, exdays) {
-      let now = new Date();
-      now.setTime(now.getTime() + exdays * 24 * 69 * 60 * 1000);
-      let expires = "expires=" + now.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     },
   },
 };

@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <h1>{{ name }}</h1>
+    <h1>{{ department }}</h1>
     <div class="user">
-      <span>{{ short_name }}</span>
-      <span>{{ job_title }}</span>
+      <span class="name">{{ short_name }}</span>
+      <span class="job_title">{{ job_title }}</span>
       <div class="dropdown">
         <div>Сменить пароль</div>
         <div @click="logout">Выйти</div>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: {
     name: String,
@@ -22,45 +24,35 @@ export default {
     return {
       short_name: "",
       job_title: "",
+      department: "",
     };
   },
 
-  created() {
-    let jwt = this.getCookie("jwt");
+  async created() {
+    let jwt = localStorage.getItem("jwt");
 
-    let searchParams = new URLSearchParams();
-    searchParams.set("jwt", jwt);
-
-    fetch("http://localhost/api/employee/validate_token.php", {
-      method: "POST",
-      body: searchParams,
-    })
+    await axios
+      .post("http://localhost/api/employee/validate_token.php", { jwt })
       .then((response) => {
-        return response.json();
-      })
-      .then((json) => {
-        this.short_name = json.data.short_name;
-        this.job_title = json.data.job_title;
+        this.short_name = response.data.user.short_name;
+        this.job_title = response.data.user.job_title;
+
+        axios
+          .get(
+            `http://localhost/api/department/read_one.php?id=${response.data.user.department_id}`
+          )
+          .then((response) => {
+            console.log(response.data);
+            this.department = response.data.name;
+          });
       });
   },
 
   methods: {
-    getCookie(cname) {
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let cookies = decodedCookie.split(";");
-      for (let cookie of cookies) {
-        while (cookie.charAt(0) == " ") {
-          cookie = cookie.substring(1);
-        }
-        if (cookie.indexOf(name) == 0) {
-          return cookie.substring(name.length, cookie.length);
-        }
-      }
-      return "";
+    logout() {
+      localStorage.removeItem("jwt");
+      this.$router.push("/login");
     },
-
-    logout() {},
   },
 };
 </script>
@@ -77,21 +69,29 @@ export default {
 
 .user {
   display: grid;
+  justify-items: center;
   gap: 10px;
-  border: 1px solid var(--grey);
   padding: 5px 15px;
   border-radius: 5px;
   position: relative;
 }
 
+.name {
+  font-weight: 600;
+}
+
+.job_title {
+  font-size: 14px;
+}
+
 .user .dropdown {
   display: none;
   position: absolute;
-  top: 59px;
-  left: -1px;
+  top: 56px;
+  left: -10px;
   z-index: 9;
   background: var(--grey);
-  width: calc(100% + 2px);
+  width: calc(100% + 20px);
   border-radius: 5px;
   border: 1px solid var(--grey);
 }
@@ -103,6 +103,7 @@ export default {
 .user .dropdown > div {
   padding: 5px 15px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .user .dropdown > div:hover {

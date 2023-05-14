@@ -8,7 +8,9 @@
 
 	$employee = new Employee($db);
 
-	$employee->number = $_POST['number'];
+	$data = json_decode(file_get_contents("php://input"));
+
+	$employee->number = $data->number;
 	$employee_exists = $employee->findNumber(); 
 	
 	include_once "../config/core.php";
@@ -19,7 +21,7 @@
 	use \Firebase\JWT\JWT;
 
 	
-	if ($employee_exists && password_verify($_POST['password'], $employee->password)) {
+	if ($employee_exists && password_verify($data->password, $employee->password)) {
 		$token = array(
 			"iss" => $iss,
 			"aud" => $aud,

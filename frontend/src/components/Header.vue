@@ -44,7 +44,13 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.department = response.data.name;
+          })
+          .catch((error) => {
+            console.log(error);
           });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
 

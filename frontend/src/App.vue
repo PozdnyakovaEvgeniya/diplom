@@ -53,7 +53,6 @@ export default {
   },
 
   beforeCreate() {
-    console.log(localStorage.getItem("jwt"));
     if (!localStorage.getItem("jwt")) {
       this.$router.replace("/login");
     }

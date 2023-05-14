@@ -17,18 +17,20 @@
 
 <script>
 import Table from "@/components/Table.vue";
-import json1 from "@/assets/json/employees.json";
 import json2 from "@/assets/json/hours.json";
+import axios from "axios";
 
 export default {
   components: { Table },
 
   data() {
     return {
-      employees: json1,
+      user: {},
+      employees: [],
       hours: json2,
       headers: [
-        { id: "id", name: "Табельный номер" },
+        { id: "id", name: "id", hidden: true },
+        { id: "number", name: "Табельный номер" },
         { id: "name", name: "ФИО" },
         { id: "job_title", name: "Должность" },
       ],
@@ -36,13 +38,42 @@ export default {
     };
   },
 
-  created() {
-    this.getDate();
-    this.getData();
-    this.getDepartment();
+  async created() {
+    this.getUser().then(() =>
+      this.getEmployees().then(() => {
+        this.getDate();
+        this.getData();
+      })
+    );
   },
 
   methods: {
+    async getUser() {
+      await axios
+        .post("http://localhost/api/employee/validate_token.php", {
+          jwt: localStorage.getItem("jwt"),
+        })
+        .then((response) => {
+          this.user = response.data.user;
+        })
+        .catch((error) => {
+          this.logout();
+        });
+    },
+
+    async getEmployees() {
+      await axios
+        .get(
+          `http://localhost/api/employee/read_department.php?id=${this.user.department_id}`
+        )
+        .then((response) => {
+          this.employees = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     getDate() {
       let date = new Date(this.$route.params.year, this.$route.params.month, 1);
 
@@ -68,7 +99,8 @@ export default {
           1
         );
         let elem = [
-          { id: "id", name: employee.id },
+          { id: "id", name: employee.id, hidden: true },
+          { id: "number", name: employee.number },
           { id: "name", name: employee.name },
           { id: "job_title", name: employee.job_title },
         ];
@@ -98,7 +130,10 @@ export default {
       this.$router.push({ name: "employee", params: { id } });
     },
 
-    getDepartment() {},
+    logout() {
+      localStorage.removeItem("jwt");
+      this.$router.push("/login");
+    },
   },
 };
 </script>

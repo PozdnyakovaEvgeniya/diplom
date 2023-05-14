@@ -40,6 +40,14 @@
       return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->status, $this->working_mode, $password));
     }
 
+    function readDepartment() {
+      $query = "SELECT * FROM `employees` WHERE `department_id` = ? ORDER BY `number`";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$this->department_id]);
+
+      return $stmt;
+    }
+
     function findNumber() {
       $this->number=htmlspecialchars(strip_tags($this->number));
 

@@ -1,31 +1,35 @@
 <template>
   <div class="table-wrapper">
     <div class="table">
-      <div
-        v-for="(header, index) in headers"
-        :class="'cell header ' + header.id"
-        :key="index"
-      >
-        {{ header.name }}
-      </div>
-      <template v-for="(elem, index1) in data" :key="elem[0].name">
+      <template v-for="(header, index) in headers">
         <div
-          v-for="(item, index2) in elem"
-          :class="'cell ' + item.id"
-          :key="index2"
-          :id="selected ? 'elem' + elem[0].name : ''"
-          @mouseenter="hover('elem' + elem[0].name)"
-          @mouseleave="unhover('elem' + elem[0].name)"
-          @click="$emit('rowClick', elem[0].name)"
+          v-if="!header.hidden"
+          :class="'cell header ' + header.id"
+          :key="index"
         >
-          <input
-            :data-date="item.date"
-            v-if="item.input && item.id == 'date'"
-            type="text"
-            :value="item.name"
-          />
-          <template v-else>{{ item.name }}</template>
+          {{ header.name }}
         </div>
+      </template>
+
+      <template v-for="elem in data" :key="elem[0].name">
+        <template v-for="item in elem" :key="item.id">
+          <div
+            v-if="!item.hidden"
+            :class="'cell ' + item.id"
+            :id="selected ? 'elem' + elem[0].name : ''"
+            @mouseenter="hover('elem' + elem[0].name)"
+            @mouseleave="unhover('elem' + elem[0].name)"
+            @click="$emit('rowClick', elem[0].name)"
+          >
+            <input
+              :data-date="item.date"
+              v-if="item.input && item.id == 'date'"
+              type="text"
+              :value="item.name"
+            />
+            <template v-else>{{ item.name }}</template>
+          </div>
+        </template>
       </template>
     </div>
   </div>
@@ -68,7 +72,7 @@ export default {
   border: 1px solid var(--grey);
   border-radius: 5px;
   height: auto;
-  max-height: calc(100vh - 178px);
+  max-height: calc(100vh - 181px);
 }
 
 .table {

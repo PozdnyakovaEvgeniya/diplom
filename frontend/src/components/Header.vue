@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <h1>{{ department }}</h1>
+    <h1>{{ department.name }}</h1>
     <div class="user">
-      <span class="name">{{ short_name }}</span>
-      <span class="job_title">{{ job_title }}</span>
+      <span class="name">{{ user.short_name }}</span>
+      <span class="job_title">{{ user.job_title }}</span>
       <div class="dropdown">
         <div>Сменить пароль</div>
         <div @click="logout">Выйти</div>
@@ -16,45 +16,44 @@
 import axios from "axios";
 
 export default {
-  props: {
-    name: String,
-  },
-
   data() {
     return {
-      short_name: "",
-      job_title: "",
-      department: "",
+      user: {},
+      department: {},
     };
   },
 
   async created() {
-    let jwt = localStorage.getItem("jwt");
-
-    await axios
-      .post("http://localhost/api/employee/validate_token.php", { jwt })
-      .then((response) => {
-        this.short_name = response.data.user.short_name;
-        this.job_title = response.data.user.job_title;
-
-        axios
-          .get(
-            `http://localhost/api/department/read_one.php?id=${response.data.user.department_id}`
-          )
-          .then((response) => {
-            console.log(response.data);
-            this.department = response.data.name;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.getUser().then(() => this.getDepartment());
   },
 
   methods: {
+    async getUser() {
+      await axios
+        .post("http://localhost/api/employee/validate_token.php", {
+          jwt: localStorage.getItem("jwt"),
+        })
+        .then((response) => {
+          this.user = response.data.user;
+        })
+        .catch((error) => {
+          this.logout();
+        });
+    },
+
+    async getDepartment() {
+      await axios
+        .get(
+          `http://localhost/api/department/read_one.php?id=${this.user.department_id}`
+        )
+        .then((response) => {
+          this.department = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     logout() {
       localStorage.removeItem("jwt");
       this.$router.push("/login");

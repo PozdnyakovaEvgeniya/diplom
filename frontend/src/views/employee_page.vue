@@ -21,7 +21,6 @@
 
 <script>
 import Table from "@/components/Table.vue";
-import json from "@/assets/json/hours.json";
 import Back from "@/components/Back.vue";
 import axios from "axios";
 
@@ -36,14 +35,12 @@ export default {
       employee: {},
       headers: [{ id: "name", name: "Часов" }],
       data: [],
-      arr: ["Отработано по графику", "Переработано", "Отгул"],
     };
   },
 
   created() {
     this.getEmployee().then(() => {
       this.getDate();
-      this.getData();
     });
   },
 
@@ -51,11 +48,13 @@ export default {
     async getEmployee() {
       await axios
         .get(
-          `http://localhost/api/employee/read_one.php?id=${this.$route.params.id}`
+          `http://localhost/api/employee/getOne.php?id=${this.$route.params.id}`
         )
         .then((response) => {
-          console.log(response.data);
           this.employee = response.data;
+        })
+        .then(() => {
+          this.getHours();
         });
     },
 
@@ -76,25 +75,51 @@ export default {
       }
     },
 
-    getData() {
-      for (let item of this.arr) {
+    async getData() {
+      for (let index = 0; index < 3; index++) {
         let date = new Date(
           this.$route.params.year,
           this.$route.params.month,
           1
         );
-        let elem = [{ id: "name", name: item }];
-        let input = item == "Отгул" ? true : false;
+        let elem = [
+          {
+            id: "name",
+            name: ["Отработано по графику", "Переработано", "Отгул"][index],
+          },
+        ];
 
         while (this.$route.params.month == date.getMonth()) {
-          elem.push({
-            id: "date",
-            name: json[0].time,
-            input,
-            date: `${date.getFullYear()}-${this.normalizeNum(
-              date.getMonth()
-            )}-${this.normalizeNum(date.getDate())}`,
-          });
+          let input =
+            index == 2 && date.getDay() != 6 && date.getDay() != 0
+              ? true
+              : false;
+
+          let date_string = `${date.getFullYear()}-${this.normalizeNum(
+            date.getMonth() + 1
+          )}-${this.normalizeNum(date.getDate())}`;
+          let flag = false;
+          for (let hour of this.employee.hours) {
+            if (hour.date == date_string) {
+              elem.push({
+                id: "date",
+                name: [hour.hours, hour.overtime, hour.time_off][index],
+                input,
+                date: date_string,
+              });
+              flag = true;
+              break;
+            }
+          }
+          if (!flag) {
+            elem.push({
+              id: "date",
+              name: date.getDay() == 6 || date.getDay() == 0 ? "В" : 0,
+              input,
+              background:
+                date.getDay() == 6 || date.getDay() == 0 ? true : false,
+            });
+          }
           date = new Date(
             date.getFullYear(),
             date.getMonth(),
@@ -103,6 +128,28 @@ export default {
         }
         this.data.push(elem);
       }
+    },
+
+    async getHours() {
+      await axios
+        .get(
+          `http://localhost/api/hour/getOfMonth.php?id=${
+            this.$route.params.id
+          }&start=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(
+            +this.$route.params.month + 1
+          )}-01&end=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
+        )
+        .then((response) => {
+          this.employee.hours = response.data;
+          this.getData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     normalizeNum(num) {

@@ -22,7 +22,7 @@
       return $stmt->execute(array($this->name));
     }
 
-    function readOne()
+    function getOne()
     {
       $query = "SELECT * FROM `departments` WHERE `id` = ?";
       $stmt = $this->conn->prepare($query);

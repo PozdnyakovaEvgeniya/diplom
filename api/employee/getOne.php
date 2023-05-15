@@ -9,7 +9,7 @@
     $employee = new Employee($db);
 	$employee->id = isset($_GET["id"]) ? $_GET["id"]: die();
 
-	$employee->readOne();
+	$employee->getOne();
 
 	if ($employee->number != null) {
 		$employee = array(

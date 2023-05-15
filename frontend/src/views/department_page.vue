@@ -17,7 +17,6 @@
 
 <script>
 import Table from "@/components/Table.vue";
-import json2 from "@/assets/json/hours.json";
 import axios from "axios";
 
 export default {
@@ -27,7 +26,7 @@ export default {
     return {
       user: {},
       employees: [],
-      hours: json2,
+      hours: [],
       headers: [
         { id: "id", name: "id", hidden: true },
         { id: "number", name: "Табельный номер" },
@@ -42,7 +41,6 @@ export default {
     this.getUser().then(() =>
       this.getEmployees().then(() => {
         this.getDate();
-        this.getData();
       })
     );
   },
@@ -50,7 +48,7 @@ export default {
   methods: {
     async getUser() {
       await axios
-        .post("http://localhost/api/employee/validate_token.php", {
+        .post("http://localhost/api/employee/getUser.php", {
           jwt: localStorage.getItem("jwt"),
         })
         .then((response) => {
@@ -64,10 +62,15 @@ export default {
     async getEmployees() {
       await axios
         .get(
-          `http://localhost/api/employee/read_department.php?id=${this.user.department_id}`
+          `http://localhost/api/employee/getOfDepartment.php?id=${this.user.department_id}`
         )
         .then((response) => {
           this.employees = response.data;
+        })
+        .then(() => {
+          for (let index = 0; index < this.employees.length; index++) {
+            this.getHours(this.employees[index].id, index);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -91,35 +94,66 @@ export default {
       }
     },
 
-    getData() {
-      for (let employee of this.employees) {
-        let date = new Date(
-          this.$route.params.year,
-          this.$route.params.month,
-          1
-        );
-        let elem = [
-          { id: "id", name: employee.id, hidden: true },
-          { id: "number", name: employee.number },
-          { id: "name", name: employee.name },
-          { id: "job_title", name: employee.job_title },
-        ];
+    getData(employee) {
+      let date = new Date(this.$route.params.year, this.$route.params.month, 1);
+      let elem = [
+        { id: "id", name: employee.id, hidden: true },
+        { id: "number", name: employee.number },
+        { id: "name", name: employee.name },
+        { id: "job_title", name: employee.job_title },
+      ];
 
-        while (this.$route.params.month == date.getMonth()) {
+      while (this.$route.params.month == date.getMonth()) {
+        let flag = false;
+        for (let hour of employee.hours) {
+          if (
+            hour.date ==
+            `${this.normalizeNum(date.getFullYear())}-${this.normalizeNum(
+              date.getMonth() + 1
+            )}-${this.normalizeNum(date.getDate())}`
+          ) {
+            elem.push({
+              id: "date",
+              name: hour.hours + hour.time_off,
+            });
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) {
           elem.push({
             id: "date",
-            name:
-              date.getDay() == 6 || date.getDay() == 0 ? "В" : json2[0].time,
+            name: date.getDay() == 6 || date.getDay() == 0 ? "В" : 0,
             background: date.getDay() == 6 || date.getDay() == 0 ? true : false,
           });
-          date = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate() + 1
-          );
         }
-        this.data.push(elem);
+        date = new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate() + 1
+        );
       }
+      this.data.push(elem);
+    },
+
+    async getHours(id, index) {
+      await axios
+        .get(
+          `http://localhost/api/hour/getOfMonth.php?id=${id}&start=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(
+            +this.$route.params.month + 1
+          )}-01&end=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
+        )
+        .then((response) => {
+          this.employees[index].hours = response.data;
+          this.getData(this.employees[index]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     normalizeNum(num) {
@@ -131,7 +165,6 @@ export default {
     },
 
     route(id) {
-      console.log(this.$route.path);
       this.$router.push({ name: "employee", params: { id } });
     },
 

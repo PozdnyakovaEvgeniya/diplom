@@ -8,7 +8,7 @@
 
     $employee = new Employee($db);
     $employee->department_id = $_GET['id'];
-	$stmt = $employee->readDepartment();
+	$stmt = $employee->getOfDepartment();
     $num = $stmt->rowCount();
 
 	if ($num > 0) {

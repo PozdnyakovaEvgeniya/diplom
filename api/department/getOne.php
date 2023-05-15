@@ -9,7 +9,7 @@
     $department = new Department($db);
 	$department->id = isset($_GET["id"]) ? $_GET["id"]: die();
 
-	$department->readOne();
+	$department->getOne();
 
 	if ($department->name != null) {
 		$department = array(

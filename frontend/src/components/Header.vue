@@ -30,7 +30,7 @@ export default {
   methods: {
     async getUser() {
       await axios
-        .post("http://localhost/api/employee/validate_token.php", {
+        .post("http://localhost/api/employee/getUser.php", {
           jwt: localStorage.getItem("jwt"),
         })
         .then((response) => {
@@ -44,7 +44,7 @@ export default {
     async getDepartment() {
       await axios
         .get(
-          `http://localhost/api/department/read_one.php?id=${this.user.department_id}`
+          `http://localhost/api/department/getOne.php?id=${this.user.department_id}`
         )
         .then((response) => {
           this.department = response.data;

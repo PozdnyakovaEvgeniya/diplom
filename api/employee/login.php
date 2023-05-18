@@ -2,7 +2,7 @@
 	include_once "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/employee.php";
-
+	
 	$database = new Database();
 	$db = $database->getConnection();
 

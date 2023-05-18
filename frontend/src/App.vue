@@ -35,6 +35,7 @@ export default {
         "Декабрь",
       ],
       path: "",
+      user: "",
     };
   },
 
@@ -50,12 +51,33 @@ export default {
         ? `/main/${year}/${month}`
         : `/main/${year}/${month}/employee/${this.$route.params.id}`;
     },
+
+    async getUser() {
+      await axios
+        .post("http://localhost/api/employee/getUser.php", {
+          jwt: localStorage.getItem("jwt"),
+        })
+        .then((response) => {
+          this.user = response.data.user;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 
   beforeCreate() {
     if (!localStorage.getItem("jwt")) {
       this.$router.replace("/login");
     }
+  },
+
+  watch: {
+    "this.$route.path": {
+      handler: () => {
+        console.log(this.$route.path);
+      },
+    },
   },
 };
 </script>

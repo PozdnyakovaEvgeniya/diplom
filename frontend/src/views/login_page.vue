@@ -12,7 +12,7 @@
         <input type="password" v-model="password" />
       </div>
       <div class="form-button">
-        <button @click="login">Войти</button>
+        <button>Войти</button>
       </div>
     </form>
   </div>
@@ -28,6 +28,7 @@ export default {
       password: "",
       now: new Date(),
       error: "",
+      user: "",
     };
   },
 
@@ -41,13 +42,32 @@ export default {
         })
         .then((response) => {
           localStorage.setItem("jwt", response.data.jwt);
-          this.$router.replace({
-            name: "department",
-            params: {
-              year: this.now.getFullYear(),
-              month: this.now.getMonth(),
-            },
-          });
+          this.getUser();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.response.data.message;
+        });
+    },
+
+    async getUser() {
+      await axios
+        .post("http://localhost/api/employee/getUser.php", {
+          jwt: localStorage.getItem("jwt"),
+        })
+        .then((response) => {
+          if (response.data.user.status == 1) {
+            this.$router.replace({
+              name: "department",
+              params: {
+                year: this.now.getFullYear(),
+                month: this.now.getMonth(),
+              },
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

@@ -7,15 +7,14 @@
 
 <script>
 import Header from "@/components/Header.vue";
-import Table from "@/components/Table.vue";
-import json1 from "@/assets/json/employees.json";
-import json2 from "@/assets/json/hours.json";
 
 export default {
   components: { Header },
 
   data() {
-    return {};
+    return {
+      user: "",
+    };
   },
 };
 </script>

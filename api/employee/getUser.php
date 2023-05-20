@@ -1,12 +1,8 @@
 <?php
-  include_once "../config/headers.php";   
-  include_once "../config/core.php";
-	include_once "../libs/php-jwt/src/BeforeValidException.php";
-	include_once "../libs/php-jwt/src/CachedKeySet.php";
-	include_once "../libs/php-jwt/src/ExpiredException.php";
-	include_once "../libs/php-jwt/src/SignatureInvalidException.php";
-	include_once "../libs/php-jwt/src/JWT.php";
-	include_once "../libs/php-jwt/src/Key.php";
+  include_once "../config/headers.php";  
+	require_once('../vendor/autoload.php');
+	require_once('../config/core.php');
+	
   use \Firebase\JWT\JWT;
   use \Firebase\JWT\Key;
 

@@ -2,6 +2,10 @@
 	include_once "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/employee.php";
+	require_once('../vendor/autoload.php');
+	require_once('../config/core.php');
+	
+	use Firebase\JWT\JWT;
 	
 	$database = new Database();
 	$db = $database->getConnection();
@@ -11,16 +15,8 @@
 	$data = json_decode(file_get_contents("php://input"));
 
 	$employee->number = $data->number;
-	$employee_exists = $employee->findNumber(); 
-	
-	include_once "../config/core.php";
-	include_once "../libs/php-jwt/src/BeforeValidException.php";
-	include_once "../libs/php-jwt/src/ExpiredException.php";
-	include_once "../libs/php-jwt/src/SignatureInvalidException.php";
-	include_once "../libs/php-jwt/src/JWT.php";
-	use \Firebase\JWT\JWT;
-
-	
+	$employee_exists = $employee->findNumber();
+		
 	if ($employee_exists && password_verify($data->password, $employee->password)) {
 		$token = array(
 			"iss" => $iss,
@@ -35,11 +31,12 @@
 				"department_id" => $employee->department_id,
 				"short_name" => $employee->getShortName(),
 			)
-		);    
+		);   
 		
 		http_response_code(200);
 		
 		$jwt = JWT::encode($token, $key, 'HS256');
+		 
 		echo json_encode(
 			array(
 				"message" => "success",

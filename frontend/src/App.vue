@@ -55,7 +55,7 @@ export default {
     async getUser() {
       await axios
         .post("http://localhost/api/employee/getUser.php", {
-          jwt: localStorage.getItem("jwt"),
+          token: localStorage.getItem("token"),
         })
         .then((response) => {
           this.user = response.data.user;
@@ -67,7 +67,7 @@ export default {
   },
 
   beforeCreate() {
-    if (!localStorage.getItem("jwt")) {
+    if (!localStorage.getItem("token")) {
       this.$router.replace("/login");
     }
   },

@@ -31,10 +31,10 @@ export default {
     async getUser() {
       await axios
         .post("http://localhost/api/employee/getUser.php", {
-          jwt: localStorage.getItem("jwt"),
+          token: localStorage.getItem("token"),
         })
         .then((response) => {
-          this.user = response.data.user;
+          this.user = response.data;
         })
         .catch((error) => {
           this.logout();
@@ -54,9 +54,15 @@ export default {
         });
     },
 
-    logout() {
-      localStorage.removeItem("jwt");
-      this.$router.push("/login");
+    async logout() {
+      await axios
+        .post(`http://localhost/api/employee/logout.php`, {
+          token: localStorage.getItem("token"),
+        })
+        .then(() => {
+          localStorage.removeItem("token");
+          this.$router.push("/login");
+        });
     },
   },
 };

@@ -11,9 +11,11 @@
     public $patronymic;
     public $job_title;
     public $department_id;
+    public $shift_id;
     public $status;
     public $working_mode;
     public $password;
+    public $token;
 
     public function __construct($db)
     {
@@ -40,10 +42,19 @@
       return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->status, $this->working_mode, $password));
     }
 
+    function login() {
+      $this->token = sha1(random_bytes(100)) . sha1(random_bytes(100));
+      
+      $query = "UPDATE `employees` SET `token` = ? WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->token, $this->id));
+    }
+
     function getOfDepartment() {
       $query = "SELECT * FROM `employees` WHERE `department_id` = ? ORDER BY `number`";
       $stmt = $this->conn->prepare($query);
-      $stmt->execute([$this->department_id]);
+      $stmt->execute(array($this->department_id));
 
       return $stmt;
     }

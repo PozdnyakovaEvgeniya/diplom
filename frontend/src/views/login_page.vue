@@ -41,7 +41,8 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          localStorage.setItem("jwt", response.data.jwt);
+          this.error = "";
+          localStorage.setItem("token", response.data.token);
           this.getUser();
         })
         .catch((error) => {
@@ -53,10 +54,10 @@ export default {
     async getUser() {
       await axios
         .post("http://localhost/api/employee/getUser.php", {
-          jwt: localStorage.getItem("jwt"),
+          token: localStorage.getItem("token"),
         })
         .then((response) => {
-          if (response.data.user.status == 1) {
+          if (response.data.status == 1) {
             this.$router.replace({
               name: "department",
               params: {

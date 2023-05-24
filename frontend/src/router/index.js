@@ -24,11 +24,7 @@ const routes = [
           {
             name: "department",
             path: "",
-            redirect: (to) => {
-              return {
-                name: "timesheet",
-              };
-            },
+            redirect: { name: "timesheet" },
           },
           {
             name: "timesheet",

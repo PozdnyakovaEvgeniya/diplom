@@ -14,7 +14,7 @@
       $this->conn = $db;
     }  
 
-    function getOfDepartment($start, $end)
+    function getOfDepartment()
     {
       $query = "SELECT * FROM `shifts` WHERE `department_id` = ?";
       $stmt = $this->conn->prepare($query);

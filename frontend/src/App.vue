@@ -61,7 +61,7 @@ export default {
 
     async getUser() {
       await axios
-        .post("http://localhost/api/employee/getUser.php", {
+        .post("http://localhost/api/employees/getUser.php", {
           token: localStorage.getItem("token"),
         })
         .then((response) => {

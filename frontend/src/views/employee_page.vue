@@ -54,7 +54,7 @@ export default {
     async getEmployee() {
       await axios
         .get(
-          `http://localhost/api/employee/getOne.php?id=${this.$route.params.id}`
+          `http://localhost/api/employees/getOne.php?id=${this.$route.params.id}`
         )
         .then((response) => {
           this.employee = response.data;
@@ -139,7 +139,7 @@ export default {
     async getHours() {
       await axios
         .get(
-          `http://localhost/api/hour/getOfMonth.php?id=${
+          `http://localhost/api/hours/getOfMonth.php?id=${
             this.$route.params.id
           }&start=${this.normalizeNum(
             this.$route.params.year

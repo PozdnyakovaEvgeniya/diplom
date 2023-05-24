@@ -30,7 +30,7 @@ export default {
   methods: {
     async getUser() {
       await axios
-        .post("http://localhost/api/employee/getUser.php", {
+        .post("http://localhost/api/employees/getUser.php", {
           token: localStorage.getItem("token"),
         })
         .then((response) => {
@@ -44,7 +44,7 @@ export default {
     async getDepartment() {
       await axios
         .get(
-          `http://localhost/api/department/getOne.php?id=${this.user.department_id}`
+          `http://localhost/api/departments/getOne.php?id=${this.user.department_id}`
         )
         .then((response) => {
           this.department = response.data;
@@ -56,7 +56,7 @@ export default {
 
     async logout() {
       await axios
-        .post(`http://localhost/api/employee/logout.php`, {
+        .post(`http://localhost/api/employees/logout.php`, {
           token: localStorage.getItem("token"),
         })
         .then(() => {

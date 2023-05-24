@@ -41,7 +41,7 @@ export default {
   methods: {
     async getUser() {
       await axios
-        .post("http://localhost/api/employee/getUser.php", {
+        .post("http://localhost/api/employees/getUser.php", {
           token: localStorage.getItem("token"),
         })
         .then((response) => {
@@ -55,7 +55,7 @@ export default {
     async getEmployees() {
       await axios
         .get(
-          `http://localhost/api/employee/getOfDepartment.php?id=${this.user.department_id}`
+          `http://localhost/api/employees/getOfDepartment.php?id=${this.user.department_id}`
         )
         .then((response) => {
           this.employees = response.data;
@@ -132,7 +132,7 @@ export default {
     async getHours(id, index) {
       await axios
         .get(
-          `http://localhost/api/hour/getOfMonth.php?id=${id}&start=${this.normalizeNum(
+          `http://localhost/api/hours/getOfMonth.php?id=${id}&start=${this.normalizeNum(
             this.$route.params.year
           )}-${this.normalizeNum(
             +this.$route.params.month + 1

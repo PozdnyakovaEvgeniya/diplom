@@ -36,7 +36,7 @@ export default {
     async login(e) {
       e.preventDefault();
       await axios
-        .post("http://localhost/api/employee/login.php", {
+        .post("http://localhost/api/employees/login.php", {
           number: this.number,
           password: this.password,
         })
@@ -53,7 +53,7 @@ export default {
 
     async getUser() {
       await axios
-        .post("http://localhost/api/employee/getUser.php", {
+        .post("http://localhost/api/employees/getUser.php", {
           token: localStorage.getItem("token"),
         })
         .then((response) => {

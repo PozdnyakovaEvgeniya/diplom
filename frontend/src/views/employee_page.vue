@@ -3,7 +3,13 @@
     <div class="content">
       <div class="content-header">
         <Back
-          :to="`/main/${$route.params.year}/${$route.params.month}/department`"
+          :to="{
+            name: 'department',
+            params: {
+              year: this.$route.params.year,
+              month: this.$route.params.month,
+            },
+          }"
         ></Back>
         <div class="employee">
           <h4>{{ employee.name }}</h4>

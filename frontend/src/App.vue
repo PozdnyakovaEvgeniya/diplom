@@ -47,9 +47,16 @@ export default {
     },
 
     setPath(year, month) {
-      return this.$route.path.includes("department")
-        ? `/main/${year}/${month}`
-        : `/main/${year}/${month}/employee/${this.$route.params.id}`;
+      let params = { year, month };
+      if (this.$route.params.id) {
+        params.id = this.$route.params.id;
+      }
+      return this.$route.name
+        ? {
+            name: this.$route.name,
+            params,
+          }
+        : `/timekeeper-main/${year}/${month}/department`;
     },
 
     async getUser() {

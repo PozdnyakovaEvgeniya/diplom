@@ -28,10 +28,10 @@
 			"job_title" => $employee->job_title,
 		);
 
-		http_response_code(200);
+		// http_response_code(200);
 		echo json_encode($employee);
 	} else {
-		http_response_code(404);
+		// http_response_code(404);
 		echo json_encode(array("message" => "Доступ запрещен"), JSON_UNESCAPED_UNICODE);
 	}
 ?>

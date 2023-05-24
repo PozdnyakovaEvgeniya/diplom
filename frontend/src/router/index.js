@@ -2,11 +2,20 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
-    name: "main",
-    path: "/main/:year/:month",
-    component: () => import("@/views/main_page.vue"),
+    name: "timekeeper-main",
+    path: "/timekeeper-main/:year/:month",
+    component: () => import("@/views/timekeeper_main_page.vue"),
     children: [
-      {name: "main", path: "", redirect: to => {return {path: `/main/${to.params.year}/${to.params.month}/department`}}},
+      {
+        name: "timekeeper-main",
+        path: "",
+        redirect: (to) => {
+          return {
+            name: "department",
+            params: { year: to.params.year, month: to.params.year },
+          };
+        },
+      },
       {
         name: "department",
         path: "department/",
@@ -17,8 +26,8 @@ const routes = [
         path: "employee/:id",
         component: () => import("@/views/employee_page.vue"),
       },
-    ]
-  },  
+    ],
+  },
   {
     path: "/login",
     component: () => import("@/views/login_page.vue"),

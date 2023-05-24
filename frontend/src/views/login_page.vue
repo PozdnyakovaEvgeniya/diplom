@@ -59,7 +59,7 @@ export default {
         .then((response) => {
           if (response.data.status == 1) {
             this.$router.replace({
-              name: "department",
+              name: "timesheet",
               params: {
                 year: this.now.getFullYear(),
                 month: this.now.getMonth(),

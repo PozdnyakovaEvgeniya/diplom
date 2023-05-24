@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -34,8 +36,6 @@ export default {
         "Ноябрь",
         "Декабрь",
       ],
-      path: "",
-      user: "",
     };
   },
 
@@ -65,7 +65,15 @@ export default {
           token: localStorage.getItem("token"),
         })
         .then((response) => {
-          this.user = response.data.user;
+          if (response.data.id == 1) {
+            this.$router.replace({
+              name: "timesheet",
+              params: {
+                year: this.now.getFullYear(),
+                month: this.now.getMonth(),
+              },
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -79,12 +87,8 @@ export default {
     }
   },
 
-  watch: {
-    "this.$route.path": {
-      handler: () => {
-        console.log(this.$route.path);
-      },
-    },
+  created() {
+    this.getUser();
   },
 };
 </script>

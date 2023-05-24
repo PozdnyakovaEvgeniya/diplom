@@ -4,7 +4,7 @@
       <div class="content-header">
         <Back
           :to="{
-            name: 'department',
+            name: 'timesheet',
             params: {
               year: this.$route.params.year,
               month: this.$route.params.month,

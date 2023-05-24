@@ -20,6 +20,27 @@ const routes = [
         name: "department",
         path: "department/",
         component: () => import("@/views/department_page.vue"),
+        children: [
+          {
+            name: "department",
+            path: "",
+            redirect: (to) => {
+              return {
+                name: "timesheet",
+              };
+            },
+          },
+          {
+            name: "timesheet",
+            path: "timesheet/",
+            component: () => import("@/views/timesheet_page.vue"),
+          },
+          {
+            name: "shifts",
+            path: "shifts/",
+            component: () => import("@/views/shifts_page.vue"),
+          },
+        ],
       },
       {
         name: "employee",

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div v-if="$route.path != '/login'" class="nav">
+    <div v-if="$route.path != '/login'" class="main-nav">
       <h4>{{ now.getFullYear() }} год</h4>
       <router-link
         v-for="(month, index) in months"
@@ -163,7 +163,7 @@ input {
   border: 2px solid var(--grey);
 }
 
-.nav {
+.main-nav {
   height: 100%;
   overflow-y: auto;
   padding: 20px 0;
@@ -174,33 +174,29 @@ input {
   border-right: 2px solid var(--grey);
 }
 
-.nav h4 {
+.main-nav h4 {
   padding: 10px 20px;
 }
 
-.nav a {
+.main-nav a {
   width: 100%;
   padding: 10px 20px;
   border: 1px solid var(--grey);
 }
 
-.nav a:hover,
-.nav .router-link-active {
+.main-nav a:hover,
+.main-nav .router-link-active {
   background: var(--white);
   border-radius: 5px;
 }
 
-.nav a.now {
+.main-nav a.now {
   font-weight: 600;
 }
 
 .container {
   border-radius: 0 20px 20px 0;
   background: var(--white);
-}
-
-.container a:hover {
-  text-decoration: underline;
 }
 
 .content-header {
@@ -246,5 +242,21 @@ input {
 
 .error {
   color: red;
+}
+
+.nav {
+  border-bottom: 2px solid var(--grey);
+  display: flex;
+}
+
+.nav a {
+  display: block;
+  padding: 20px;
+  border: 1px solid var(--white);
+}
+
+.nav a:hover,
+.nav .router-link-active {
+  background: var(--grey);
 }
 </style>

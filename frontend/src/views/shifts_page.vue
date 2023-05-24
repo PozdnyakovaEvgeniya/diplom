@@ -1,10 +1,17 @@
 <template>
-  <div class="department_page">
-    <div class="nav">
-      <router-link :to="{ name: 'timesheet' }"> Табель </router-link>
-      <router-link :to="{ name: 'shifts' }"> Смены </router-link>
+  <div class="shifts_page">
+    <div class="content">
+      <Table
+        :headers="headers"
+        :data="data"
+        :selected="true"
+        @rowClick="route"
+      ></Table>
     </div>
-    <router-view></router-view>
+    <div class="content-bottom">
+      <div></div>
+      <button>Закрыть табель</button>
+    </div>
   </div>
 </template>
 

@@ -14,6 +14,17 @@
       $this->conn = $db;
     }  
 
+    function add() 
+    {
+      $this->name = htmlspecialchars(strip_tags($this->name));
+      $this->department_id = htmlspecialchars(strip_tags($this->department_id));
+      
+      $query = "INSERT INTO `shifts`(`name`, `department_id`) VALUES (?, ?)";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->name, $this->department_id));
+    }
+
     function getOfDepartment()
     {
       $query = "SELECT * FROM `shifts` WHERE `department_id` = ?";

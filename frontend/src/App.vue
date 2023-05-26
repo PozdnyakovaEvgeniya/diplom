@@ -36,6 +36,7 @@ export default {
         "Ноябрь",
         "Декабрь",
       ],
+      user: {},
     };
   },
 
@@ -65,6 +66,7 @@ export default {
           token: localStorage.getItem("token"),
         })
         .then((response) => {
+          this.user = response.data;
           if (response.data.id == 1) {
             this.$router.replace({
               name: "timesheet",
@@ -153,6 +155,14 @@ input {
   width: 40px;
 }
 
+ol {
+  margin: 20px;
+}
+
+li {
+  margin: 10px 0;
+}
+
 .form-field input {
   padding: 10px 20px;
   width: 350px;
@@ -223,11 +233,13 @@ input {
 }
 
 .form {
+  width: max-content;
   border-radius: 5px;
   padding: 40px 50px;
   display: grid;
   gap: 20px;
   background: var(--white);
+  border: 1px solid var(--grey);
 }
 
 .form-field {

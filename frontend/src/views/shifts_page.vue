@@ -5,21 +5,32 @@
       <ol>
         <li v-for="(shift, index) in shifts" :key="index">{{ shift.name }}</li>
       </ol>
+
+      <form class="form" @submit.prevent="addShift(user.department_id)">
+        <h4>Добавить смену</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Название</span>
+          <input type="text" v-model="name" />
+        </div>
+        <div class="form-button">
+          <button>Добавить</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
-import Table from "@/components/Table.vue";
 import axios from "axios";
 
 export default {
-  components: { Table },
-
   data() {
     return {
       user: {},
       shifts: [],
+      name: "",
+      error: "",
     };
   },
 
@@ -38,7 +49,7 @@ export default {
         .then((response) => {
           this.user = response.data;
         })
-        .catch((error) => {
+        .catch(() => {
           this.logout();
         });
     },
@@ -51,8 +62,22 @@ export default {
         .then((response) => {
           this.shifts = response.data;
         })
-        .catch((error) => {
+        .catch(() => {
           this.logout();
+        });
+    },
+
+    async addShift(department_id) {
+      await axios
+        .post("http://localhost/api/shifts/add.php", {
+          name: this.name,
+          department_id,
+        })
+        .then(() => {
+          this.getShifts();
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
 

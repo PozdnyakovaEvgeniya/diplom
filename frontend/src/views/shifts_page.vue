@@ -19,10 +19,6 @@
       </div>
       <Table :headers="headers" :data="data" @update="update"></Table>
     </div>
-    <div class="content-bottom">
-      <div></div>
-      <button>Сохранить</button>
-    </div>
   </div>
 </template>
 
@@ -120,7 +116,9 @@ export default {
         let newDate =
           this.normalizeNum(date.getDate()) +
           "." +
-          this.normalizeNum(date.getMonth() + 1);
+          this.normalizeNum(date.getMonth() + 1) +
+          ", " +
+          ["вс", "пн", "вт", "ср", "чт", "пт", "сб"][date.getDay()];
         this.headers.push({ id: "date", name: newDate });
         date = new Date(
           date.getFullYear(),
@@ -162,7 +160,7 @@ export default {
               id: "date",
               name: date.hours,
               input: true,
-              date: date_string,
+              request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}&hours=`,
             });
             flag = true;
             break;
@@ -173,7 +171,7 @@ export default {
             id: "date",
             name: 0,
             input: true,
-            date: date_string,
+            request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}&hours=`,
           });
         }
         newDate = new Date(

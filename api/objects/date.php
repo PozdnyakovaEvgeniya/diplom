@@ -15,6 +15,37 @@
       $this->conn = $db;
     }  
 
+    function add() 
+    {
+      $this->date = htmlspecialchars(strip_tags($this->date));
+      $this->shift_id = htmlspecialchars(strip_tags($this->shift_id));
+      $this->hours = htmlspecialchars(strip_tags($this->hours));
+      
+      if ($this->hours == 0) {
+        $this->status = 26;
+      } else {
+        $this->status = 1;
+      }
+
+      $query = "SELECT * FROM `dates` WHERE `date` = ? AND `shift_id` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->date, $this->shift_id));
+      $num = $stmt->rowCount();
+
+      if ($num == 0) {
+        $query = "INSERT INTO `dates`(`date`, `shift_id`, `hours`, `status`) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+
+        return $stmt->execute(array($this->date, $this->shift_id, $this->hours, $this->status));
+      } else {
+        $query = "UPDATE `dates` SET `hours` = ?, `status` = ? WHERE `date` = ? AND `shift_id` = ?";
+        $stmt = $this->conn->prepare($query);
+
+        return $stmt->execute(array($this->hours, $this->status, $this->date, $this->shift_id));
+      }
+      
+    }
+
     function getOfMonth($start, $end)
     {
       $query = "SELECT * FROM `dates` WHERE `shift_id` = ? AND `date` >= ? AND `date` < ?";

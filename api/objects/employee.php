@@ -13,9 +13,7 @@
     public $department_id;
     public $shift_id;
     public $status;
-    public $working_mode;
     public $password;
-    public $token;
 
     public function __construct($db)
     {
@@ -31,7 +29,6 @@
       $this->job_title = htmlspecialchars(strip_tags($this->job_title));
       $this->department_id = htmlspecialchars(strip_tags($this->department_id));
       $this->status = htmlspecialchars(strip_tags($this->status));
-      $this->working_mode = htmlspecialchars(strip_tags($this->working_mode));
       $this->password = htmlspecialchars(strip_tags($this->password));
       
       $password = empty($_POST['password']) ? NULL : password_hash($this->password, PASSWORD_BCRYPT);

@@ -1,7 +1,7 @@
 <template>
-  <div class="department_page">
+  <div class="main_page">
     <Header></Header>
-    <router-view :key="$route.path"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -13,8 +13,4 @@ export default {
 };
 </script>
 
-<style>
-.table-wrapper {
-  height: calc(100vh - 170px);
-}
-</style>
+<style></style>

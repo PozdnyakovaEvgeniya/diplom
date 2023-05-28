@@ -1,0 +1,51 @@
+<template>
+  <button>
+    <svg
+      class="icon"
+      width="32px"
+      height="32px"
+      viewBox="0 0 32 32"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+    >
+      <defs></defs>
+      <g
+        id="Page-2-Copy"
+        stroke="none"
+        stroke-width="1"
+        fill="none"
+        fill-rule="evenodd"
+      >
+        <g id="51" stroke="#ffffff" fill="#ffffff">
+          <path
+            d="M15,15 L0.992786407,15 C0.444485615,15 0,15.4438648 0,16 C0,16.5522847 0.452362061,17 0.992786407,17 L15,17 L15,31.0072136 C15,31.5555144 15.4438648,32 16,32 C16.5522847,32 17,31.5476379 17,31.0072136 L17,17 L31.0072136,17 C31.5555144,17 32,16.5561352 32,16 C32,15.4477153 31.5476379,15 31.0072136,15 L17,15 L17,0.992786407 C17,0.444485615 16.5561352,-8.15366451e-17 16,-1.8369702e-16 C15.4477153,-2.85150083e-16 15,0.452362061 15,0.992786407 L15,15 Z"
+            id="Rectangle-458"
+            stroke="none"
+          ></path>
+        </g>
+      </g>
+    </svg>
+    <slot></slot>
+  </button>
+</template>
+
+<script>
+export default {
+  props: {},
+};
+</script>
+
+<style scoped>
+.icon {
+  width: 15px;
+  height: 15px;
+}
+
+button {
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+</style>

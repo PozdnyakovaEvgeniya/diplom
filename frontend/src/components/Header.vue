@@ -36,7 +36,7 @@ export default {
         .then((response) => {
           this.user = response.data;
         })
-        .catch((error) => {
+        .catch(() => {
           this.logout();
         });
     },

@@ -25,6 +25,14 @@
       return $stmt->execute(array($this->name, $this->department_id));
     }
 
+    function delete() 
+    {
+      $query = "DELETE FROM `shifts` WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->id));
+    }
+
     function getOfDepartment()
     {
       $query = "SELECT * FROM `shifts` WHERE `department_id` = ?";

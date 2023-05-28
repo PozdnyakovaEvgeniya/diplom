@@ -4,7 +4,7 @@
       <router-link :to="{ name: 'timesheet' }"> Табель </router-link>
       <router-link :to="{ name: 'shifts' }"> Смены </router-link>
     </div>
-    <router-view></router-view>
+    <router-view :key="$route.path"></router-view>
   </div>
 </template>
 

@@ -27,6 +27,7 @@
               type="text"
               :value="item.name"
             />
+            <Delete v-else-if="item.delete" :request="item.request"></Delete>
             <template v-else>{{ item.name }}</template>
           </div>
         </template>
@@ -36,7 +37,12 @@
 </template>
 
 <script>
+import Delete from "./Delete.vue";
 export default {
+  components: {
+    Delete,
+  },
+
   props: {
     headers: Array,
     data: Array,
@@ -89,7 +95,7 @@ export default {
 }
 
 .cell {
-  border-right: 1px solid var(--grey);
+  border-left: 1px solid var(--grey);
   border-bottom: 1px solid var(--grey);
   padding: 5px;
 }
@@ -100,9 +106,13 @@ export default {
   cursor: pointer;
 }
 
+.delete {
+  border-left: none;
+}
+
 .background {
   background: var(--grey);
-  border-right: 1px solid var(--white);
+  border-left: 1px solid var(--white);
   border-bottom: 1px solid var(--white);
 }
 </style>

@@ -11,7 +11,7 @@
         {{ month }}
       </router-link>
     </div>
-    <router-view class="container" :key="$route.path"></router-view>
+    <router-view class="container"></router-view>
   </div>
 </template>
 
@@ -77,17 +77,28 @@ export default {
             });
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          this.logout();
+        });
+    },
+
+    async logout() {
+      await axios
+        .post(`http://localhost/api/employees/logout.php`, {
+          token: localStorage.getItem("token"),
+        })
+        .then(() => {
+          localStorage.removeItem("token");
+          this.$router.push("/login");
         });
     },
   },
 
-  beforeCreate() {
-    if (!localStorage.getItem("token")) {
-      this.$router.replace("/login");
-    }
-  },
+  // beforeCreate() {
+  //   if (!localStorage.getItem("token")) {
+  //     this.$router.replace("/login");
+  //   }
+  // },
 
   created() {
     this.getUser();
@@ -144,6 +155,7 @@ button {
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: 400;
 }
 
 input {
@@ -274,5 +286,6 @@ li {
 .nav a:hover,
 .nav .router-link-active {
   background: var(--grey);
+  border-radius: 5px;
 }
 </style>

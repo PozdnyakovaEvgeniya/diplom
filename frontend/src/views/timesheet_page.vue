@@ -176,4 +176,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-wrapper {
+  max-height: calc(100vh - 170px);
+}
+</style>

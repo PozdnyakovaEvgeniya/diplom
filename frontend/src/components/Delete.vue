@@ -40,8 +40,9 @@ export default {
 
   methods: {
     async click() {
-      console.log(this.request);
-      await axios.get(this.request);
+      await axios.get(this.request).then(() => {
+        this.$emit("update");
+      });
     },
   },
 };

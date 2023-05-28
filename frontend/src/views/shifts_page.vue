@@ -17,7 +17,7 @@
       <div class="content-header">
         <Add @click="showAdd">Добавить смену</Add>
       </div>
-      <Table :headers="headers" :data="data"></Table>
+      <Table :headers="headers" :data="data" @update="update"></Table>
     </div>
     <div class="content-bottom">
       <div></div>
@@ -50,6 +50,7 @@ export default {
       headers: [{ id: "name", name: "Смена" }, { id: "delete" }],
       data: [],
       modalAdd: false,
+      updated: false,
     };
   },
 
@@ -199,8 +200,7 @@ export default {
           department_id,
         })
         .then(() => {
-          this.data = [];
-          this.getShifts();
+          this.update();
           this.closeAdd();
         })
         .catch((error) => {
@@ -220,6 +220,20 @@ export default {
     closeAdd() {
       this.name = "";
       this.modalAdd = false;
+    },
+
+    update() {
+      this.updated = true;
+    },
+  },
+
+  watch: {
+    updated() {
+      if (this.updated == true) {
+        this.data = [];
+        this.getShifts();
+        this.updated = false;
+      }
     },
   },
 };

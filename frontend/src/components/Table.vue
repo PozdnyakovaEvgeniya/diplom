@@ -27,7 +27,11 @@
               type="text"
               :value="item.name"
             />
-            <Delete v-else-if="item.delete" :request="item.request"></Delete>
+            <Delete
+              v-else-if="item.delete"
+              :request="item.request"
+              @update="$emit('update')"
+            ></Delete>
             <template v-else>{{ item.name }}</template>
           </div>
         </template>

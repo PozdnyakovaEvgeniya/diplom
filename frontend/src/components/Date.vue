@@ -2,7 +2,7 @@
   <div class="date">
     <label>
       <input @change="submit" type="checkbox" v-model="holiday" />
-      Праз.день
+      Выходной
     </label>
     <label>День: <input @change="submit" type="text" v-model="day" /></label>
     <label>Ночь: <input @change="submit" type="text" v-model="night" /></label>

@@ -21,9 +21,9 @@
             @mouseleave="unhover('elem' + elem[0].name)"
             @click="$emit('rowClick', elem[0].name)"
           >
-            <InputForm
-              v-if="item.input && item.id == 'date'"
-              :value="item.name"
+            <Date
+              v-if="item.date && item.id == 'date'"
+              :values="item.name"
               :request="item.request"
             />
             <Delete
@@ -40,13 +40,13 @@
 </template>
 
 <script>
-import Delete from "./Delete.vue";
-import InputForm from "./InputForm.vue";
+import Delete from "@/components/Delete.vue";
+import Date from "@/components/Date.vue";
 
 export default {
   components: {
     Delete,
-    InputForm,
+    Date,
   },
 
   props: {
@@ -106,7 +106,7 @@ export default {
   padding: 5px;
 }
 
-.date {
+.date.header {
   text-align: center;
 }
 

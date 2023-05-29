@@ -21,7 +21,8 @@
             extract($row);
             $date_item = array(
                 "date" => $date,
-                "hours" => $hours,
+                "day_hours" => $day_hours,
+                "night_hours" => $night_hours,
                 "status" => $status,
             );
             array_push($dates_arr, $date_item);

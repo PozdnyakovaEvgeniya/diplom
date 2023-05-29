@@ -102,6 +102,7 @@ export default {
         )
         .then((response) => {
           this.shifts[index].dates = response.data;
+          console.log(this.shifts);
           this.getData(this.shifts[index]);
         })
         .catch((error) => {
@@ -158,9 +159,13 @@ export default {
           ) {
             elem.push({
               id: "date",
-              name: date.hours,
-              input: true,
-              request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}&hours=`,
+              name: [
+                date.day_hours ? date.day_hours : 0,
+                date.night_hours ? date.night_hours : 0,
+                date.status == 1 ? true : false,
+              ],
+              date: true,
+              request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
             });
             flag = true;
             break;
@@ -169,9 +174,9 @@ export default {
         if (!flag) {
           elem.push({
             id: "date",
-            name: 0,
-            input: true,
-            request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}&hours=`,
+            name: [0, 0, false],
+            date: true,
+            request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
           });
         }
         newDate = new Date(

@@ -158,7 +158,7 @@ button {
   font-weight: 400;
 }
 
-input {
+input:not([type="checkbox"]) {
   background: var(--grey);
   border-radius: 5px;
   border: none;

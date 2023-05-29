@@ -7,7 +7,8 @@
     public $id;
     public $date;
     public $shift_id;
-    public $hours;
+    public $day_hours;
+    public $night_hours;
     public $status;
 
     public function __construct($db)
@@ -19,13 +20,9 @@
     {
       $this->date = htmlspecialchars(strip_tags($this->date));
       $this->shift_id = htmlspecialchars(strip_tags($this->shift_id));
-      $this->hours = htmlspecialchars(strip_tags($this->hours));
-      
-      if ($this->hours == 0) {
-        $this->status = 26;
-      } else {
-        $this->status = 1;
-      }
+      $this->day_hours = htmlspecialchars(strip_tags($this->day_hours));
+      $this->night_hours = htmlspecialchars(strip_tags($this->night_hours));
+      $this->status = htmlspecialchars(strip_tags($this->status));
 
       $query = "SELECT * FROM `dates` WHERE `date` = ? AND `shift_id` = ?";
       $stmt = $this->conn->prepare($query);
@@ -33,15 +30,17 @@
       $num = $stmt->rowCount();
 
       if ($num == 0) {
-        $query = "INSERT INTO `dates`(`date`, `shift_id`, `hours`, `status`) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO `dates`(`date`, `shift_id`, `day_hours`, `night_hours`, `status`) VALUES (?, ?, ?, ?, ?)";
+
         $stmt = $this->conn->prepare($query);
 
-        return $stmt->execute(array($this->date, $this->shift_id, $this->hours, $this->status));
+        return $stmt->execute(array($this->date, $this->shift_id, $this->day_hours, $this->night_hours, $this->status));
       } else {
-        $query = "UPDATE `dates` SET `hours` = ?, `status` = ? WHERE `date` = ? AND `shift_id` = ?";
+        $query = "UPDATE `dates` SET `day_hours` = ?, `night_hours` = ?, `status` = ? WHERE `date` = ? AND `shift_id` = ?";
+
         $stmt = $this->conn->prepare($query);
 
-        return $stmt->execute(array($this->hours, $this->status, $this->date, $this->shift_id));
+        return $stmt->execute(array($this->day_hours, $this->night_hours, $this->status, $this->date, $this->shift_id));
       }
       
     }

@@ -4,8 +4,7 @@
       <input @change="submit" type="checkbox" v-model="holiday" />
       Выходной
     </label>
-    <label>День: <input @change="submit" type="text" v-model="day" /></label>
-    <label>Ночь: <input @change="submit" type="text" v-model="night" /></label>
+    <label>План: <input @change="submit" type="text" v-model="day" /></label>
   </div>
 </template>
 
@@ -51,6 +50,7 @@ export default {
 
 label {
   display: flex;
+  justify-content: space-between;
   gap: 2px;
   font-size: 13px;
   align-items: center;

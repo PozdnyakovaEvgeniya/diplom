@@ -20,6 +20,7 @@
                 "id" => $id,
                 "number" => $number,
                 "name" => $surname.' '.$name.' '.$patronymic,
+                "shift_id" => $shift_id,
                 "job_title" => $job_title,
             );
             array_push($employees_arr, $employee_item);

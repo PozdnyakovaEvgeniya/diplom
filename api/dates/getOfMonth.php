@@ -20,10 +20,10 @@
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $date_item = array(
+                "id" => $id,
                 "date" => $date,
-                "day_hours" => $day_hours,
-                "night_hours" => $night_hours,
-                "status" => $status,
+                "plan_hours" => $hours,
+                "date_status" => $status,
             );
             array_push($dates_arr, $date_item);
         }

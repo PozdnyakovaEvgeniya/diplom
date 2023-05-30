@@ -106,10 +106,6 @@ export default {
   padding: 5px;
 }
 
-.date.header {
-  text-align: center;
-}
-
 .hover {
   background-color: var(--grey);
   border-color: var(--white);

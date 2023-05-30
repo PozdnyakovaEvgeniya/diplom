@@ -16,31 +16,22 @@
           <div>{{ employee.job_title }}</div>
         </div>
       </div>
-      <Table :headers="headers" :data="data"></Table>
-    </div>
-    <div class="content-bottom">
-      <div>Доступно часов отгула: {{ employee.overtime }}</div>
-      <button>Сохранить</button>
     </div>
   </div>
 </template>
 
 <script>
-import Table from "@/components/Table.vue";
 import Back from "@/components/Back.vue";
 import axios from "axios";
 
 export default {
   components: {
-    Table,
     Back,
   },
 
   data() {
     return {
       employee: {},
-      headers: [{ id: "name", name: "Часов" }],
-      data: [],
     };
   },
 

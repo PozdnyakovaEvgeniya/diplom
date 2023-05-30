@@ -6,23 +6,30 @@
 
     public $id;
     public $employee_id;
-    public $date;
+    public $date_id;
     public $hours;
     public $overtime;
     public $time_off;
+    public $status;
 
     public function __construct($db)
     {
       $this->conn = $db;
     }  
 
-    function getOfMonth($start, $end)
+    function getOne()
     {
-      $query = "SELECT * FROM `hours` WHERE `employee_id` = ? AND `date` >= ? AND `date` < ?";
+      $query = "SELECT * FROM `hours` WHERE `employee_id` = ? AND `date_id` = ?";
       $stmt = $this->conn->prepare($query);
-      $stmt->execute(array($this->employee_id, $start, $end));
+      $stmt->execute(array($this->employee_id, $this->date_id));
 
-      return $stmt;
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->id = $row["id"];
+      $this->hours = $row["hours"];
+      $this->overtime = $row["overtime"];
+      $this->time_off = $row["time_off"];
+      $this->status = $row["status"];
     }  
   }
 ?>

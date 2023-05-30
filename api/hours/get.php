@@ -29,7 +29,7 @@
 
 		for($i = 0; $i < count($employees); $i++) {
 			$date = new Date($db);
-			$date->shift_id = $employees[$i]['id'];
+			$date->shift_id = $employees[$i]['shift_id'];
 			$start = $_GET['start'];
 			$end = $_GET['end'];
 

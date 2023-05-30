@@ -98,7 +98,6 @@ export default {
     },
 
     getData(employee) {
-      console.log(employee);
       let date = new Date(this.$route.params.year, this.$route.params.month, 1);
       let elem = [
         { id: "id", name: employee.id, hidden: true },
@@ -107,17 +106,17 @@ export default {
         { id: "job_title", name: employee.job_title },
       ];
       while (this.$route.params.month == date.getMonth()) {
-        for (let index = 0; index < employee.dates.length; index++) {
+        for (let currentDate of employee.dates) {
           if (
-            employee.dates[index].date ==
+            currentDate.date ==
             `${this.normalizeNum(date.getFullYear())}-${this.normalizeNum(
               date.getMonth() + 1
             )}-${this.normalizeNum(date.getDate())}`
           ) {
             elem.push({
               id: "date",
-              name:
-                employee.dates[index].hours + employee.dates[index].time_off,
+              name: currentDate.hours + currentDate.time_off,
+              background: currentDate.date_status == 1 ? true : false,
             });
           }
         }
@@ -152,6 +151,6 @@ export default {
 
 <style scoped>
 .table-wrapper {
-  max-height: calc(100vh - 170px);
+  max-height: calc(100vh - 251px);
 }
 </style>

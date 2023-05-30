@@ -25,8 +25,6 @@ export default {
   data() {
     return {
       user: {},
-      employees: [],
-      hours: [],
       headers: [
         { id: "id", name: "id", hidden: true },
         { id: "number", name: "Табельный номер" },
@@ -38,11 +36,10 @@ export default {
   },
 
   async created() {
-    this.getUser().then(() =>
-      this.getEmployees().then(() => {
-        this.getDate();
-      })
-    );
+    this.getUser().then(() => {
+      this.getDates();
+      this.get();
+    });
   },
 
   methods: {
@@ -59,21 +56,23 @@ export default {
         });
     },
 
-    async getEmployees() {
+    async get() {
       await axios
-        .get(
-          `http://localhost/api/employees/getOfDepartment.php?id=${this.user.department_id}`
+        .post(
+          `http://localhost/api/hours/get.php?id=${
+            this.user.department_id
+          }&start=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(
+            +this.$route.params.month + 1
+          )}-01&end=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
         )
         .then((response) => {
-          this.employees = response.data;
-        })
-        .then(() => {
-          for (let index = 0; index < this.employees.length; index++) {
-            this.getDates(
-              this.employees[index].shift_id,
-              index,
-              this.employees[index].id
-            );
+          console.log(response.data);
+          for (let employee of response.data) {
+            this.getData(employee);
           }
         })
         .catch((error) => {
@@ -81,7 +80,7 @@ export default {
         });
     },
 
-    getDate() {
+    getDates() {
       let date = new Date(this.$route.params.year, this.$route.params.month, 1);
 
       while (this.$route.params.month == date.getMonth()) {
@@ -99,6 +98,7 @@ export default {
     },
 
     getData(employee) {
+      console.log(employee);
       let date = new Date(this.$route.params.year, this.$route.params.month, 1);
       let elem = [
         { id: "id", name: employee.id, hidden: true },
@@ -109,17 +109,16 @@ export default {
       while (this.$route.params.month == date.getMonth()) {
         for (let index = 0; index < employee.dates.length; index++) {
           if (
-            dates[index].date ==
+            employee.dates[index].date ==
             `${this.normalizeNum(date.getFullYear())}-${this.normalizeNum(
               date.getMonth() + 1
             )}-${this.normalizeNum(date.getDate())}`
           ) {
             elem.push({
               id: "date",
-              name: dates[index].hours + dates[index].time_off,
+              name:
+                employee.dates[index].hours + employee.dates[index].time_off,
             });
-            flag = true;
-            break;
           }
         }
         date = new Date(
@@ -129,55 +128,6 @@ export default {
         );
       }
       this.data.push(elem);
-    },
-
-    async getDates(shift_id, index, employee_id) {
-      await axios
-        .get(
-          `http://localhost/api/dates/getOfMonth.php?id=${shift_id}&start=${this.normalizeNum(
-            this.$route.params.year
-          )}-${this.normalizeNum(
-            +this.$route.params.month + 1
-          )}-01&end=${this.normalizeNum(
-            this.$route.params.year
-          )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
-        )
-        .then((response) => {
-          this.employees[index].dates = response.data;
-        })
-        .then(() => {
-          for (let i = 0; i < this.employees[index].dates.length; i++) {
-            this.getHours(
-              employee_id,
-              this.employees[index].dates[i].id,
-              index,
-              i
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    async getHours(employee_id, date_id, index1, index2) {
-      await axios
-        .get(
-          `http://localhost/api/hours/getOne.php?employee_id=${employee_id}&date_id=${date_id}`
-        )
-        .then((response) => {
-          for (let key in response.data) {
-            this.employees[index1].dates[index2].push(response.data[key]);
-            this.getData(this.employees[index1]);
-          }
-        })
-        .catch(() => {
-          this.employees[index1].dates[index2].hours = 0;
-          this.employees[index1].dates[index2].overtime = 0;
-          this.employees[index1].dates[index2].time_off = 0;
-          this.employees[index1].dates[index2].status = 0;
-          this.getData(this.employees[index1]);
-        });
     },
 
     normalizeNum(num) {

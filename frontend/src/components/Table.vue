@@ -25,6 +25,8 @@
               v-if="item.date && item.id == 'date'"
               :values="item.name"
               :request="item.request"
+              :saved="saved"
+              @save="$emit('save')"
             />
             <Delete
               v-else-if="item.delete"
@@ -53,6 +55,7 @@ export default {
     headers: Array,
     data: Array,
     selected: Boolean,
+    saved: Boolean,
   },
 
   methods: {

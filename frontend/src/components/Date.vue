@@ -1,10 +1,10 @@
 <template>
   <div class="date">
     <label>
-      <input @change="submit" type="checkbox" v-model="holiday" />
+      <input type="checkbox" v-model="holiday" />
       Выходной
     </label>
-    <label>План: <input @change="submit" type="text" v-model="day" /></label>
+    <label>План: <input type="text" v-model="day" /></label>
   </div>
 </template>
 
@@ -15,13 +15,13 @@ export default {
   props: {
     values: Array,
     request: String,
+    saved: Boolean,
   },
 
   data() {
     return {
       day: this.values[0],
-      night: this.values[1],
-      holiday: this.values[2],
+      holiday: this.values[1],
     };
   },
 
@@ -29,13 +29,20 @@ export default {
     async submit() {
       await axios.get(
         this.request +
-          "&day_hours=" +
+          "&hours=" +
           this.day +
-          "&night_hours=" +
-          this.night +
           "&status=" +
           (this.holiday ? 1 : 0)
       );
+    },
+  },
+
+  watch: {
+    saved() {
+      if (this.saved == true) {
+        this.submit();
+        this.$emit("save", false);
+      }
     },
   },
 };
@@ -44,14 +51,14 @@ export default {
 <style scoped>
 .date {
   display: grid;
-  gap: 2px;
+  gap: 8px;
   align-items: center;
 }
 
 label {
   display: flex;
   justify-content: space-between;
-  gap: 2px;
+  gap: 4px;
   font-size: 13px;
   align-items: center;
 }

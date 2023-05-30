@@ -17,7 +17,17 @@
       <div class="content-header">
         <Add @click="showAdd">Добавить смену</Add>
       </div>
-      <Table :headers="headers" :data="data" @update="update"></Table>
+      <Table
+        :headers="headers"
+        :data="data"
+        :saved="saved"
+        @update="update"
+        @save="save"
+      ></Table>
+    </div>
+    <div class="content-bottom">
+      <div></div>
+      <button @click="save(true)">Сохранить</button>
     </div>
   </div>
 </template>
@@ -47,6 +57,7 @@ export default {
       data: [],
       modalAdd: false,
       updated: false,
+      saved: false,
     };
   },
 
@@ -102,7 +113,6 @@ export default {
         )
         .then((response) => {
           this.shifts[index].dates = response.data;
-          console.log(this.shifts);
           this.getData(this.shifts[index]);
         })
         .catch((error) => {
@@ -160,9 +170,8 @@ export default {
             elem.push({
               id: "date",
               name: [
-                date.day_hours ? date.day_hours : 0,
-                date.night_hours ? date.night_hours : 0,
-                date.status == 1 ? true : false,
+                date.plan_hours ? date.plan_hours : 0,
+                date.date_status == 1 ? true : false,
               ],
               date: true,
               request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
@@ -228,6 +237,10 @@ export default {
     update() {
       this.updated = true;
     },
+
+    save(bool) {
+      this.saved = bool;
+    },
   },
 
   watch: {
@@ -237,6 +250,10 @@ export default {
         this.getShifts();
         this.updated = false;
       }
+    },
+
+    saved() {
+      console.log(this.saved);
     },
   },
 };

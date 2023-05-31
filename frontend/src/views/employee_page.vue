@@ -1,13 +1,13 @@
 <template>
   <div class="employee_page">
     <Modal :show="modalAdd" @close="closeAdd">
-      <form class="form" @submit.prevent="">
+      <form class="form" @submit.prevent="addPeriod">
         <h4>Добавить период</h4>
         <div class="error">{{ error }}</div>
         <div class="form-field">
           <span>Название периода</span>
           <Multiselect
-            v-model="status"
+            v-model="status_id"
             label="name"
             trackBy="id"
             valueProp="id"
@@ -16,11 +16,11 @@
         </div>
         <div class="form-field">
           <span>Начало</span>
-          <input type="text" name="start" />
+          <input type="date" v-model="start" />
         </div>
         <div class="form-field">
           <span>Конец</span>
-          <input type="text" name="end" />
+          <input type="date" v-model="end" />
         </div>
         <div class="form-button">
           <button>Добавить</button>
@@ -72,8 +72,10 @@ export default {
     return {
       employee: {},
       statuses: [],
-      status: "",
+      status_id: "",
       modalAdd: false,
+      start: "",
+      end: "",
     };
   },
 
@@ -99,6 +101,23 @@ export default {
         .then((response) => {
           this.statuses = response.data;
           console.log(this.statuses);
+        });
+    },
+
+    async addPeriod() {
+      await axios
+        .post("http://localhost/api/periods/add.php", {
+          employee_id: this.employee.id,
+          status_id: this.status_id,
+          start: this.start,
+          end: this.end,
+        })
+        .then(() => {
+          this.update();
+          this.closeAdd();
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
 

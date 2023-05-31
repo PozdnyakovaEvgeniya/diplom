@@ -106,6 +106,7 @@ export default {
         { id: "job_title", name: employee.job_title },
       ];
       while (this.$route.params.month == date.getMonth()) {
+        let flag = false;
         for (let currentDate of employee.dates) {
           if (
             currentDate.date ==
@@ -118,8 +119,17 @@ export default {
               name: currentDate.hours + currentDate.time_off,
               background: currentDate.date_status == 1 ? true : false,
             });
+            flag = true;
+            break;
           }
         }
+        if (!flag) {
+          elem.push({
+            id: "date",
+            name: 0,
+          });
+        }
+
         date = new Date(
           date.getFullYear(),
           date.getMonth(),

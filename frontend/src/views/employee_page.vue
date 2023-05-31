@@ -1,5 +1,32 @@
 <template>
   <div class="employee_page">
+    <Modal :show="modalAdd" @close="closeAdd">
+      <form class="form" @submit.prevent="">
+        <h4>Добавить период</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Название периода</span>
+          <Multiselect
+            v-model="status"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="statuses"
+          ></Multiselect>
+        </div>
+        <div class="form-field">
+          <span>Начало</span>
+          <input type="text" name="start" />
+        </div>
+        <div class="form-field">
+          <span>Конец</span>
+          <input type="text" name="end" />
+        </div>
+        <div class="form-button">
+          <button>Добавить</button>
+        </div>
+      </form>
+    </Modal>
     <div class="content">
       <div class="content-header">
         <Back
@@ -16,29 +43,43 @@
           <div>{{ employee.job_title }}</div>
         </div>
       </div>
+      <div class="content-header">
+        <Add @click="showAdd">Добавить смену</Add>
+      </div>
+      <Table></Table>
     </div>
   </div>
 </template>
 
 <script>
-import Back from "@/components/Back.vue";
 import axios from "axios";
+import Multiselect from "@vueform/multiselect";
+import Add from "@/components/Add.vue";
+import Back from "@/components/Back.vue";
+import Modal from "@/components/Modal.vue";
+import Table from "@/components/Table.vue";
 
 export default {
   components: {
     Back,
+    Multiselect,
+    Add,
+    Modal,
+    Table,
   },
 
   data() {
     return {
       employee: {},
+      statuses: [],
+      status: "",
+      modalAdd: false,
     };
   },
 
   created() {
-    this.getEmployee().then(() => {
-      this.getDate();
-    });
+    this.getEmployee();
+    this.getStatuses();
   },
 
   methods: {
@@ -49,112 +90,25 @@ export default {
         )
         .then((response) => {
           this.employee = response.data;
-        })
-        .then(() => {
-          this.getHours();
         });
     },
 
-    getDate() {
-      let date = new Date(this.$route.params.year, this.$route.params.month, 1);
-
-      while (this.$route.params.month == date.getMonth()) {
-        let newDate =
-          this.normalizeNum(date.getDate()) +
-          "." +
-          this.normalizeNum(date.getMonth() + 1);
-        this.headers.push({ id: "date", name: newDate });
-        date = new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate() + 1
-        );
-      }
-    },
-
-    async getData() {
-      for (let index = 0; index < 3; index++) {
-        let date = new Date(
-          this.$route.params.year,
-          this.$route.params.month,
-          1
-        );
-        let elem = [
-          {
-            id: "name",
-            name: ["Отработано по графику", "Переработано", "Отгул"][index],
-          },
-        ];
-
-        while (this.$route.params.month == date.getMonth()) {
-          let input =
-            index == 2 && date.getDay() != 6 && date.getDay() != 0
-              ? true
-              : false;
-
-          let date_string = `${date.getFullYear()}-${this.normalizeNum(
-            date.getMonth() + 1
-          )}-${this.normalizeNum(date.getDate())}`;
-          let flag = false;
-          for (let hour of this.employee.hours) {
-            if (hour.date == date_string) {
-              elem.push({
-                id: "date",
-                name: [hour.hours, hour.overtime, hour.time_off][index],
-                input,
-                date: date_string,
-              });
-              flag = true;
-              break;
-            }
-          }
-          if (!flag) {
-            elem.push({
-              id: "date",
-              name: date.getDay() == 6 || date.getDay() == 0 ? "В" : 0,
-              input,
-              background:
-                date.getDay() == 6 || date.getDay() == 0 ? true : false,
-            });
-          }
-          date = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate() + 1
-          );
-        }
-        this.data.push(elem);
-      }
-    },
-
-    async getHours() {
+    async getStatuses() {
       await axios
-        .get(
-          `http://localhost/api/hours/getOfMonth.php?id=${
-            this.$route.params.id
-          }&start=${this.normalizeNum(
-            this.$route.params.year
-          )}-${this.normalizeNum(
-            +this.$route.params.month + 1
-          )}-01&end=${this.normalizeNum(
-            this.$route.params.year
-          )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
-        )
+        .get("http://localhost/api/statuses/get.php")
         .then((response) => {
-          this.employee.hours = response.data;
-          this.getData();
-        })
-        .catch((error) => {
-          console.log(error);
+          this.statuses = response.data;
+          console.log(this.statuses);
         });
     },
 
-    normalizeNum(num) {
-      if (num > 0 && num < 10) {
-        return "0" + num;
-      }
+    showAdd() {
+      this.modalAdd = true;
+    },
 
-      return num;
+    closeAdd() {
+      this.name = "";
+      this.modalAdd = false;
     },
   },
 };

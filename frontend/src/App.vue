@@ -94,17 +94,19 @@ export default {
     },
   },
 
-  // beforeCreate() {
-  //   if (!localStorage.getItem("token")) {
-  //     this.$router.replace("/login");
-  //   }
-  // },
+  beforeCreate() {
+    if (!localStorage.getItem("token")) {
+      this.$router.replace("/login");
+    }
+  },
 
   created() {
     this.getUser();
   },
 };
 </script>
+
+<style src="@vueform/multiselect/themes/default.css"></style>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -165,6 +167,24 @@ input:not([type="checkbox"]) {
   outline: none;
   padding: 2px 5px;
   width: 40px;
+}
+
+.multiselect,
+.multiselect.is_active {
+  background: var(--grey);
+  border: 1px solid var(--grey) !important;
+}
+
+.multiselect-option.is-selected,
+.multiselect-option.is-selected.is-pointed,
+.multiselect-option.is-pointed,
+.multiselect-option:hover {
+  background: var(--grey);
+  color: initial;
+}
+
+.multiselect li {
+  margin: 0;
 }
 
 ol {

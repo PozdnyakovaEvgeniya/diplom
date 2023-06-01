@@ -56,6 +56,14 @@
       return $stmt;
     }
 
+    function getOfShift() {
+      $query = "SELECT * FROM `employees` WHERE `shift_id` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->shift_id));
+
+      return $stmt;
+    }
+
     function getOne()
     {
       $query = "SELECT * FROM `employees` WHERE `id` = ?";

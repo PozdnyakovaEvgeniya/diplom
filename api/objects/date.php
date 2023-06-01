@@ -60,7 +60,11 @@
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      $this->date = $row['id'];
+      $this->id = $row['id'];
+      $this->date = $row['date'];
+      $this->shift_id = $row['shift_id'];
+      $this->hours = $row['hours'];
+      $this->status = $row['status'];
     }
   }
 ?>

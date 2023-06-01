@@ -40,7 +40,7 @@
 
     function getOfMonth($start, $end)
     {
-      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND (`start` >= '$start' AND `start` < '$end') || (`end` >= '$start' AND `end` < '$end') || (`start` < '$start' AND `end` >= '$end') ORDER BY `start`";
+      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND ((`start` >= '$start' AND `start` < '$end') || (`end` >= '$start' AND `end` < '$end') || (`start` < '$start' AND `end` >= '$end')) ORDER BY `start`";
       $stmt = $this->conn->prepare($query);
       $stmt->execute(array($this->employee_id));
 

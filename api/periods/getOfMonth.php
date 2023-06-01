@@ -23,6 +23,7 @@
             extract($row);
             $period_item = array(
                 "id" => $id,
+                "employee_id" => $employee_id,
                 "status" => $status,
                 "start" => $start,
                 "end" => $end,

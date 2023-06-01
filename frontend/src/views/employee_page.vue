@@ -148,7 +148,7 @@ export default {
           status: this.status,
           start: this.start,
           end: this.status == 0 ? this.start : this.end,
-          hours: this.status == 0 ? this.hours : "",
+          hours: this.status == 0 ? this.hours : null,
           shift_id: this.employee.shift_id,
         })
         .then(() => {

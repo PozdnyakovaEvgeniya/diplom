@@ -4,6 +4,7 @@
 	include_once "../objects/employee.php";
 	include_once "../objects/date.php";
 	include_once "../objects/hour.php";
+	include_once "../objects/period.php";
 	$database = new Database();
 	$db = $database->getConnection();
 
@@ -52,15 +53,21 @@
 
 				for ($j = 0; $j < count($dates); $j++) {
 					$hour = new Hour($db);
-					$hour->employee_id = $_GET['id'];
+					$hour->employee_id = $employees[$i]['id'];
 					$hour->date_id = $dates[$j]['id'];
 
 					$stmt = $hour->getOne();
 
 					$dates[$j]['hours'] = $hour->hours ? $hour->hours : 0;
-					$dates[$j]['overtime'] = $hour->overtime ? $hour->overtime : 0;
-					$dates[$j]['time_off'] = $hour->time_off ? $hour->time_off : 0;
-					$dates[$j]['status'] = $hour->status ? $hour->status : 0;
+
+					$period = new Period($db);
+					$period->employee_id = $employees[$i]['id'];
+					$period->start = $dates[$j]['date'];
+					$period->status = 0;
+					
+					$stmt = $period->getOne();
+
+					$dates[$j]['time_off'] = $period->hours ? $period->hours : 0;
 				}
 			} else {
 				$dates = array();

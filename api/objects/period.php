@@ -46,5 +46,15 @@
 
       return $stmt;
     }  
+
+    function getOne() {
+      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND `start` = ? AND `status` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->employee_id, $this->start, $this->status));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->hours = $row["hours"];
+    }
   }
 ?>

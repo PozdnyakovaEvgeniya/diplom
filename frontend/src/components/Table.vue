@@ -22,7 +22,7 @@
             @click="$emit('rowClick', elem[0].name)"
           >
             <Date
-              v-if="item.date && item.id == 'date'"
+              v-if="item.date"
               :values="item.name"
               :request="item.request"
               :saved="saved"
@@ -33,6 +33,7 @@
               :request="item.request"
               @update="$emit('update')"
             ></Delete>
+            <Hours v-else-if="item.hours" :values="item.name"></Hours>
             <template v-else>{{ item.name }}</template>
           </div>
         </template>
@@ -44,11 +45,13 @@
 <script>
 import Delete from "@/components/Delete.vue";
 import Date from "@/components/Date.vue";
+import Hours from "@/components/Hours.vue";
 
 export default {
   components: {
     Delete,
     Date,
+    Hours,
   },
 
   props: {

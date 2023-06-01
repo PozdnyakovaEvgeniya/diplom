@@ -116,7 +116,16 @@ export default {
           ) {
             elem.push({
               id: "date",
-              name: currentDate.hours + currentDate.time_off,
+              name: [
+                currentDate.employee_status == ""
+                  ? currentDate.date_status
+                  : currentDate.employee_status,
+                currentDate.plan_hours,
+                currentDate.hours,
+                currentDate.time_off,
+                currentDate.date,
+              ],
+              hours: true,
               background: currentDate.date_status == 1 ? true : false,
             });
             flag = true;

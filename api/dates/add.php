@@ -25,7 +25,6 @@
 
         if ($num > 0) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                print_r($row);
                 $hour = new Hour($db);
                 $hour->date_id = $date->id;
                 $hour->employee_id = $row['id'];

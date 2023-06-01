@@ -40,13 +40,18 @@
 			if ($num > 0) {
 				$dates = array();
 				
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-					extract($row);
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {					
+					$period = new Period($db);
+					$period->employee_id = $employees[$i]['id'];
+					
+					$period->getOfDate($row['date']);
+
 					$date_item = array(
-						"id" => $id,
-						"date" => $date,
-						"plan_hours" => $hours,
-						"date_status" => $status,
+						"id" => $row['id'],
+						"date" => $row['date'],
+						"plan_hours" => $row['hours'],
+						"date_status" => $row['status'],
+						"employee_status" => $period->status ? $period->status + 2 : "",
 					);
 					array_push($dates, $date_item);
 				}

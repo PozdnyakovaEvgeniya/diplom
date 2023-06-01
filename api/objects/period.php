@@ -56,5 +56,15 @@
 
       $this->hours = $row["hours"];
     }
+
+    function getOfDate($date) {
+      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND `start` <= '$date' AND `end` >= '$date'";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->employee_id));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->status = $row["status"];
+    }
   }
 ?>

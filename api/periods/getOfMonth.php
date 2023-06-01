@@ -21,17 +21,12 @@
         
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-
-            $status = new Status($db);
-            $status->id = $status_id;
-
-            $status->getOne();
-
             $period_item = array(
                 "id" => $id,
-                "status" => $status->name,
+                "status" => $status,
                 "start" => $start,
                 "end" => $end,
+                "hours" => $hours,
             );
             array_push($periods, $period_item);
         }

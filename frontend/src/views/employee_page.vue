@@ -7,7 +7,7 @@
         <div class="form-field">
           <span>Название периода</span>
           <Multiselect
-            v-model="status_id"
+            v-model="status"
             label="name"
             trackBy="id"
             valueProp="id"
@@ -18,7 +18,11 @@
           <span>Начало периода</span>
           <input type="date" v-model="start" />
         </div>
-        <div class="form-field">
+        <div class="form-field" v-if="status == 0">
+          <span>Количество часов</span>
+          <input type="еуче" v-model="hours" />
+        </div>
+        <div class="form-field" v-else>
           <span>Окончание периода</span>
           <input type="date" v-model="end" />
         </div>
@@ -76,8 +80,12 @@ export default {
   data() {
     return {
       employee: {},
-      statuses: [],
-      status_id: "",
+      statuses: [
+        { id: 0, name: "Отгул" },
+        { id: 1, name: "Отпуск" },
+        { id: 2, name: "Больничный" },
+      ],
+      status: 0,
       modalAdd: false,
       start: "",
       end: "",
@@ -86,15 +94,16 @@ export default {
         { id: "delete" },
         { id: "start", name: "Начало периода" },
         { id: "end", name: "Окончание периода" },
+        { id: "hours", name: "Количество часов" },
       ],
       data: [],
       updated: false,
+      hours: "",
     };
   },
 
   created() {
     this.getEmployee();
-    this.getStatuses();
     this.getPeriods();
   },
 
@@ -106,14 +115,6 @@ export default {
         )
         .then((response) => {
           this.employee = response.data;
-        });
-    },
-
-    async getStatuses() {
-      await axios
-        .get("http://localhost/api/statuses/get.php")
-        .then((response) => {
-          this.statuses = response.data;
         });
     },
 
@@ -144,9 +145,10 @@ export default {
       await axios
         .post("http://localhost/api/periods/add.php", {
           employee_id: this.employee.id,
-          status_id: this.status_id,
+          status: this.status,
           start: this.start,
-          end: this.end,
+          end: this.status == 0 ? this.start : this.end,
+          hours: this.status == 0 ? this.hours : "",
         })
         .then(() => {
           this.update();
@@ -160,7 +162,7 @@ export default {
     getData(period) {
       let elem = [
         { id: "id", name: period.id, hidden: true },
-        { id: "name", name: period.status },
+        { id: "name", name: ["Отгул", "Отпуск", "Больничный"][period.status] },
         {
           id: "delete",
           delete: true,
@@ -168,6 +170,7 @@ export default {
         },
         { id: "start", name: period.start.split("-").reverse().join(".") },
         { id: "end", name: period.end.split("-").reverse().join(".") },
+        { id: "hours", name: period.hours },
       ];
       this.data.push(elem);
     },

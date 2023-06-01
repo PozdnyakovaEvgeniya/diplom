@@ -5,10 +5,11 @@
     private $table_name = "periods";
 
     public $id;
-    public $status_id;
+    public $status;
     public $employee_id;
     public $start;
     public $end;
+    public $hours;
 
     public function __construct($db)
     {
@@ -17,15 +18,16 @@
 
     function add() 
     {
-      $this->status_id = htmlspecialchars(strip_tags($this->status_id));
+      $this->status = htmlspecialchars(strip_tags($this->status));
       $this->employee_id = htmlspecialchars(strip_tags($this->employee_id));
       $this->start = htmlspecialchars(strip_tags($this->start));
       $this->end = htmlspecialchars(strip_tags($this->end));
+      $this->hours = htmlspecialchars(strip_tags($this->hours));
       
-      $query = "INSERT INTO `periods`(`status_id`, `employee_id`, `start`, `end`) VALUES (?, ?, ?, ?)";
+      $query = "INSERT INTO `periods`(`status`, `employee_id`, `start`, `end`, `hours`) VALUES (?, ?, ?, ?, ?)";
       $stmt = $this->conn->prepare($query);
 
-      return $stmt->execute(array($this->status_id, $this->employee_id, $this->start, $this->end));
+      return $stmt->execute(array($this->status, $this->employee_id, $this->start, $this->end, $this->hours));
     }
 
     function delete() 

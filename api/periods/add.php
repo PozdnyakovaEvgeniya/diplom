@@ -10,16 +10,11 @@
 
     $data = json_decode(file_get_contents("php://input"));
 
-    $period->status_id = $data->status_id;
+    $period->status = $data->status;
     $period->employee_id = $data->employee_id;
     $period->start = $data->start;
     $period->end = $data->end;
+    $period->hours = $data->hours;
 
     $period->add();
-
-	// if ($period->add()) {
-    //     http_response_code(200);
-    // } else {
-    //     http_response_code(400);
-    // };
 ?>

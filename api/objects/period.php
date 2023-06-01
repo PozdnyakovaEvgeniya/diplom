@@ -36,13 +36,13 @@
     //   return $stmt->execute(array($this->id));
     // }
 
-    // function getOfDepartment()
-    // {
-    //   $query = "SELECT * FROM `shifts` WHERE `department_id` = ?";
-    //   $stmt = $this->conn->prepare($query);
-    //   $stmt->execute(array($this->department_id));
+    function getOfMonth($start, $end)
+    {
+      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND (`start` >= '$start' AND `start` < '$end') || (`end` >= '$start' AND `end` < '$end') || (`start` < '$start' AND `end` >= '$end')";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->employee_id));
 
-    //   return $stmt;
-    // }  
+      return $stmt;
+    }  
   }
 ?>

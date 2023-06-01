@@ -46,7 +46,7 @@
       <div class="content-header">
         <Add @click="showAdd">Добавить смену</Add>
       </div>
-      <Table></Table>
+      <Table :headers="headers" :data="data"></Table>
     </div>
   </div>
 </template>
@@ -76,12 +76,20 @@ export default {
       modalAdd: false,
       start: "",
       end: "",
+      headers: [
+        { id: "name", name: "Наименование периода" },
+        { id: "delete" },
+        { id: "start", name: "Начало периода" },
+        { id: "end", name: "Окончание периода" },
+      ],
+      data: [],
     };
   },
 
   created() {
     this.getEmployee();
     this.getStatuses();
+    this.getPeriods();
   },
 
   methods: {
@@ -100,7 +108,29 @@ export default {
         .get("http://localhost/api/statuses/get.php")
         .then((response) => {
           this.statuses = response.data;
-          console.log(this.statuses);
+        });
+    },
+
+    async getPeriods() {
+      await axios
+        .get(
+          `http://localhost/api/periods/getOfMonth.php?id=${
+            this.$route.params.id
+          }&start=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(
+            +this.$route.params.month + 1
+          )}-01&end=${this.normalizeNum(
+            this.$route.params.year
+          )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
+        )
+        .then((response) => {
+          for (let period of response.data) {
+            this.getData(period);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
 
@@ -113,12 +143,35 @@ export default {
           end: this.end,
         })
         .then(() => {
-          this.update();
+          // this.update();
           this.closeAdd();
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    getData(period) {
+      let elem = [
+        { id: "id", name: period.id, hidden: true },
+        { id: "name", name: period.status },
+        {
+          id: "delete",
+          delete: true,
+          // request: `http://localhost/api/shifts/delete.php?id=${shift.id}`,
+        },
+        { id: "start", name: period.start },
+        { id: "end", name: period.end },
+      ];
+      this.data.push(elem);
+    },
+
+    normalizeNum(num) {
+      if (num > 0 && num < 10) {
+        return "0" + num;
+      }
+
+      return num;
     },
 
     showAdd() {

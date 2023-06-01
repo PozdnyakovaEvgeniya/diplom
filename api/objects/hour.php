@@ -31,5 +31,21 @@
       $this->time_off = $row["time_off"];
       $this->status = $row["status"];
     }  
+
+    function add() {
+      $query = "SELECT * FROM `hours` WHERE `employee_id` = ? AND `date_id` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->employee_id, $this->date_id));
+
+      if($stmt) {
+        $query = "UPDATE `hours` SET `overtime`=? WHERE `employee_id` = ? AND `date_id` = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(array($this->time_off, $this->employee_id, $this->date_id));
+      } else {
+        $query = "INSERT INTO `hours`(`employee_id`, `date_id`, `time_off`) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(array($this->employee_id, $this->date_id, $this->time_off));
+      }
+    }
   }
 ?>

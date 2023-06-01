@@ -149,6 +149,7 @@ export default {
           start: this.start,
           end: this.status == 0 ? this.start : this.end,
           hours: this.status == 0 ? this.hours : "",
+          shift_id: this.employee.shift_id,
         })
         .then(() => {
           this.update();

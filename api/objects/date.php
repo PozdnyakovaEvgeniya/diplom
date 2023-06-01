@@ -51,5 +51,16 @@
 
       return $stmt;
     }  
+
+    function getOne() 
+    {
+      $query = "SELECT * FROM `dates` WHERE `shift_id` = ? AND `date` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->shift_id, $this->date));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->date = $row['id'];
+    }
   }
 ?>

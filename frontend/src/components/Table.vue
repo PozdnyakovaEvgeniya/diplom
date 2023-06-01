@@ -92,7 +92,8 @@ export default {
 
 .table {
   display: grid;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
 }
 
 .header {

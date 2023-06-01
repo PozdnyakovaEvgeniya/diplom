@@ -15,10 +15,11 @@
     $period->start = $data->start;
     $period->end = $data->end;
 
+    $period->add();
 
-	if ($period->add()) {
-        http_response_code(200);
-    } else {
-        http_response_code(400);
-    };
+	// if ($period->add()) {
+    //     http_response_code(200);
+    // } else {
+    //     http_response_code(400);
+    // };
 ?>

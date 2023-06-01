@@ -1,16 +1,16 @@
 <?php
 	include_once "../config/headers.php";
 	include_once "../config/database.php";
-	include_once "../objects/shift.php";
+	include_once "../objects/period.php";
 
 	$database = new Database();
 	$db = $database->getConnection();
 
-    $shift = new Shift($db);
+    $period = new Period($db);
 
-    $shift->id = $_GET['id'];
+    $period->id = $_GET['id'];
 
-	if ($shift->delete()) {
+	if ($period->delete()) {
         http_response_code(200);
     } else {
         http_response_code(400);

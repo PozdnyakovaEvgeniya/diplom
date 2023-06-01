@@ -15,11 +15,11 @@
           ></Multiselect>
         </div>
         <div class="form-field">
-          <span>Начало</span>
+          <span>Начало периода</span>
           <input type="date" v-model="start" />
         </div>
         <div class="form-field">
-          <span>Конец</span>
+          <span>Окончание периода</span>
           <input type="date" v-model="end" />
         </div>
         <div class="form-button">
@@ -44,9 +44,14 @@
         </div>
       </div>
       <div class="content-header">
-        <Add @click="showAdd">Добавить смену</Add>
+        <Add @click="showAdd">Добавить период</Add>
       </div>
-      <Table :headers="headers" :data="data"></Table>
+      <Table
+        v-if="data.length != 0"
+        :headers="headers"
+        :data="data"
+        @update="update"
+      ></Table>
     </div>
   </div>
 </template>
@@ -83,6 +88,7 @@ export default {
         { id: "end", name: "Окончание периода" },
       ],
       data: [],
+      updated: false,
     };
   },
 
@@ -143,7 +149,7 @@ export default {
           end: this.end,
         })
         .then(() => {
-          // this.update();
+          this.update();
           this.closeAdd();
         })
         .catch((error) => {
@@ -158,10 +164,10 @@ export default {
         {
           id: "delete",
           delete: true,
-          // request: `http://localhost/api/shifts/delete.php?id=${shift.id}`,
+          request: `http://localhost/api/periods/delete.php?id=${period.id}`,
         },
-        { id: "start", name: period.start },
-        { id: "end", name: period.end },
+        { id: "start", name: period.start.split("-").reverse().join(".") },
+        { id: "end", name: period.end.split("-").reverse().join(".") },
       ];
       this.data.push(elem);
     },
@@ -182,13 +188,31 @@ export default {
       this.name = "";
       this.modalAdd = false;
     },
+
+    update() {
+      this.updated = true;
+    },
+  },
+
+  watch: {
+    updated() {
+      if (this.updated == true) {
+        this.data = [];
+        this.getPeriods();
+        this.updated = false;
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.employee {
-  display: grid;
-  gap: 10px;
+.table-wrapper {
+  width: max-content;
+}
+
+.table {
+  width: max-content;
+  max-width: 100%;
 }
 </style>

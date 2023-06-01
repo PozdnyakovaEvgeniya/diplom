@@ -28,17 +28,17 @@
       return $stmt->execute(array($this->status_id, $this->employee_id, $this->start, $this->end));
     }
 
-    // function delete() 
-    // {
-    //   $query = "DELETE FROM `shifts` WHERE `id` = ?";
-    //   $stmt = $this->conn->prepare($query);
+    function delete() 
+    {
+      $query = "DELETE FROM `periods` WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
 
-    //   return $stmt->execute(array($this->id));
-    // }
+      return $stmt->execute(array($this->id));
+    }
 
     function getOfMonth($start, $end)
     {
-      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND (`start` >= '$start' AND `start` < '$end') || (`end` >= '$start' AND `end` < '$end') || (`start` < '$start' AND `end` >= '$end')";
+      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND (`start` >= '$start' AND `start` < '$end') || (`end` >= '$start' AND `end` < '$end') || (`start` < '$start' AND `end` >= '$end') ORDER BY `start`";
       $stmt = $this->conn->prepare($query);
       $stmt->execute(array($this->employee_id));
 

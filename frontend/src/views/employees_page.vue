@@ -57,7 +57,7 @@
       <div class="content-header">
         <Add @click="showAdd">Добавить работника</Add>
       </div>
-      <Table :headers="headers" :data="data"></Table>
+      <Table :headers="headers" :data="data" @update="update"></Table>
     </div>
   </div>
 </template>
@@ -146,7 +146,7 @@ export default {
         {
           id: "delete",
           delete: true,
-          request: `http://localhost/api/employee/delete.php?id=${employee.id}`,
+          request: `http://localhost/api/employees/delete.php?id=${employee.id}`,
         },
         { id: "name", name: employee.name },
         { id: "job_title", name: employee.job_title },

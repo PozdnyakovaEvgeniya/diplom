@@ -119,5 +119,13 @@
     function getShortName() {
       return $this->surname." ".mb_substr($this->name, 0, 1).".".mb_substr($this->patronymic, 0, 1).".";
     }
+
+    function delete() 
+    {
+      $query = "DELETE FROM `employees` WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->id));
+    }
   }
 ?>

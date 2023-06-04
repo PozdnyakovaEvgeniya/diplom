@@ -14,9 +14,9 @@
 	$stmt = $date->getOfMonth($start, $end);
     $num = $stmt->rowCount();
 
-	if ($num > 0) {
-        $dates = array();
+    $dates = array();
 
+	if ($num > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $date_item = array(
@@ -27,10 +27,8 @@
             );
             array_push($dates, $date_item);
         }
+    } 
 
-        http_response_code(200);
-        echo json_encode($dates);
-    } else {
-        http_response_code(404);
-    }
+    http_response_code(200);
+    echo json_encode($dates);
 ?>

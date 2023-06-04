@@ -16,9 +16,11 @@
     $period->end = $data->end;
     $period->hours = $data->hours;
 
-    if ($period->add()) {
-        http_response_code(200);
-    } else {
-        http_response_code(400);
-    };
+    $period->add();
+
+    // if ($period->add()) {
+    //     // http_response_code(200);
+    // } else {
+    //     // http_response_code(400);
+    // };
 ?>

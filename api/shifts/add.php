@@ -13,10 +13,11 @@
     $shift->name = $data->name;
     $shift->department_id = $data->department_id;
 
+    $shift->add();
 
-	if ($shift->add()) {
-        http_response_code(200);
-    } else {
-        http_response_code(400);
-    };
+	// if ($shift->add()) {
+    //     // http_response_code(200);
+    // } else {
+    //     // http_response_code(400);
+    // };
 ?>

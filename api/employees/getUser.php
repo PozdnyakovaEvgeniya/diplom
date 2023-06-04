@@ -10,15 +10,15 @@
 
 	$data = json_decode(file_get_contents("php://input")); 
   
-  $token = new Token($db);
-  $token->token = $data->token;
-  $token->getOfToken();
+	$token = new Token($db);
+	$token->token = $data->token;
+	$token->getOfToken();
 
-	$employee = new Employee($db);
-  $employee->id = $token->employee_id;
-  $employee->getOne();
+		$employee = new Employee($db);
+	$employee->id = $token->employee_id;
+	$employee->getOne();
 
-  if ($employee->number != null) {
+	if ($employee->number != null) {
 		$employee = array(
 			"id" => $employee->id,
 			"number" => $employee->number,
@@ -28,10 +28,10 @@
 			"job_title" => $employee->job_title,
 		);
 
-		http_response_code(200);
+		// http_response_code(200);
 		echo json_encode($employee);
 	} else {
-		http_response_code(404);
+		// http_response_code(404);
 		echo json_encode(array("message" => "Доступ запрещен"), JSON_UNESCAPED_UNICODE);
 	}
 ?>

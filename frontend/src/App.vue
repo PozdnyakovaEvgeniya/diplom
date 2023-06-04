@@ -214,7 +214,7 @@ li {
 
 .form-field input {
   padding: 10px 20px;
-  width: 350px;
+  width: 450px;
 }
 
 .wrapper {

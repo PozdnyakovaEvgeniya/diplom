@@ -29,14 +29,14 @@
       $this->job_title = htmlspecialchars(strip_tags($this->job_title));
       $this->department_id = htmlspecialchars(strip_tags($this->department_id));
       $this->status = htmlspecialchars(strip_tags($this->status));
-      $this->password = htmlspecialchars(strip_tags($this->password));
+      $this->shift_id = htmlspecialchars(strip_tags($this->shift_id));
       
-      $password = empty($_POST['password']) ? NULL : password_hash($this->password, PASSWORD_BCRYPT);
+      $this->password = empty($this->password) ? NULL : password_hash($this->password, PASSWORD_BCRYPT);
       
-      $query = "INSERT INTO `employees`(`number`, `surname`, `name`, `patronymic`, `job_title`, `department_id`, `status`, `working_mode`, `password`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $query = "INSERT INTO `employees`(`number`, `surname`, `name`, `patronymic`, `job_title`, `department_id`, `shift_id`, `status`, `password`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
       $stmt = $this->conn->prepare($query);
 
-      return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->status, $this->working_mode, $password));
+      return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->shift_id, $this->status, $this->password));
     }
 
     function login() {

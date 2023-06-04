@@ -38,8 +38,8 @@ export default {
 
 <style scoped>
 .icon {
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
 }
 
 button {

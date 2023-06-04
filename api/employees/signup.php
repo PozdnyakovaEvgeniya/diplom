@@ -8,32 +8,27 @@
 
   $employee = new Employee($db);
 
-  $employee->number = $_POST['number'];
-  $employee->surname = $_POST['surname'];
-  $employee->name = $_POST['name'];
-  $employee->patronymic = empty($_POST['patronymic']) ? NULL : $_POST['patronymic'];
-  $employee->job_title = $_POST['job_title'];
-  $employee->department_id = $_POST['department_id'];
-  $employee->status = empty($_POST['status']) ? 0 : $_POST['status'];
-  $employee->working_mode = empty($_POST['working_mode']) ? 0 : $_POST['working_mode'];
-  $employee->password = empty($_POST['password']) ? NULL : $_POST['password'];
+	$data = json_decode(file_get_contents("php://input"));
+
+  $employee->number = $data->number;
+  $employee->surname = $data->surname;
+  $employee->name = $data->name;
+  $employee->patronymic = empty($data->patronymic) ? NULL : $data->patronymic;
+  $employee->job_title = $data->job_title;
+  $employee->department_id = $data->department_id;
+  $employee->shift_id = $data->shift_id;
+  $employee->status = $data->status;
+  $employee->password = empty($data->password) ? NULL : $data->password;
 
   if (
-    isset($employee->number) &&
-    isset($employee->surname) &&
-    isset($employee->name) &&
-    isset($employee->job_title) &&
-    isset($employee->department_id) &&
-    isset($employee->status) &&
-    isset($employee->working_mode) &&
     !$employee->findNumber() &&
-    $employee->create()
+    $stmt = $employee->create()
   ) {
-    http_response_code(200);
+    // http_response_code(200);
 
     echo json_encode(array("message" => "success"));
   } else {
-    http_response_code(400);
+    // http_response_code(400);
 
     echo json_encode(array("message" => "Невозможно создать пользователя"));
   }

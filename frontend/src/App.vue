@@ -1,15 +1,26 @@
 <template>
   <div class="wrapper">
     <div v-if="$route.path != '/login'" class="main-nav">
-      <h4>{{ now.getFullYear() }} год</h4>
-      <router-link
-        v-for="(month, index) in months"
-        :key="index"
-        :to="setPath(now.getFullYear(), index)"
-        :class="setClass(now.getFullYear(), index)"
-      >
-        {{ month }}
-      </router-link>
+      <template v-if="this.user.status == 1">
+        <h4>{{ now.getFullYear() }} год</h4>
+        <router-link
+          v-for="(month, index) in months"
+          :key="index"
+          :to="setPath(now.getFullYear(), index)"
+          :class="setClass(now.getFullYear(), index)"
+        >
+          {{ month }}
+        </router-link>
+      </template>
+      <template v-else-if="this.user != [] && this.user.status == 2">
+        <router-link
+          v-for="department in departments"
+          :key="department.id"
+          to="#"
+        >
+          {{ department.name }}
+        </router-link>
+      </template>
     </div>
     <router-view class="container"></router-view>
   </div>
@@ -37,10 +48,20 @@ export default {
         "Декабрь",
       ],
       user: {},
+      departments: [],
     };
   },
 
   methods: {
+    async getDepartments() {
+      await axios
+        .get("http://localhost/api/departments/get.php")
+        .then((response) => {
+          this.departments = response.data;
+          console.log(response.data);
+        });
+    },
+
     setClass(year, month) {
       if (year == this.now.getFullYear() && month == this.now.getMonth()) {
         return "now";
@@ -67,13 +88,18 @@ export default {
         })
         .then((response) => {
           this.user = response.data;
-          if (response.data.id == 1) {
+          if (response.data.status == 1) {
             this.$router.replace({
               name: "timesheet",
               params: {
                 year: this.now.getFullYear(),
                 month: this.now.getMonth(),
               },
+            });
+          } else if (response.data.status == 2) {
+            this.getDepartments();
+            this.$router.replace({
+              name: "hr-main",
             });
           }
         })
@@ -100,8 +126,10 @@ export default {
     }
   },
 
-  created() {
-    this.getUser();
+  watch: {
+    $route() {
+      this.getUser();
+    },
   },
 };
 </script>

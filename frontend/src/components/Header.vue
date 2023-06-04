@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <h1>{{ department.name }}</h1>
+    <h1>{{ name }}</h1>
     <div class="user">
       <span class="name">{{ user.short_name }}</span>
       <span class="job_title">{{ user.job_title }}</span>
@@ -16,15 +16,18 @@
 import axios from "axios";
 
 export default {
+  props: {
+    name: String,
+  },
+
   data() {
     return {
       user: {},
-      department: {},
     };
   },
 
   async created() {
-    this.getUser().then(() => this.getDepartment());
+    this.getUser();
   },
 
   methods: {
@@ -38,19 +41,6 @@ export default {
         })
         .catch(() => {
           this.logout();
-        });
-    },
-
-    async getDepartment() {
-      await axios
-        .get(
-          `http://localhost/api/departments/getOne.php?id=${this.user.department_id}`
-        )
-        .then((response) => {
-          this.department = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
         });
     },
 

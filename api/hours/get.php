@@ -13,9 +13,9 @@
 	$stmt = $employee->getOfDepartment();
     $num = $stmt->rowCount();
 
-	if ($num > 0) {
-        $employees = array();
-        
+	$employees = array();
+	
+	if ($num > 0) {        
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $employee_item = array(
@@ -80,9 +80,8 @@
 
 			$employees[$i]['dates'] = $dates;
 		}
-		http_response_code(200);
-		echo json_encode($employees);
-	} else {
-		http_response_code(404);
-	}		
+	} 	
+
+	http_response_code(200);
+	echo json_encode($employees);
 ?>

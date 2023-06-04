@@ -32,5 +32,14 @@
 
       $this->name = $row["name"];
     }
+
+    function get()
+    {
+      $query = "SELECT * FROM `departments`";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute();
+
+      return $stmt;
+    }
   }
 ?>

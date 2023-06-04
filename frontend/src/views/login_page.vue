@@ -65,6 +65,10 @@ export default {
                 month: this.now.getMonth(),
               },
             });
+          } else if (response.data.status == 2) {
+            this.$router.replace({
+              name: "hr-main",
+            });
           }
         })
         .catch((error) => {

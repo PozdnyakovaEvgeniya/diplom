@@ -1,5 +1,5 @@
 <?php
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/period.php";
 	include_once "../objects/status.php";
@@ -34,5 +34,7 @@
     
         http_response_code(200);
         echo json_encode($periods);
-    }		
+    } else {
+        http_response_code(404);
+    }	
 ?>

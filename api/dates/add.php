@@ -1,5 +1,5 @@
 <?php
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/date.php";
 	include_once "../objects/hour.php";
@@ -30,6 +30,9 @@
                 $hour->employee_id = $row['id'];
                 $hour->add();
             }
-        }           
-    } 
+        }     
+        http_response_code(200);      
+    } else {
+        http_response_code(400);
+    }
 ?>

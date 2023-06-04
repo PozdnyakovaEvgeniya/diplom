@@ -1,5 +1,5 @@
 <?php
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/period.php";
 

@@ -1,5 +1,5 @@
 <?php
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/period.php";
 
@@ -16,5 +16,9 @@
     $period->end = $data->end;
     $period->hours = $data->hours;
 
-    $period->add();
+    if ($period->add()) {
+        http_response_code(200);
+    } else {
+        http_response_code(400);
+    };
 ?>

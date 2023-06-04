@@ -1,5 +1,5 @@
 <?php
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/employee.php";
 
@@ -25,6 +25,5 @@
 		echo json_encode($employee);
 	} else {
 		http_response_code(404);
-		echo json_encode(array("message" => "Отдел не существует"), JSON_UNESCAPED_UNICODE);
 	}
 ?>

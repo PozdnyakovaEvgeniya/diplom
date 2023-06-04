@@ -1,5 +1,5 @@
 <?php 
-  include_once "../config/headers.php";
+  include "../config/headers.php";
   include_once "../config/database.php";
   include_once "../objects/token.php";
 
@@ -17,6 +17,5 @@
 }
 else {
     http_response_code(503);
-    echo json_encode(array("message" => "Не удалось выйти"));
 }
 ?>

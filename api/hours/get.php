@@ -1,5 +1,5 @@
 <?php
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/employee.php";
 	include_once "../objects/date.php";
@@ -82,5 +82,7 @@
 		}
 		http_response_code(200);
 		echo json_encode($employees);
+	} else {
+		http_response_code(404);
 	}		
 ?>

@@ -1,6 +1,6 @@
 <?php
   
-	include_once "../config/headers.php";
+	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/employee.php";
 	include_once "../objects/token.php";
@@ -28,10 +28,10 @@
 			"job_title" => $employee->job_title,
 		);
 
-		// http_response_code(200);
+		http_response_code(200);
 		echo json_encode($employee);
 	} else {
-		// http_response_code(404);
+		http_response_code(404);
 		echo json_encode(array("message" => "Доступ запрещен"), JSON_UNESCAPED_UNICODE);
 	}
 ?>

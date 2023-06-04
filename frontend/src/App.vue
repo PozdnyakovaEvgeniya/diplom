@@ -13,10 +13,11 @@
         </router-link>
       </template>
       <template v-else-if="this.user != [] && this.user.status == 2">
+        <h4>Отделы</h4>
         <router-link
           v-for="department in departments"
           :key="department.id"
-          to="#"
+          :to="{ name: 'employees', params: { department_id: department.id } }"
         >
           {{ department.name }}
         </router-link>
@@ -58,7 +59,6 @@ export default {
         .get("http://localhost/api/departments/get.php")
         .then((response) => {
           this.departments = response.data;
-          console.log(response.data);
         });
     },
 
@@ -88,19 +88,8 @@ export default {
         })
         .then((response) => {
           this.user = response.data;
-          if (response.data.status == 1) {
-            this.$router.replace({
-              name: "timesheet",
-              params: {
-                year: this.now.getFullYear(),
-                month: this.now.getMonth(),
-              },
-            });
-          } else if (response.data.status == 2) {
+          if (response.data.status == 2) {
             this.getDepartments();
-            this.$router.replace({
-              name: "hr-main",
-            });
           }
         })
         .catch(() => {
@@ -253,6 +242,7 @@ li {
 }
 
 .main-nav a {
+  font-size: 14px;
   width: 100%;
   padding: 10px 20px;
   border: 1px solid var(--grey);

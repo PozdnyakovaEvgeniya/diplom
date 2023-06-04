@@ -29,7 +29,12 @@ export default {
       now: new Date(),
       error: "",
       user: "",
+      departments: [],
     };
+  },
+
+  created() {
+    this.getDepartments();
   },
 
   methods: {
@@ -67,12 +72,23 @@ export default {
             });
           } else if (response.data.status == 2) {
             this.$router.replace({
-              name: "hr-main",
+              name: "employees",
+              params: {
+                department_id: this.departments[0].id,
+              },
             });
           }
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+
+    async getDepartments() {
+      await axios
+        .get("http://localhost/api/departments/get.php")
+        .then((response) => {
+          this.departments = response.data;
         });
     },
   },

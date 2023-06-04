@@ -35,7 +35,7 @@
 
     function get()
     {
-      $query = "SELECT * FROM `departments`";
+      $query = "SELECT * FROM `departments` ORDER BY `name`";
       $stmt = $this->conn->prepare($query);
       $stmt->execute();
 

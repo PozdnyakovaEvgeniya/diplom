@@ -83,6 +83,16 @@
           <input type="text" v-model="employee.job_title" />
         </div>
         <div class="form-field">
+          <span>Отдел</span>
+          <Multiselect
+            v-model="employee.department_id"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="departments"
+          ></Multiselect>
+        </div>
+        <div class="form-field">
           <span>Смена</span>
           <Multiselect
             v-model="employee.shift_id"
@@ -177,12 +187,14 @@ export default {
         { id: 3, name: "Сотрудник бухгалтерии" },
       ],
       error: "",
+      departments: [],
     };
   },
 
   created() {
-    this.getEmployees(this.$route.params.department_id);
     this.getShifts();
+    this.getDepartments();
+    this.getEmployees(this.$route.params.department_id);
   },
 
   methods: {
@@ -194,6 +206,14 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+
+    async getDepartments() {
+      await axios
+        .get("http://localhost/api/departments/get.php")
+        .then((response) => {
+          this.departments = response.data;
         });
     },
 
@@ -212,6 +232,18 @@ export default {
     },
 
     getData(employee) {
+      for (let shift of this.shifts) {
+        if (shift.id == employee.shift_id) {
+          employee.shift = shift.name;
+          break;
+        }
+      }
+      for (let status of this.statuses) {
+        if (status.id == employee.status) {
+          employee.status = status.name;
+          break;
+        }
+      }
       let elem = [
         { id: "id", name: employee.id, hidden: true },
         { id: "number", name: employee.number },
@@ -227,7 +259,7 @@ export default {
         },
         { id: "name", name: employee.name },
         { id: "job_title", name: employee.job_title },
-        { id: "shift", name: employee.shift_id },
+        { id: "shift", name: employee.shift },
         { id: "status", name: employee.status },
       ];
       this.data.push(elem);

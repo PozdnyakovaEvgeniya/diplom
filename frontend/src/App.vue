@@ -171,7 +171,7 @@ button {
   background: var(--purple);
   color: var(--white);
   border: none;
-  padding: 10px 20px;
+  padding: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 400;

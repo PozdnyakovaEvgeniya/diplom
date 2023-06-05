@@ -146,7 +146,7 @@ export default {
 :root {
   --grey: #e6e6fa;
   --white: #ffffff;
-  --purple: #9999f8;
+  --purple: #8888e7;
   --black: #000000;
   --blackout: #f5f5f5b3;
 }
@@ -212,7 +212,7 @@ li {
   margin: 10px 0;
 }
 
-.form-field input {
+.form-field input:not([type="checkbox"]) {
   padding: 10px 20px;
   width: 450px;
 }

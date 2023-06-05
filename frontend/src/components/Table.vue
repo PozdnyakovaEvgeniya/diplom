@@ -28,6 +28,10 @@
               :saved="saved"
               @save="$emit('save')"
             />
+            <Update
+              v-else-if="item.update"
+              @edit="$emit('edit', item.data_id)"
+            ></Update>
             <Delete
               v-else-if="item.delete"
               :request="item.request"
@@ -44,12 +48,14 @@
 
 <script>
 import Delete from "@/components/Delete.vue";
+import Update from "@/components/Update.vue";
 import Date from "@/components/Date.vue";
 import Hours from "@/components/Hours.vue";
 
 export default {
   components: {
     Delete,
+    Update,
     Date,
     Hours,
   },
@@ -119,7 +125,8 @@ export default {
   cursor: pointer;
 }
 
-.delete {
+.delete,
+.update {
   border-left: none;
 }
 

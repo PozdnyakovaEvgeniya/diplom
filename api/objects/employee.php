@@ -39,6 +39,23 @@
       return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->shift_id, $this->status, $this->password));
     }
 
+    function update() 
+    {      
+      $this->number = htmlspecialchars(strip_tags($this->number));
+      $this->surname = htmlspecialchars(strip_tags($this->surname));
+      $this->name = htmlspecialchars(strip_tags($this->name));
+      $this->patronymic = htmlspecialchars(strip_tags($this->patronymic));
+      $this->job_title = htmlspecialchars(strip_tags($this->job_title));
+      $this->department_id = htmlspecialchars(strip_tags($this->department_id));
+      $this->status = htmlspecialchars(strip_tags($this->status));
+      $this->shift_id = htmlspecialchars(strip_tags($this->shift_id));
+      
+      $query = "UPDATE `employees` SET `number` = ?, `surname` = ?, `name` = ?, `patronymic` = ?, `job_title` = ?, `department_id` = ?, `shift_id` = ?, `status` = ?,`password` = ? WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->shift_id, $this->status, $this->password, $this->id));
+    }
+
     function login() {
       $this->token = sha1(random_bytes(100)) . sha1(random_bytes(100));
       
@@ -79,7 +96,7 @@
       $this->job_title = $row["job_title"];
       $this->department_id = $row["department_id"];
       $this->status = $row["status"];
-      $this->working_mode = $row["working_mode"];
+      $this->shift_id = $row["shift_id"];
       $this->overtime = $row["overtime"];
       $this->password = $row["password"];
     }

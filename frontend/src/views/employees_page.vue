@@ -44,7 +44,12 @@
             :options="statuses"
           ></Multiselect>
         </div>
-        <div v-if="employee.status != 0" class="form-field">
+        <div
+          v-if="
+            employee.status == 1 || employee.status == 2 || employee.status == 3
+          "
+          class="form-field"
+        >
           <span>Пароль</span>
           <input type="password" v-model="employee.password" />
         </div>
@@ -53,11 +58,74 @@
         </div>
       </form>
     </Modal>
+    <Modal :show="modalUpdate" @close="closeUpdate">
+      <form class="form" @submit.prevent="updateEmployee">
+        <h4>Редактировать работника</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Табельный номер</span>
+          <input type="text" v-model="employee.number" />
+        </div>
+        <div class="form-field">
+          <span>Фамилия</span>
+          <input type="text" v-model="employee.surname" />
+        </div>
+        <div class="form-field">
+          <span>Имя</span>
+          <input type="text" v-model="employee.name" />
+        </div>
+        <div class="form-field">
+          <span>Отчество</span>
+          <input type="text" v-model="employee.patronymic" />
+        </div>
+        <div class="form-field">
+          <span>Должность</span>
+          <input type="text" v-model="employee.job_title" />
+        </div>
+        <div class="form-field">
+          <span>Смена</span>
+          <Multiselect
+            v-model="employee.shift_id"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="shifts"
+          ></Multiselect>
+        </div>
+        <div class="form-field">
+          <span>Уровень доступа</span>
+          <Multiselect
+            v-model="employee.status"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="statuses"
+          ></Multiselect>
+        </div>
+        <div
+          v-if="
+            employee.status == 1 || employee.status == 2 || employee.status == 3
+          "
+          class="form-field"
+        >
+          <span>Пароль</span>
+          <input type="password" v-model="employee.password" />
+        </div>
+        <div class="form-button">
+          <button>Сохранить</button>
+        </div>
+      </form>
+    </Modal>
     <div class="content">
       <div class="content-header">
         <Add @click="showAdd">Добавить работника</Add>
       </div>
-      <Table :headers="headers" :data="data" @update="update"></Table>
+      <Table
+        :headers="headers"
+        :data="data"
+        @update="update"
+        @edit="edit"
+      ></Table>
     </div>
   </div>
 </template>
@@ -75,6 +143,7 @@ export default {
   data() {
     return {
       employee: {
+        id: "",
         number: "",
         surname: "",
         name: "",
@@ -88,6 +157,7 @@ export default {
       headers: [
         { id: "id", name: "id", hidden: true },
         { id: "number", name: "Табельный номер" },
+        { id: "update" },
         { id: "delete" },
         { id: "name", name: "ФИО" },
         { id: "job_title", name: "Должность" },
@@ -97,6 +167,7 @@ export default {
       data: [],
       employees: [],
       modalAdd: false,
+      modalUpdate: false,
       updated: false,
       shifts: [],
       statuses: [
@@ -111,6 +182,7 @@ export default {
 
   created() {
     this.getEmployees(this.$route.params.department_id);
+    this.getShifts();
   },
 
   methods: {
@@ -144,6 +216,11 @@ export default {
         { id: "id", name: employee.id, hidden: true },
         { id: "number", name: employee.number },
         {
+          id: "update",
+          update: true,
+          data_id: employee.id,
+        },
+        {
           id: "delete",
           delete: true,
           request: `http://localhost/api/employees/delete.php?id=${employee.id}`,
@@ -157,6 +234,9 @@ export default {
     },
 
     async addEmployee() {
+      if (this.employee.status == 0) {
+        this.employee.password = "";
+      }
       await axios
         .post("http://localhost/api/employees/signup.php", this.employee)
         .then(() => {
@@ -164,7 +244,22 @@ export default {
           this.closeAdd();
         })
         .catch((error) => {
-          console.log(error);
+          this.error = error.response.data.message;
+        });
+    },
+
+    async updateEmployee() {
+      if (this.employee.status == 0) {
+        this.employee.password = "";
+      }
+      await axios
+        .post("http://localhost/api/employees/update.php", this.employee)
+        .then(() => {
+          this.update();
+          this.closeUpdate();
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
         });
     },
 
@@ -182,25 +277,58 @@ export default {
         });
     },
 
+    async edit(id) {
+      await axios
+        .get(`http://localhost/api/employees/getOne.php?id=${id}`)
+        .then((response) => {
+          this.employee = response.data;
+          this.showUpdate();
+        });
+    },
+
     update() {
       this.updated = true;
     },
 
     showAdd() {
-      this.getShifts();
       this.modalAdd = true;
     },
 
     closeAdd() {
-      this.name = "";
+      this.employee.number = "";
+      this.employee.surname = "";
+      this.employee.name = "";
+      this.employee.patronymic = "";
+      this.employee.job_title = "";
+      this.employee.shift_id = "";
+      this.employee.status = 0;
+      this.employee.password = "";
+      this.error = "";
       this.modalAdd = false;
+    },
+
+    showUpdate() {
+      this.modalUpdate = true;
+    },
+
+    closeUpdate() {
+      this.employee.number = "";
+      this.employee.surname = "";
+      this.employee.name = "";
+      this.employee.patronymic = "";
+      this.employee.job_title = "";
+      this.employee.shift_id = "";
+      this.employee.status = 0;
+      this.employee.password = "";
+      this.error = "";
+      this.modalUpdate = false;
     },
   },
 
   watch: {
     updated() {
+      this.data = [];
       if (this.updated == true) {
-        this.data = [];
         this.getEmployees(this.$route.params.department_id);
         this.updated = false;
       }
@@ -209,4 +337,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.table-wrapper {
+  width: max-content;
+}
+
+.table {
+  width: max-content;
+  max-width: 100%;
+}
+</style>

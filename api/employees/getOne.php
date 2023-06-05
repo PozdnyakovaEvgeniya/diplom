@@ -15,10 +15,16 @@
 		$employee = array(
 			"id" => $employee->id,
 			"number" => $employee->number,
-			"name" => $employee->getFullName(),
+			"surname" => $employee->surname,
+			"name" => $employee->name,
+			"patronymic" => $employee->patronymic,
+			"fullName" => $employee->getFullName(),
 			"job_title" => $employee->job_title,
-			"working_mode" => $employee->working_mode,
+			"department_id" => $employee->department_id,
+			"shift_id" => $employee->shift_id,
+			"status" => $employee->status,
 			"overtime" => $employee->overtime,
+			"password" => $employee->password,
 		);
 
 		http_response_code(200);

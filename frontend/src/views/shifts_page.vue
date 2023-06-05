@@ -251,10 +251,6 @@ export default {
         this.updated = false;
       }
     },
-
-    saved() {
-      console.log(this.saved);
-    },
   },
 };
 </script>

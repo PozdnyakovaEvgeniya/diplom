@@ -213,6 +213,7 @@ export default {
 <style scoped>
 .table-wrapper {
   width: max-content;
+  max-width: 100%;
 }
 
 .table {

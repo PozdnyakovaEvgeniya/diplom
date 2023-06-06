@@ -1,28 +1,29 @@
 <template>
-  <button>
+  <button :class="class">
     <svg
       class="icon"
-      width="32px"
-      height="32px"
-      viewBox="0 0 32 32"
-      version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
+      version="1.1"
+      id="Layer_1"
+      x="0px"
+      y="0px"
+      viewBox="0 0 512 512"
+      style="enable-background: new 0 0 512 512"
+      xml:space="preserve"
     >
-      <defs></defs>
-      <g
-        id="Page-2-Copy"
-        stroke="none"
-        stroke-width="1"
-        fill="none"
-        fill-rule="evenodd"
-      >
-        <g id="51" stroke="#ffffff" fill="#ffffff">
+      <g>
+        <g>
           <path
-            d="M15,15 L0.992786407,15 C0.444485615,15 0,15.4438648 0,16 C0,16.5522847 0.452362061,17 0.992786407,17 L15,17 L15,31.0072136 C15,31.5555144 15.4438648,32 16,32 C16.5522847,32 17,31.5476379 17,31.0072136 L17,17 L31.0072136,17 C31.5555144,17 32,16.5561352 32,16 C32,15.4477153 31.5476379,15 31.0072136,15 L17,15 L17,0.992786407 C17,0.444485615 16.5561352,-8.15366451e-17 16,-1.8369702e-16 C15.4477153,-2.85150083e-16 15,0.452362061 15,0.992786407 L15,15 Z"
-            id="Rectangle-458"
-            stroke="none"
-          ></path>
+            d="M256,0c-11.422,0-20.682,9.26-20.682,20.682v470.636c0,11.423,9.26,20.682,20.682,20.682    c11.423,0,20.682-9.259,20.682-20.682V20.682C276.682,9.26,267.423,0,256,0z"
+          />
+        </g>
+      </g>
+      <g>
+        <g>
+          <path
+            d="M491.318,235.318H20.682C9.26,235.318,0,244.578,0,256c0,11.423,9.26,20.682,20.682,20.682h470.636    c11.423,0,20.682-9.259,20.682-20.682C512,244.578,502.741,235.318,491.318,235.318z"
+          />
         </g>
       </g>
     </svg>
@@ -32,20 +33,40 @@
 
 <script>
 export default {
-  props: {},
+  props: { class: String },
 };
 </script>
 
 <style scoped>
 .icon {
-  width: 13px;
-  height: 13px;
+  width: 11px;
+  height: 11px;
+  stroke: var(--white);
+  fill: var(--white);
 }
 
 button {
-  border-radius: 5px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
+}
+
+button.link {
+  background: none;
+  color: initial;
+  font-size: 14px;
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid var(--grey);
+  justify-content: flex-start;
+}
+
+button.link:hover {
+  background: var(--white);
+}
+
+button.link .icon {
+  fill: initial;
 }
 </style>

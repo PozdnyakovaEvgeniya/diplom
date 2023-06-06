@@ -14,6 +14,7 @@
       </template>
       <template v-else-if="this.user != [] && this.user.status == 2">
         <h4>Отделы</h4>
+        <Add :class="'link'">Новый</Add>
         <router-link
           v-for="department in departments"
           :key="department.id"
@@ -29,8 +30,13 @@
 
 <script>
 import axios from "axios";
+import Add from "@/components/Add.vue";
 
 export default {
+  components: {
+    Add,
+  },
+
   data() {
     return {
       now: new Date(),

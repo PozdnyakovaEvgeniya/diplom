@@ -20,7 +20,7 @@
       $this->conn = $db;
     }
 
-    function create() 
+    function add() 
     {            
       $this->number = htmlspecialchars(strip_tags($this->number));
       $this->surname = htmlspecialchars(strip_tags($this->surname));

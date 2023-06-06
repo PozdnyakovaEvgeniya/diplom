@@ -22,7 +22,7 @@
 
   if (
     !$employee->findNumber() &&
-    $stmt = $employee->create()
+    $stmt = $employee->add()
   ) {
     // http_response_code(200);
 

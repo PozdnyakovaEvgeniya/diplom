@@ -1,5 +1,18 @@
 <template>
   <div class="wrapper">
+    <Modal :show="modalAdd" @close="closeAdd">
+      <form class="form" @submit.prevent="addShift(user.department_id)">
+        <h4>Добавить отдел</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Название</span>
+          <input type="text" v-model="name" />
+        </div>
+        <div class="form-button">
+          <button>Добавить</button>
+        </div>
+      </form>
+    </Modal>
     <div v-if="$route.path != '/login'" class="main-nav">
       <template v-if="this.user.status == 1">
         <h4>{{ now.getFullYear() }} год</h4>
@@ -14,7 +27,6 @@
       </template>
       <template v-else-if="this.user != [] && this.user.status == 2">
         <h4>Отделы</h4>
-        <Add :class="'link'">Новый</Add>
         <router-link
           v-for="department in departments"
           :key="department.id"
@@ -22,6 +34,7 @@
         >
           {{ department.name }}
         </router-link>
+        <Add :class="'link'" @click="showAdd">Добавить</Add>
       </template>
     </div>
     <router-view class="container"></router-view>
@@ -31,10 +44,12 @@
 <script>
 import axios from "axios";
 import Add from "@/components/Add.vue";
+import Modal from "@/components/Modal.vue";
 
 export default {
   components: {
     Add,
+    Modal,
   },
 
   data() {
@@ -56,6 +71,8 @@ export default {
       ],
       user: {},
       departments: [],
+      modalAdd: false,
+      updated: false,
     };
   },
 
@@ -103,6 +120,20 @@ export default {
         });
     },
 
+    async addShift(department_id) {
+      await axios
+        .post("http://localhost/api/departments/add.php", {
+          name: this.name,
+        })
+        .then(() => {
+          this.update();
+          this.closeAdd();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     async logout() {
       await axios
         .post(`http://localhost/api/employees/logout.php`, {
@@ -112,6 +143,19 @@ export default {
           localStorage.removeItem("token");
           this.$router.push("/login");
         });
+    },
+
+    showAdd() {
+      this.modalAdd = true;
+    },
+
+    closeAdd() {
+      this.name = "";
+      this.modalAdd = false;
+    },
+
+    update() {
+      this.updated = true;
     },
   },
 
@@ -124,6 +168,13 @@ export default {
   watch: {
     $route() {
       this.getUser();
+    },
+    updated() {
+      if (this.updated == true) {
+        this.data = [];
+        this.getDepartments();
+        this.updated = false;
+      }
     },
   },
 };

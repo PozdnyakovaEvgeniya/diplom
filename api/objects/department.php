@@ -12,7 +12,7 @@
       $this->conn = $db;
     }
 
-    function create() 
+    function add() 
     {            
       $this->name = htmlspecialchars(strip_tags($this->name));
       

@@ -68,29 +68,7 @@ const routes = [
         name: "employees",
         path: "employees/",
         component: () => import("@/views/employees_page.vue"),
-        //     children: [
-        //       {
-        //         name: "department",
-        //         path: "",
-        //         redirect: { name: "timesheet" },
-        //       },
-        //       {
-        //         name: "timesheet",
-        //         path: "timesheet/",
-        //         component: () => import("@/views/timesheet_page.vue"),
-        //       },
-        //       {
-        //         name: "shifts",
-        //         path: "shifts/",
-        //         component: () => import("@/views/shifts_page.vue"),
-        //       },
-        //     ],
       },
-      //   {
-      //     name: "employee",
-      //     path: "employee/:id",
-      //     component: () => import("@/views/employee_page.vue"),
-      //   },
     ],
   },
 ];

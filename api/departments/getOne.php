@@ -11,7 +11,7 @@
 
 	$department->getOne();
 
-	if ($department->name != null) {
+	if ($department->id != null) {
 		$department = array(
 			"id" => $department->id,
 			"name" => $department->name,

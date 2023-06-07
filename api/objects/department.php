@@ -33,6 +33,18 @@
       $this->name = $row["name"];
     }
 
+    function getOneOfName()
+    {
+      $query = "SELECT * FROM `departments` WHERE `name` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->name));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->id = $row["id"];
+      $this->name = $row["name"];
+    }
+
     function get()
     {
       $query = "SELECT * FROM `departments` ORDER BY `name`";
@@ -40,6 +52,14 @@
       $stmt->execute();
 
       return $stmt;
+    }
+
+    function delete() 
+    {
+      $query = "DELETE FROM `departments` WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->id));
     }
   }
 ?>

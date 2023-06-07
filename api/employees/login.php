@@ -22,12 +22,12 @@
 		$token->employee_id = $employee->id;
 		$token->create();
 
-		// http_response_code(200);
+		http_response_code(200);
 		echo json_encode(array(
 			"token" => $token->token,
 		)); 
 	} else {
-		// http_response_code(401);
+		http_response_code(401);
 		echo json_encode(array(
 			"message" => "Неверный логин или пароль",
 		));

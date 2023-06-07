@@ -126,9 +126,79 @@
         </div>
       </form>
     </Modal>
+    <Modal :show="modalEdit" @close="closeEdit">
+      <form class="form" @submit.prevent="editDepartment">
+        <h4>Редактировать работника</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Табельный номер</span>
+          <input type="text" v-model="employee.number" />
+        </div>
+        <div class="form-field">
+          <span>Фамилия</span>
+          <input type="text" v-model="employee.surname" />
+        </div>
+        <div class="form-field">
+          <span>Имя</span>
+          <input type="text" v-model="employee.name" />
+        </div>
+        <div class="form-field">
+          <span>Отчество</span>
+          <input type="text" v-model="employee.patronymic" />
+        </div>
+        <div class="form-field">
+          <span>Должность</span>
+          <input type="text" v-model="employee.job_title" />
+        </div>
+        <div class="form-field">
+          <span>Отдел</span>
+          <Multiselect
+            v-model="employee.department_id"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="departments"
+          ></Multiselect>
+        </div>
+        <div class="form-field">
+          <span>Смена</span>
+          <Multiselect
+            v-model="employee.shift_id"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="shifts"
+          ></Multiselect>
+        </div>
+        <div class="form-field">
+          <span>Уровень доступа</span>
+          <Multiselect
+            v-model="employee.status"
+            label="name"
+            trackBy="id"
+            valueProp="id"
+            :options="statuses"
+          ></Multiselect>
+        </div>
+        <div
+          v-if="
+            employee.status == 1 || employee.status == 2 || employee.status == 3
+          "
+          class="form-field"
+        >
+          <span>Пароль</span>
+          <input type="password" v-model="employee.password" />
+        </div>
+        <div class="form-button">
+          <button>Сохранить</button>
+        </div>
+      </form>
+    </Modal>
     <div class="content">
       <div class="content-header">
         <Add @click="showAdd">Добавить работника</Add>
+        <BigUpdate @click="showEdit">Редактировать отдел</BigUpdate>
+        <BigDelete @click="delDepartment">Удалить отдел</BigDelete>
       </div>
       <Table
         :headers="headers"
@@ -144,11 +214,13 @@
 import Table from "@/components/Table.vue";
 import Modal from "@/components/Modal.vue";
 import Add from "@/components/Add.vue";
+import BigDelete from "@/components/BigDelete.vue";
+import BigUpdate from "@/components/BigUpdate.vue";
 import Multiselect from "@vueform/multiselect";
 import axios from "axios";
 
 export default {
-  components: { Table, Modal, Add, Multiselect },
+  components: { Table, Modal, Add, Multiselect, BigDelete, BigUpdate },
 
   data() {
     return {
@@ -295,6 +367,22 @@ export default {
         });
     },
 
+    async delDepartment() {
+      axios
+        .get(
+          `http://localhost/api/departments/delete.php?id=${this.$route.params.department_id}`
+        )
+        .then((response) => {
+          this.departments = response.data;
+          this.$router.replace({
+            name: "employees",
+            params: {
+              department_id: this.departments[0].id,
+            },
+          });
+        });
+    },
+
     async getShifts() {
       await axios
         .get(
@@ -302,7 +390,8 @@ export default {
         )
         .then((response) => {
           this.shifts = response.data;
-          this.employee.shift_id = response.data[0].id;
+          console.log(response.data[0]);
+          this.employee.shift_id = this.shifts[0].id;
         })
         .catch((error) => {
           console.log(error);

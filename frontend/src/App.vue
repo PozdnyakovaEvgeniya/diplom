@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <Modal :show="modalAdd" @close="closeAdd">
-      <form class="form" @submit.prevent="addShift(user.department_id)">
+      <form class="form" @submit.prevent="addDepartment">
         <h4>Добавить отдел</h4>
         <div class="error">{{ error }}</div>
         <div class="form-field">
@@ -120,14 +120,20 @@ export default {
         });
     },
 
-    async addShift(department_id) {
+    async addDepartment() {
       await axios
         .post("http://localhost/api/departments/add.php", {
           name: this.name,
         })
-        .then(() => {
+        .then((response) => {
           this.update();
           this.closeAdd();
+          this.$router.push({
+            name: "employees",
+            params: {
+              department_id: response.data.id,
+            },
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -206,6 +212,7 @@ export default {
   --purple: #8888e7;
   --black: #000000;
   --blackout: #f5f5f5b3;
+  --darkgrey: #8a8a8a;
 }
 
 a {

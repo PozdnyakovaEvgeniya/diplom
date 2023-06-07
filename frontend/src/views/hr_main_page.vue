@@ -1,7 +1,11 @@
 <template>
   <div class="main_page">
     <Header :name="department.name"></Header>
-    <router-view :key="$route.path"></router-view>
+    <router-view
+      @update="$emit('update')"
+      @updateHeader="update"
+      :key="$route.path"
+    ></router-view>
   </div>
 </template>
 
@@ -16,6 +20,7 @@ export default {
   data() {
     return {
       department: {},
+      updated: false,
     };
   },
 
@@ -34,11 +39,21 @@ export default {
           console.log(error);
         });
     },
+
+    update() {
+      this.updated = true;
+    },
   },
 
   watch: {
     "$route.params.department_id"() {
       this.getDepartment(this.$route.params.department_id);
+    },
+    updated() {
+      if (this.updated == true) {
+        this.getDepartment(this.$route.params.department_id);
+        this.updated = false;
+      }
     },
   },
 };

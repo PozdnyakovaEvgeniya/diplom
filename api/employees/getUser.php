@@ -14,7 +14,7 @@
 	$token->token = $data->token;
 	$token->getOfToken();
 
-		$employee = new Employee($db);
+	$employee = new Employee($db);
 	$employee->id = $token->employee_id;
 	$employee->getOne();
 

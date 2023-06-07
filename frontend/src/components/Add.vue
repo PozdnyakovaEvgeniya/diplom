@@ -58,8 +58,9 @@ button.link {
   font-size: 14px;
   width: 100%;
   padding: 10px 20px;
-  border: 1px solid var(--grey);
   justify-content: flex-start;
+  border-bottom: 1px solid var(--purple);
+  border-top: 1px solid var(--purple);
 }
 
 button.link:hover {

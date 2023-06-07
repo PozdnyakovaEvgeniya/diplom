@@ -10,7 +10,7 @@
     </div>
     <div class="content-bottom">
       <div></div>
-      <button>Закрыть табель</button>
+      <button v-if="!closed" @click="close">Закрыть табель</button>
     </div>
   </div>
 </template>
@@ -32,17 +32,48 @@ export default {
         { id: "job_title", name: "Должность" },
       ],
       data: [],
+      closed: false,
     };
   },
 
   async created() {
     this.getUser().then(() => {
+      this.getClosed();
       this.getDates();
       this.get();
     });
   },
 
   methods: {
+    async getClosed() {
+      await axios
+        .get(
+          `http://localhost/api/months/get.php?department_id=${
+            this.user.department_id
+          }&year=${this.$route.params.year}&month=${
+            +this.$route.params.month + 1
+          }`
+        )
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.count != 0) {
+            this.closed = true;
+          }
+        });
+    },
+
+    async close() {
+      await axios
+        .post("http://localhost/api/months/add.php", {
+          department_id: this.user.department_id,
+          year: this.$route.params.year,
+          month: +this.$route.params.month + 1,
+        })
+        .then(() => {
+          this.closed = true;
+        });
+    },
+
     async getUser() {
       await axios
         .post("http://localhost/api/employees/getUser.php", {

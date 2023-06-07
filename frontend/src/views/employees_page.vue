@@ -128,66 +128,11 @@
     </Modal>
     <Modal :show="modalEdit" @close="closeEdit">
       <form class="form" @submit.prevent="editDepartment">
-        <h4>Редактировать работника</h4>
+        <h4>Редактировать отдел</h4>
         <div class="error">{{ error }}</div>
         <div class="form-field">
-          <span>Табельный номер</span>
-          <input type="text" v-model="employee.number" />
-        </div>
-        <div class="form-field">
-          <span>Фамилия</span>
-          <input type="text" v-model="employee.surname" />
-        </div>
-        <div class="form-field">
-          <span>Имя</span>
-          <input type="text" v-model="employee.name" />
-        </div>
-        <div class="form-field">
-          <span>Отчество</span>
-          <input type="text" v-model="employee.patronymic" />
-        </div>
-        <div class="form-field">
-          <span>Должность</span>
-          <input type="text" v-model="employee.job_title" />
-        </div>
-        <div class="form-field">
-          <span>Отдел</span>
-          <Multiselect
-            v-model="employee.department_id"
-            label="name"
-            trackBy="id"
-            valueProp="id"
-            :options="departments"
-          ></Multiselect>
-        </div>
-        <div class="form-field">
-          <span>Смена</span>
-          <Multiselect
-            v-model="employee.shift_id"
-            label="name"
-            trackBy="id"
-            valueProp="id"
-            :options="shifts"
-          ></Multiselect>
-        </div>
-        <div class="form-field">
-          <span>Уровень доступа</span>
-          <Multiselect
-            v-model="employee.status"
-            label="name"
-            trackBy="id"
-            valueProp="id"
-            :options="statuses"
-          ></Multiselect>
-        </div>
-        <div
-          v-if="
-            employee.status == 1 || employee.status == 2 || employee.status == 3
-          "
-          class="form-field"
-        >
-          <span>Пароль</span>
-          <input type="password" v-model="employee.password" />
+          <span>Название</span>
+          <input type="text" v-model="department.name" />
         </div>
         <div class="form-button">
           <button>Сохранить</button>
@@ -250,6 +195,7 @@ export default {
       employees: [],
       modalAdd: false,
       modalUpdate: false,
+      modalEdit: false,
       updated: false,
       shifts: [],
       statuses: [
@@ -260,6 +206,7 @@ export default {
       ],
       error: "",
       departments: [],
+      department: {},
     };
   },
 
@@ -383,6 +330,19 @@ export default {
         });
     },
 
+    async editDepartment() {
+      axios
+        .post(`http://localhost/api/departments/update.php`, this.department)
+        .then(() => {
+          this.$emit("update");
+          this.$emit("updateHeader");
+          this.closeEdit();
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
+
     async getShifts() {
       await axios
         .get(
@@ -390,7 +350,6 @@ export default {
         )
         .then((response) => {
           this.shifts = response.data;
-          console.log(response.data[0]);
           this.employee.shift_id = this.shifts[0].id;
         })
         .catch((error) => {
@@ -404,6 +363,19 @@ export default {
         .then((response) => {
           this.employee = response.data;
           this.showUpdate();
+        });
+    },
+
+    async getDepartment() {
+      await axios
+        .get(
+          `http://localhost/api/departments/getOne.php?id=${this.$route.params.department_id}`
+        )
+        .then((response) => {
+          this.department = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
 
@@ -443,6 +415,17 @@ export default {
       this.employee.password = "";
       this.error = "";
       this.modalUpdate = false;
+    },
+
+    showEdit() {
+      this.getDepartment();
+      this.modalEdit = true;
+    },
+
+    closeEdit() {
+      this.department.name = "";
+      this.error = "";
+      this.modalEdit = false;
     },
   },
 

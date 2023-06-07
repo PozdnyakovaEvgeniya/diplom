@@ -27,7 +27,7 @@
     </div>
     <div class="content-bottom">
       <div></div>
-      <button @click="save(true)">Сохранить</button>
+      <button v-if="!closed" @click="save(true)">Сохранить</button>
     </div>
   </div>
 </template>
@@ -58,6 +58,7 @@ export default {
       modalAdd: false,
       updated: false,
       saved: false,
+      closed: false,
     };
   },
 
@@ -65,6 +66,7 @@ export default {
     this.getDate();
     this.getUser().then(() => {
       this.getShifts();
+      this.getClosed();
     });
   },
 
@@ -79,6 +81,23 @@ export default {
         })
         .catch(() => {
           this.logout();
+        });
+    },
+
+    async getClosed() {
+      await axios
+        .get(
+          `http://localhost/api/months/get.php?department_id=${
+            this.user.department_id
+          }&year=${this.$route.params.year}&month=${
+            +this.$route.params.month + 1
+          }`
+        )
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.count != 0) {
+            this.closed = true;
+          }
         });
     },
 
@@ -174,6 +193,7 @@ export default {
                 date.date_status == 1 ? true : false,
               ],
               date: true,
+              closed: this.closed,
               request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
             });
             flag = true;
@@ -185,6 +205,7 @@ export default {
             id: "date",
             name: [0, 0, false],
             date: true,
+            closed: this.closed,
             request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
           });
         }

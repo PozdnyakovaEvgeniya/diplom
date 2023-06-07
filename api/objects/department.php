@@ -61,5 +61,13 @@
 
       return $stmt->execute(array($this->id));
     }
+
+    function update() 
+    {
+      $query = "UPDATE `departments` SET `name` = ? WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+
+      return $stmt->execute(array($this->name, $this->id));
+    }
   }
 ?>

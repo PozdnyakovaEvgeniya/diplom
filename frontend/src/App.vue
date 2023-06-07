@@ -37,7 +37,7 @@
         <Add :class="'link'" @click="showAdd">Добавить</Add>
       </template>
     </div>
-    <router-view class="container"></router-view>
+    <router-view @update="update" class="container"></router-view>
   </div>
 </template>
 
@@ -73,6 +73,7 @@ export default {
       departments: [],
       modalAdd: false,
       updated: false,
+      error: "",
     };
   },
 
@@ -136,7 +137,7 @@ export default {
           });
         })
         .catch((error) => {
-          console.log(error);
+          this.error = error.response.data.message;
         });
     },
 
@@ -285,7 +286,7 @@ li {
   width: 100vw;
   height: 100vh;
   display: grid;
-  grid-template-columns: 125px calc(100% - 125px);
+  grid-template-columns: 150px calc(100% - 150px);
   border-radius: 22px;
   border: 2px solid var(--grey);
 }

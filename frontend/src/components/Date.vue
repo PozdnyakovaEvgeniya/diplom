@@ -1,10 +1,10 @@
 <template>
   <div class="date">
     <label>
-      <input type="checkbox" v-model="holiday" />
+      <input type="checkbox" v-model="holiday" :disabled="closed" />
       Выходной
     </label>
-    <label>План: <input type="text" v-model="day" /></label>
+    <label>План: <input type="text" v-model="day" :disabled="closed" /></label>
   </div>
 </template>
 
@@ -16,10 +16,12 @@ export default {
     values: Array,
     request: String,
     saved: Boolean,
+    closed: Boolean,
   },
 
   data() {
     return {
+      user: {},
       day: this.values[0],
       holiday: this.values[1],
     };
@@ -34,6 +36,11 @@ export default {
           "&status=" +
           (this.holiday ? 1 : 0)
       );
+    },
+
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
     },
   },
 

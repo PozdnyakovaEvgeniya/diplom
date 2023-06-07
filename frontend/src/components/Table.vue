@@ -26,6 +26,7 @@
               :values="item.name"
               :request="item.request"
               :saved="saved"
+              :closed="item.closed"
               @save="$emit('save')"
             />
             <Update

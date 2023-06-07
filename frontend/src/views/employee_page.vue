@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="content-header">
-        <Add @click="showAdd">Добавить период</Add>
+        <Add v-if="!closed" @click="showAdd">Добавить период</Add>
       </div>
       <Table
         v-if="data.length != 0"
@@ -79,6 +79,7 @@ export default {
 
   data() {
     return {
+      user: {},
       employee: {},
       statuses: [
         { id: 0, name: "Отгул" },
@@ -99,15 +100,49 @@ export default {
       data: [],
       updated: false,
       hours: "",
+      closed: false,
     };
   },
 
   created() {
-    this.getEmployee();
-    this.getPeriods();
+    this.getUser().then(() => {
+      this.getClosed();
+      this.getEmployee();
+      this.getPeriods();
+    });
   },
 
   methods: {
+    async getUser() {
+      await axios
+        .post("http://localhost/api/employees/getUser.php", {
+          token: localStorage.getItem("token"),
+        })
+        .then((response) => {
+          this.user = response.data;
+        })
+        .catch(() => {
+          this.logout();
+        });
+    },
+
+    async getClosed() {
+      await axios
+        .get(
+          `http://localhost/api/months/get.php?department_id=${
+            this.user.department_id
+          }&year=${this.$route.params.year}&month=${
+            +this.$route.params.month + 1
+          }`
+        )
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.count != 0) {
+            this.closed = true;
+          }
+        });
+    },
+
     async getEmployee() {
       await axios
         .get(
@@ -195,6 +230,11 @@ export default {
 
     update() {
       this.updated = true;
+    },
+
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
     },
   },
 

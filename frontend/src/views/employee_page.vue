@@ -43,7 +43,7 @@
           }"
         ></Back>
         <div class="employee">
-          <h4>{{ employee.name }}</h4>
+          <h4>{{ employee.fullName }}</h4>
           <div>{{ employee.job_title }}</div>
         </div>
       </div>

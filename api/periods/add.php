@@ -16,8 +16,6 @@
     $period->end = $data->end;
     $period->hours = $data->hours;
 
-    $period->add();
-
     if ($period->add()) {
         http_response_code(200);
     } else {

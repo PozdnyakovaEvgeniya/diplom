@@ -77,6 +77,14 @@ export default {
                 department_id: this.departments[0].id,
               },
             });
+          } else if (response.data.status == 3) {
+            this.$router.replace({
+              name: "timesheets",
+              params: {
+                year: this.now.getFullYear(),
+                month: this.now.getMonth(),
+              },
+            });
           }
         })
         .catch((error) => {

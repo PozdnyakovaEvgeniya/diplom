@@ -59,6 +59,7 @@ button.link {
   width: 100%;
   padding: 10px 20px;
   justify-content: flex-start;
+  border-radius: 0;
   border-bottom: 1px solid var(--purple);
   border-top: 1px solid var(--purple);
 }

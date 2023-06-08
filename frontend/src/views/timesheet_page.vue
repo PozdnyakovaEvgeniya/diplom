@@ -2,6 +2,7 @@
   <div class="timesheet_page">
     <div class="content">
       <Table
+        v-if="user.status != 3 || closed"
         :headers="headers"
         :data="data"
         :selected="true"
@@ -10,7 +11,9 @@
     </div>
     <div class="content-bottom">
       <div></div>
-      <button v-if="!closed" @click="close">Закрыть табель</button>
+      <button v-if="!closed && user.status != 3" @click="close">
+        Закрыть табель
+      </button>
     </div>
   </div>
 </template>
@@ -33,6 +36,7 @@ export default {
       ],
       data: [],
       closed: false,
+      department_id: "",
     };
   },
 
@@ -45,17 +49,24 @@ export default {
   },
 
   methods: {
+    getDepartmentId() {
+      if (this.user.status == 1) {
+        this.department_id = this.user.department_id;
+      } else if (this.user.status == 3) {
+        this.department_id = this.$route.params.id;
+      }
+    },
+
     async getClosed() {
       await axios
         .get(
           `http://localhost/api/months/get.php?department_id=${
-            this.user.department_id
+            this.department_id
           }&year=${this.$route.params.year}&month=${
             +this.$route.params.month + 1
           }`
         )
         .then((response) => {
-          console.log(response.data);
           if (response.data.count != 0) {
             this.closed = true;
           }
@@ -65,7 +76,7 @@ export default {
     async close() {
       await axios
         .post("http://localhost/api/months/add.php", {
-          department_id: this.user.department_id,
+          department_id: this.department_id,
           year: this.$route.params.year,
           month: +this.$route.params.month + 1,
         })
@@ -81,6 +92,7 @@ export default {
         })
         .then((response) => {
           this.user = response.data;
+          this.getDepartmentId();
         })
         .catch(() => {
           this.logout();
@@ -91,7 +103,7 @@ export default {
       await axios
         .post(
           `http://localhost/api/hours/get.php?id=${
-            this.user.department_id
+            this.department_id
           }&start=${this.normalizeNum(
             this.$route.params.year
           )}-${this.normalizeNum(
@@ -101,7 +113,6 @@ export default {
           )}-${this.normalizeNum(+this.$route.params.month + 2)}-01`
         )
         .then((response) => {
-          console.log(response.data);
           for (let employee of response.data) {
             this.getData(employee);
           }

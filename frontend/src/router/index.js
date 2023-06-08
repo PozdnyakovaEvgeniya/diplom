@@ -71,6 +71,40 @@ const routes = [
       },
     ],
   },
+  {
+    name: "accountant-main",
+    path: "/accountant-main/:year/:month",
+    component: () => import("@/views/accountant_main_page.vue"),
+    children: [
+      {
+        name: "accountant-main",
+        path: "",
+        redirect: (to) => {
+          return {
+            name: "timesheets",
+            params: { year: to.params.year, month: to.params.year },
+          };
+        },
+      },
+      {
+        name: "timesheets",
+        path: "timesheets/",
+        component: () => import("@/views/timesheets_page.vue"),
+        children: [
+          {
+            name: "timesheets",
+            path: "",
+            redirect: { name: "timesheet" },
+          },
+          {
+            name: "accountant-timesheet",
+            path: "department/:id/timesheet/",
+            component: () => import("@/views/timesheet_page.vue"),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

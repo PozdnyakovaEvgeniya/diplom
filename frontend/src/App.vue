@@ -14,7 +14,7 @@
       </form>
     </Modal>
     <div v-if="$route.path != '/login'" class="main-nav">
-      <template v-if="this.user.status == 1">
+      <template v-if="this.user.status == 1 || this.user.status == 3">
         <h4>{{ now.getFullYear() }} год</h4>
         <router-link
           v-for="(month, index) in months"
@@ -378,6 +378,7 @@ li {
 .nav {
   border-bottom: 2px solid var(--grey);
   display: flex;
+  flex-wrap: wrap;
 }
 
 .nav a {

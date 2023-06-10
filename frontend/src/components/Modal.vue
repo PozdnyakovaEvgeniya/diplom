@@ -43,7 +43,9 @@ export default {
 }
 
 .modal {
+  max-height: 90vh;
   box-shadow: 0 6px 15px var(--black);
   border-radius: 5px;
+  overflow-y: auto;
 }
 </style>

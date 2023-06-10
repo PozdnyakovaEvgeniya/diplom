@@ -10,6 +10,19 @@
 
 	$data = json_decode(file_get_contents("php://input"));
 
+  $password = "";
+
+  if (empty($data->password)) {
+    if ($data -> status == 0) {
+      $password = $data->password;
+    } else {
+      http_response_code(400);
+
+      echo json_encode(array("message" => "Данному пользователю пароль обязателен"));
+      exit();
+    }
+  }
+
   $employee->number = $data->number;
   $employee->surname = $data->surname;
   $employee->name = $data->name;
@@ -21,15 +34,14 @@
   $employee->password = empty($data->password) ? NULL : $data->password;
 
   if (
-    !$employee->findNumber() &&
-    $stmt = $employee->add()
+    !$employee->findNumber()
   ) {
-    http_response_code(200);
+    $stmt = $employee->add();
 
+    http_response_code(200);
     echo json_encode(array("message" => "success"));
   } else {
     http_response_code(400);
-
-    echo json_encode(array("message" => "Невозможно создать пользователя"));
+    echo json_encode(array("message" => "Работник с таким табельным номером уже существует"));
   }
 ?>

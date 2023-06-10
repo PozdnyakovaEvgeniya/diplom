@@ -21,7 +21,7 @@
     } else {
       http_response_code(400);
 
-      echo json_encode(array("message" => "Данному уровню пароль обязателен"));
+      echo json_encode(array("message" => "Данному пользователю пароль обязателен"));
       exit();
     }
   } elseif ($data->password == $employee->password) {

@@ -5,7 +5,7 @@
         <h4>Добавить отдел</h4>
         <div class="error">{{ error }}</div>
         <div class="form-field">
-          <span>Название</span>
+          <span>Наименование</span>
           <input type="text" v-model="name" />
         </div>
         <div class="form-button">
@@ -54,6 +54,7 @@ export default {
 
   data() {
     return {
+      name: "",
       now: new Date(),
       months: [
         "Январь",
@@ -122,23 +123,27 @@ export default {
     },
 
     async addDepartment() {
-      await axios
-        .post("http://localhost/api/departments/add.php", {
-          name: this.name,
-        })
-        .then((response) => {
-          this.update();
-          this.closeAdd();
-          this.$router.push({
-            name: "employees",
-            params: {
-              department_id: response.data.id,
-            },
+      if (this.name == "") {
+        this.error = 'Поле "Наименование" не может быть пустым';
+      } else {
+        await axios
+          .post("http://localhost/api/departments/add.php", {
+            name: this.name,
+          })
+          .then((response) => {
+            this.update();
+            this.closeAdd();
+            this.$router.push({
+              name: "employees",
+              params: {
+                department_id: response.data.id,
+              },
+            });
+          })
+          .catch((error) => {
+            this.error = error.response.data.message;
           });
-        })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+      }
     },
 
     async logout() {

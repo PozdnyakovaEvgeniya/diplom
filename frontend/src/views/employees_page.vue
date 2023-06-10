@@ -31,7 +31,7 @@
             label="name"
             trackBy="id"
             valueProp="id"
-            :options="shifts"
+            :options="shifts[employee.department_id]"
           ></Multiselect>
         </div>
         <div class="form-field">
@@ -62,10 +62,6 @@
       <form class="form" @submit.prevent="updateEmployee">
         <h4>Редактировать работника</h4>
         <div class="error">{{ error }}</div>
-        <div class="form-field">
-          <span>Табельный номер</span>
-          <input type="text" v-model="employee.number" />
-        </div>
         <div class="form-field">
           <span>Фамилия</span>
           <input type="text" v-model="employee.surname" />
@@ -99,7 +95,7 @@
             label="name"
             trackBy="id"
             valueProp="id"
-            :options="shifts"
+            :options="shifts[employee.department_id]"
           ></Multiselect>
         </div>
         <div class="form-field">
@@ -197,7 +193,7 @@ export default {
       modalUpdate: false,
       modalEdit: false,
       updated: false,
-      shifts: [],
+      shifts: {},
       statuses: [
         { id: 0, name: "Без доступа" },
         { id: 1, name: "Табельщик" },
@@ -211,28 +207,20 @@ export default {
   },
 
   created() {
-    this.getShifts();
-    this.getDepartments();
-    this.getEmployees(this.$route.params.department_id);
+    this.getDepartments().then(() => {
+      this.getEmployees(this.$route.params.department_id);
+    });
   },
 
   methods: {
-    async getDepartment(id) {
-      await axios
-        .get(`http://localhost/api/departments/getOne.php?id=${id}`)
-        .then((response) => {
-          this.department = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
     async getDepartments() {
       await axios
         .get("http://localhost/api/departments/get.php")
         .then((response) => {
           this.departments = response.data;
+          for (let department of this.departments) {
+            this.getShifts(department.id);
+          }
         });
     },
 
@@ -251,18 +239,24 @@ export default {
     },
 
     getData(employee) {
-      for (let shift of this.shifts) {
-        if (shift.id == employee.shift_id) {
-          employee.shift = shift.name;
+      for (let id in this.shifts[this.$route.params.department_id]) {
+        if (
+          this.shifts[this.$route.params.department_id][id].id ==
+          employee.shift_id
+        ) {
+          employee.shift =
+            this.shifts[this.$route.params.department_id][id].name;
           break;
         }
       }
+
       for (let status of this.statuses) {
         if (status.id == employee.status) {
           employee.status = status.name;
           break;
         }
       }
+
       let elem = [
         { id: "id", name: employee.id, hidden: true },
         { id: "number", name: employee.number },
@@ -288,30 +282,62 @@ export default {
       if (this.employee.status == 0) {
         this.employee.password = "";
       }
-      await axios
-        .post("http://localhost/api/employees/signup.php", this.employee)
-        .then(() => {
-          this.update();
-          this.closeAdd();
-        })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+
+      if (this.employee.number == "") {
+        this.error = 'Поле "Табельный номер" не может быть пустым';
+      } else if (isNaN(this.employee.number)) {
+        this.error = 'Поле "Табельный номер" должно быть числом';
+      } else if (this.employee.surname == "") {
+        this.error = 'Поле "Фамилия" не может быть пустым';
+      } else if (this.employee.name == "") {
+        this.error = 'Поле "Имя" не может быть пустым';
+      } else if (this.employee.job_title == "") {
+        this.error = 'Поле "Должность" не может быть пустым';
+      } else if (this.employee.shift_id === null) {
+        this.error = 'Поле "Смена" не может быть пустым';
+      } else if (this.employee.status === null) {
+        this.error = 'Поле "Уровень" не может быть пустым';
+      } else {
+        await axios
+          .post("http://localhost/api/employees/signup.php", this.employee)
+          .then(() => {
+            this.update();
+            this.closeAdd();
+          })
+          .catch((error) => {
+            this.error = error.response.data.message;
+          });
+      }
     },
 
     async updateEmployee() {
       if (this.employee.status == 0) {
         this.employee.password = "";
       }
-      await axios
-        .post("http://localhost/api/employees/update.php", this.employee)
-        .then(() => {
-          this.update();
-          this.closeUpdate();
-        })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+
+      if (this.employee.surname == "") {
+        this.error = 'Поле "Фамилия" не может быть пустым';
+      } else if (this.employee.name == "") {
+        this.error = 'Поле "Имя" не может быть пустым';
+      } else if (this.employee.job_title == "") {
+        this.error = 'Поле "Должность" не может быть пустым';
+      } else if (this.employee.department_id === null) {
+        this.error = 'Поле "Отдел" не может быть пустым';
+      } else if (this.employee.shift_id === null) {
+        this.error = 'Поле "Смена" не может быть пустым';
+      } else if (this.employee.status === null) {
+        this.error = 'Поле "Уровень" не может быть пустым';
+      } else {
+        await axios
+          .post("http://localhost/api/employees/update.php", this.employee)
+          .then(() => {
+            this.update();
+            this.closeUpdate();
+          })
+          .catch((error) => {
+            this.error = error.response.data.message;
+          });
+      }
     },
 
     async delDepartment() {
@@ -343,14 +369,14 @@ export default {
         });
     },
 
-    async getShifts() {
+    async getShifts(id) {
       await axios
-        .get(
-          `http://localhost/api/shifts/getOfDepartment.php?id=${this.$route.params.department_id}`
-        )
+        .get(`http://localhost/api/shifts/getOfDepartment.php?id=${id}`)
         .then((response) => {
-          this.shifts = response.data;
-          this.employee.shift_id = this.shifts[0].id;
+          this.shifts[id] = response.data;
+          if (id == this.$route.params.department_id) {
+            this.employee.shift_id = this.shifts[id][0].id;
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -393,7 +419,8 @@ export default {
       this.employee.name = "";
       this.employee.patronymic = "";
       this.employee.job_title = "";
-      this.employee.shift_id = "";
+      this.employee.shift_id =
+        this.shifts[this.$route.params.department_id][0].id;
       this.employee.status = 0;
       this.employee.password = "";
       this.error = "";
@@ -410,7 +437,8 @@ export default {
       this.employee.name = "";
       this.employee.patronymic = "";
       this.employee.job_title = "";
-      this.employee.shift_id = "";
+      this.employee.shift_id =
+        this.shifts[this.$route.params.department_id][0].id;
       this.employee.status = 0;
       this.employee.password = "";
       this.error = "";
@@ -436,6 +464,10 @@ export default {
         this.getEmployees(this.$route.params.department_id);
         this.updated = false;
       }
+    },
+
+    "employee.department_id"() {
+      this.employee.shift_id = this.shifts[this.employee.department_id][0].id;
     },
   },
 };

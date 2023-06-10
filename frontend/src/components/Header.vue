@@ -1,11 +1,33 @@
 <template>
   <div class="header">
+    <Modal :show="modalUpd" @close="closeUpd">
+      <form class="form" @submit.prevent="updatePassword">
+        <h4>Изменить пароль</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Текущий пароль</span>
+          <input type="password" v-model="password_old" />
+        </div>
+        <div class="form-field">
+          <span>Новый пароль</span>
+          <input type="password" v-model="password_new" />
+        </div>
+        <div class="form-field">
+          <span>Подтверждение пароля</span>
+          <input type="password" v-model="password_confirm" />
+        </div>
+        <div class="form-button">
+          <button>Изменить</button>
+        </div>
+      </form>
+    </Modal>
     <h1>{{ name }}</h1>
     <div class="user">
       <span class="name">{{ user.short_name }}</span>
       <span class="job_title">{{ user.job_title }}</span>
       <div class="dropdown">
-        <div>Сменить пароль</div>
+        <div @click="showUpd">Сменить пароль</div>
+        <div @click="logoutAll">Завершить все другие сеансы</div>
         <div @click="logout">Выйти</div>
       </div>
     </div>
@@ -14,8 +36,13 @@
 
 <script>
 import axios from "axios";
+import Modal from "@/components/Modal.vue";
 
 export default {
+  components: {
+    Modal,
+  },
+
   props: {
     name: String,
   },
@@ -23,6 +50,11 @@ export default {
   data() {
     return {
       user: {},
+      password_old: "",
+      password_new: "",
+      password_confirm: "",
+      modalUpd: false,
+      error: "",
     };
   },
 
@@ -44,15 +76,44 @@ export default {
         });
     },
 
+    async updatePassword() {
+      await axios
+        .post("http://localhost/api/employees/updatePassword.php", {
+          id: this.user.id,
+          password_old: this.password_old,
+          password_new: this.password_new,
+          password_confirm: this.password_confirm,
+        })
+        .then((response) => {
+          localStorage.setItem("token", response.data.token);
+          this.closeUpd();
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
+
     async logout() {
       await axios
-        .post(`http://localhost/api/employees/logout.php`, {
+        .post("http://localhost/api/employees/logout.php", {
           token: localStorage.getItem("token"),
         })
         .then(() => {
           localStorage.removeItem("token");
           this.$router.push("/login");
         });
+    },
+
+    showUpd() {
+      this.modalUpd = true;
+    },
+
+    closeUpd() {
+      this.password_old = "";
+      this.password_new = "";
+      this.password_confirm = "";
+      this.error = "";
+      this.modalUpd = false;
     },
   },
 };

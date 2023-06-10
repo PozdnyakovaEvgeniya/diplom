@@ -143,6 +143,17 @@ export default {
 
     async logout() {
       await axios
+        .post(`http://localhost/api/employees/logoutAll.php`, {
+          token: localStorage.getItem("token"),
+        })
+        .then(() => {
+          localStorage.removeItem("token");
+          this.$router.push("/login");
+        });
+    },
+
+    async logoutAll() {
+      await axios
         .post(`http://localhost/api/employees/logout.php`, {
           token: localStorage.getItem("token"),
         })

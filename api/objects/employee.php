@@ -40,7 +40,7 @@
     }
 
     function update() 
-    {      
+    {     
       $this->number = htmlspecialchars(strip_tags($this->number));
       $this->surname = htmlspecialchars(strip_tags($this->surname));
       $this->name = htmlspecialchars(strip_tags($this->name));

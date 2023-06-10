@@ -44,5 +44,11 @@
       $stmt = $this->conn->prepare($query);
       return $stmt->execute(array($this->token));
     }
+
+    function delete() {
+      $query = "DELETE FROM `tokens` WHERE `employee_id` = ?";
+      $stmt = $this->conn->prepare($query);
+      return $stmt->execute(array($this->employee_id));
+    }
   }
 ?>

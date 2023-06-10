@@ -21,6 +21,18 @@
         </div>
       </form>
     </Modal>
+    <Modal :show="modalConfirm" @close="closeConfirm">
+      <div class="form">
+        <h4>Подтверждение</h4>
+        <div class="form-field">
+          <span>Сообщение</span>
+          <input type="text" :value="confirm" disabled />
+        </div>
+        <div class="form-button">
+          <button @click="closeConfirm">OK</button>
+        </div>
+      </div>
+    </Modal>
     <h1>{{ name }}</h1>
     <div class="user">
       <span class="name">{{ user.short_name }}</span>
@@ -55,6 +67,8 @@ export default {
       password_confirm: "",
       modalUpd: false,
       error: "",
+      modalConfirm: false,
+      confirm: "",
     };
   },
 
@@ -87,6 +101,7 @@ export default {
         .then((response) => {
           localStorage.setItem("token", response.data.token);
           this.closeUpd();
+          this.showConfirm("Вы изменили пароль");
         })
         .catch((error) => {
           this.error = error.response.data.message;
@@ -104,6 +119,17 @@ export default {
         });
     },
 
+    async logoutAll() {
+      await axios
+        .post(`http://localhost/api/employees/logoutAll.php`, {
+          id: this.user.id,
+        })
+        .then((response) => {
+          localStorage.setItem("token", response.data.token);
+          this.showConfirm("Вы вышли со всех устройств кроме текущего");
+        });
+    },
+
     showUpd() {
       this.modalUpd = true;
     },
@@ -114,6 +140,15 @@ export default {
       this.password_confirm = "";
       this.error = "";
       this.modalUpd = false;
+    },
+
+    showConfirm(confirm) {
+      this.modalConfirm = true;
+      this.confirm = confirm;
+    },
+
+    closeConfirm() {
+      this.modalConfirm = false;
     },
   },
 };

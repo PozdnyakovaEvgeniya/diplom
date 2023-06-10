@@ -79,10 +79,11 @@ export default {
             });
           } else if (response.data.status == 3) {
             this.$router.replace({
-              name: "timesheets",
+              name: "accountant-timesheet",
               params: {
                 year: this.now.getFullYear(),
                 month: this.now.getMonth(),
+                id: this.departments[0].id,
               },
             });
           }

@@ -296,7 +296,8 @@ export default {
       await axios
         .post("http://localhost/api/statuses/add.php", this.newStatus)
         .then(() => {
-          this.getShifts();
+          this.getStatuses();
+          this.closeAddStatus();
         })
         .catch((error) => {
           console.log(error);

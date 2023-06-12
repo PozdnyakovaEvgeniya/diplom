@@ -212,9 +212,11 @@ export default {
 
     async getUser() {
       await axios
-        .post("http://localhost/api/employees/getUser.php", {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then((response) => {
           this.user = response.data;
         })
@@ -326,10 +328,9 @@ export default {
         this.error = 'Поле "Смена" не может быть пустым';
       } else {
         await axios
-          .post("http://localhost/api/employees/updateShift.php", {
-            id: this.employee.id,
-            shift_id: this.shift_id,
-          })
+          .get(
+            `http://localhost/api/employees/updateShift.php?id=${this.employee.id}&shift_id=${this.shift_id}`
+          )
           .then(() => {
             this.getEmployee().then(() => {
               this.getShift();

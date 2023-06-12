@@ -8,30 +8,30 @@
 
   $employee = new Employee($db);
 
-	$data = json_decode(file_get_contents("php://input"));
-
   $password = "";
 
-  if (empty($data->password)) {
-    if ($data -> status == 0) {
-      $password = $data->password;
+  if (empty($_GET['password'])) {
+    if ($_GET['status'] == 0) {
+      $password = NULL;
     } else {
       http_response_code(400);
 
       echo json_encode(array("message" => "Данному пользователю пароль обязателен"));
       exit();
     }
+  } else {
+    $password = $_GET['password'];
   }
 
-  $employee->number = $data->number;
-  $employee->surname = $data->surname;
-  $employee->name = $data->name;
-  $employee->patronymic = empty($data->patronymic) ? NULL : $data->patronymic;
-  $employee->job_title = $data->job_title;
-  $employee->department_id = $data->department_id;
-  $employee->shift_id = $data->shift_id;
-  $employee->status = $data->status;
-  $employee->password = empty($data->password) ? NULL : $data->password;
+  $employee->number = $_GET['number'];
+  $employee->surname = $_GET['surname'];
+  $employee->name = $_GET['name'];
+  $employee->patronymic = empty($_GET['patronymic']) ? NULL : $_GET['patronymic'];
+  $employee->job_title = $_GET['job_title'];
+  $employee->department_id = $_GET['department_id'];
+  $employee->shift_id = $_GET['shift_id'];
+  $employee->status = $_GET['status'];
+  $employee->password = $password;
 
   if (
     !$employee->findNumber()

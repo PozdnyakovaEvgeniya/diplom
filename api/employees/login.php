@@ -10,12 +10,10 @@
 
 	$employee = new Employee($db);
 
-	$data = json_decode(file_get_contents("php://input"));
-
-	$employee->number = $data->number;
+	$employee->number = $_GET["number"];
 	$employee_exists = $employee->findNumber();
 		
-	if ($employee_exists && password_verify($data->password, $employee->password)) {
+	if ($employee_exists && password_verify($_GET["password"], $employee->password)) {
 		$token = new Token($db);
 
 

@@ -75,9 +75,11 @@ export default {
   methods: {
     async getUser() {
       await axios
-        .post("http://localhost/api/employees/getUser.php", {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then((response) => {
           this.user = response.data;
         })
@@ -88,12 +90,9 @@ export default {
 
     async updatePassword() {
       await axios
-        .post("http://localhost/api/employees/updatePassword.php", {
-          id: this.user.id,
-          password_old: this.password_old,
-          password_new: this.password_new,
-          password_confirm: this.password_confirm,
-        })
+        .get(
+          `http://localhost/api/employees/updatePassword.php?id=${this.user.id}&password_old=${this.password_old}&password_new=${this.password_new}&password_confirm=${this.password_confirm}`
+        )
         .then((response) => {
           localStorage.setItem("token", response.data.token);
           this.closeUpd();
@@ -106,9 +105,11 @@ export default {
 
     async logout() {
       await axios
-        .post("http://localhost/api/employees/logout.php", {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/logout.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then(() => {
           localStorage.removeItem("token");
           this.$router.push("/login");
@@ -117,9 +118,7 @@ export default {
 
     async logoutAll() {
       await axios
-        .post(`http://localhost/api/employees/logoutAll.php`, {
-          id: this.user.id,
-        })
+        .get(`http://localhost/api/employees/logoutAll.php?id=${this.user.id}`)
         .then((response) => {
           localStorage.setItem("token", response.data.token);
           this.showMessage("Вы вышли со всех устройств кроме текущего");

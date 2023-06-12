@@ -8,47 +8,38 @@
 
   $employee = new Employee($db);
 
-	$data = json_decode(file_get_contents("php://input"));
-
-  $employee->id = $data->id;
+  $employee->id = $_GET['id'];
   $employee->getOne();
 
   $password = "";
 
-  if (empty($data->password)) {
-    if ($data -> status == 0) {
-      $password = $data->password;
+  if (empty($_GET['password'])) {
+    if ($_GET['status'] == 0) {
+      $password = $_GET['password'];
     } else {
       http_response_code(400);
 
       echo json_encode(array("message" => "Данному пользователю пароль обязателен"));
       exit();
     }
-  } elseif ($data->password == $employee->password) {
-    $password = $data->password;
-  } elseif ($data->password != $employee->password) {
-    $password = password_hash($data->password, PASSWORD_BCRYPT);
+  } elseif ($_GET['password'] == $employee->password) {
+    $password = $_GET['password'];
+  } elseif ($_GET['password'] != $employee->password) {
+    $password = password_hash($_GET['password'], PASSWORD_BCRYPT);
   }
 
-  $employee->number = $data->number;
-  $employee->surname = $data->surname;
-  $employee->name = $data->name;
-  $employee->patronymic = empty($data->patronymic) ? NULL : $data->patronymic;
-  $employee->job_title = $data->job_title;
-  $employee->department_id = $data->department_id;
-  $employee->shift_id = $data->shift_id;
-  $employee->status = $data->status;
+  $employee->number = $_GET['number'];
+  $employee->surname = $_GET['surname'];
+  $employee->name = $_GET['name'];
+  $employee->patronymic = empty($_GET['patronymic']) ? NULL : $_GET['patronymic'];
+  $employee->job_title = $_GET['job_title'];
+  $employee->department_id = $_GET['department_id'];
+  $employee->shift_id = $_GET['shift_id'];
+  $employee->status = $_GET['status'];
   $employee->password = $password;
 
-  if (
-    $stmt = $employee->update()
-  ) {
-    http_response_code(200);
+  $stmt = $employee->update();
+  http_response_code(200);
 
-    echo json_encode(array("message" => "success"));
-  } else {
-    http_response_code(400);
-
-    echo json_encode(array("message" => "Невозможно обновить пользователя"));
-  }
+  echo json_encode(array("message" => "success"));
 ?>

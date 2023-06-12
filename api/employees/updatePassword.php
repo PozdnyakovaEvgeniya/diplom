@@ -9,22 +9,20 @@
 
   $employee = new Employee($db);
 
-	$data = json_decode(file_get_contents("php://input"));
-
-  $employee->id = $data->id;
+  $employee->id = $_GET['id'];
   $employee->getOne();
 
-  if (password_verify($data->password_old, $employee->password)) {
-    if ($data->password_new == $data->password_confirm) {
-      $employee->password = password_hash($data->password_new, PASSWORD_BCRYPT);
+  if (password_verify($_GET['password_old'], $employee->password)) {
+    if ($_GET['password_new'] == $_GET['password_confirm']) {
+      $employee->password = password_hash($_GET['password_new'], PASSWORD_BCRYPT);
       
       $stmt = $employee->update();
       $token = new Token($db);
-      $token->employee_id = $data->id;
+      $token->employee_id = $_GET['id'];
       $token->delete();
       
       $token = new Token($db);
-      $token->employee_id = $data->id;
+      $token->employee_id = $_GET['id'];
       $token->create();      
 
       http_response_code(200);

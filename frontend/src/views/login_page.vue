@@ -41,10 +41,9 @@ export default {
     async login(e) {
       e.preventDefault();
       await axios
-        .post("http://localhost/api/employees/login.php", {
-          number: this.number,
-          password: this.password,
-        })
+        .get(
+          `http://localhost/api/employees/login.php?number=${this.number}&password=${this.password}`
+        )
         .then((response) => {
           this.error = "";
           localStorage.setItem("token", response.data.token);
@@ -58,9 +57,11 @@ export default {
 
     async getUser() {
       await axios
-        .post("http://localhost/api/employees/getUser.php", {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then((response) => {
           if (response.data.status == 1) {
             this.$router.replace({

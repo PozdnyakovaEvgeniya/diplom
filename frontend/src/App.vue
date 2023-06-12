@@ -108,9 +108,11 @@ export default {
 
     async getUser() {
       await axios
-        .post("http://localhost/api/employees/getUser.php", {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then((response) => {
           this.user = response.data;
           if (response.data.status == 2) {
@@ -146,9 +148,11 @@ export default {
 
     async logout() {
       await axios
-        .post(`http://localhost/api/employees/logout.php`, {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/logout.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then(() => {
           localStorage.removeItem("token");
           this.$router.push("/login");

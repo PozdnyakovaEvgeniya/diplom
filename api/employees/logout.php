@@ -5,11 +5,9 @@
 
   $database = new Database();
   $db = $database->getConnection();
-  
-  $data = json_decode(file_get_contents("php://input"));
 
   $token = new Token($db);
-  $token->token = $data->token;
+  $token->token = $_GET["token"];
   
   if ($token->remove()) {
     http_response_code(200);

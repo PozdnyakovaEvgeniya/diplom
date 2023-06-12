@@ -25,9 +25,11 @@ export default {
   methods: {
     async getUser() {
       await axios
-        .post("http://localhost/api/employees/getUser.php", {
-          token: localStorage.getItem("token"),
-        })
+        .get(
+          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+            "token"
+          )}`
+        )
         .then((response) => {
           this.getDepartment(response.data.department_id);
         })

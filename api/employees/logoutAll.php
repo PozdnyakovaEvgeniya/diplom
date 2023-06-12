@@ -5,15 +5,13 @@
 
   $database = new Database();
   $db = $database->getConnection();
-  
-  $data = json_decode(file_get_contents("php://input"));
 
   $token = new Token($db);
-  $token->employee_id = $data->id;  
+  $token->employee_id = $_GET['id'];  
   $token->delete();
 
   $token = new Token($db);
-  $token->employee_id = $data->id;  
+  $token->employee_id = $_GET['id'];  
   $token->create();
 
   http_response_code(200);

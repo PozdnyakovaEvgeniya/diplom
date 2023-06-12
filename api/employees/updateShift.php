@@ -8,12 +8,10 @@
 
   $employee = new Employee($db);
 
-	$data = json_decode(file_get_contents("php://input"));
-
-  $employee->id = $data->id;
+  $employee->id = $_GET['id'];
   $employee->getOne();
 
-  $employee->shift_id = $data->shift_id;
+  $employee->shift_id = $_GET['shift_id'];
   
   $employee->update();
   http_response_code(200);

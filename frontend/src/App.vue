@@ -127,9 +127,7 @@ export default {
         this.error = 'Поле "Наименование" не может быть пустым';
       } else {
         await axios
-          .post("http://localhost/api/departments/add.php", {
-            name: this.name,
-          })
+          .get(`http://localhost/api/departments/add.php?name=${this.name}`)
           .then((response) => {
             this.update();
             this.closeAdd();

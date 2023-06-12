@@ -384,7 +384,9 @@ export default {
         this.error = 'Поле "Наименование" не может быть пустым';
       } else {
         axios
-          .post(`http://localhost/api/departments/update.php`, this.department)
+          .get(
+            `http://localhost/api/departments/update.php?id=${this.$route.params.department_id}&name=${this.department.name}`
+          )
           .then(() => {
             this.$emit("update");
             this.$emit("updateHeader");

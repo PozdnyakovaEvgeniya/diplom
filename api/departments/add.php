@@ -9,15 +9,14 @@
 
     $department = new Department($db);
 
-    $data = json_decode(file_get_contents("php://input"));
-    $department->name = $data->name;
+    $department->name = $_GET['name'];
     $department->getOneOfName();
 
     if ($department->id == null) {
-        $department->name = $data->name;
+        $department->name = $_GET['name'];
         $department->add();
         
-        $department->name = $data->name;
+        $department->name = $_GET['name'];
         $department->getOneOfName();
 
         $shift = new Shift($db);

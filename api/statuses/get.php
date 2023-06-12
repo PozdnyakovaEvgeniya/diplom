@@ -18,7 +18,7 @@
             $status_item = array(
                 "id" => $id,
                 "name" => $name,
-                "short_name" => $hours,
+                "short_name" => $short_name,
                 "hourly" => $hourly,
             );
             array_push($statuses, $status_item);

@@ -5,6 +5,7 @@
 	include_once "../objects/date.php";
 	include_once "../objects/hour.php";
 	include_once "../objects/period.php";
+	include_once "../objects/status.php";
 	$database = new Database();
 	$db = $database->getConnection();
 
@@ -46,12 +47,26 @@
 					
 					$period->getOfDate($row['date']);
 
+					$employee_status;
+
+					if ($period->status_id) {
+						$status = new Status($db);
+						$status->id = $period->status_id;
+						$status->getOne();
+
+						$employee_status = $status->short_name;
+					} elseif ($row['status'] == 1) {
+						$employee_status = "В";
+					} else {
+						$employee_status = "Я";
+					}					
+
 					$date_item = array(
 						"id" => $row['id'],
 						"date" => $row['date'],
 						"plan_hours" => $row['hours'],
 						"date_status" => $row['status'],
-						// "employee_status" => $period->status_id ? $period->status_id + 2 : "",
+						"employee_status" => $employee_status,
 					);
 					array_push($dates, $date_item);
 				}
@@ -63,16 +78,14 @@
 
 					$stmt = $hour->getOne();
 
-					$dates[$j]['hours'] = $hour->hours ? $hour->hours : 0;
-
 					$period = new Period($db);
 					$period->employee_id = $employees[$i]['id'];
 					$period->start = $dates[$j]['date'];
-					$period->status_id = 0;
+					$period->status_id = 1;
 					
 					$stmt = $period->getOne();
 
-					// $dates[$j]['time_off'] = $period->hours ? $period->hours : 0;
+					$dates[$j]['hours'] = $hour->hours + $period->hours;
 				}
 			} else {
 				$dates = array();

@@ -7,7 +7,7 @@
         <div class="form-field">
           <span>Название периода</span>
           <Multiselect
-            v-model="status"
+            v-model="status_id"
             label="name"
             trackBy="id"
             valueProp="id"
@@ -18,7 +18,7 @@
           <span>Начало периода</span>
           <input type="date" v-model="start" />
         </div>
-        <div class="form-field" v-if="status == 0">
+        <div class="form-field" v-if="hourly == 1">
           <span>Количество часов</span>
           <input type="еуче" v-model="hours" />
         </div>
@@ -82,7 +82,7 @@ export default {
       user: {},
       employee: {},
       statuses: [],
-      status_id: 0,
+      status_id: "",
       modalAdd: false,
       start: "",
       end: "",
@@ -97,6 +97,7 @@ export default {
       updated: false,
       hours: "",
       closed: false,
+      hourly: 0,
     };
   },
 
@@ -104,8 +105,8 @@ export default {
     this.getUser().then(() => {
       this.getClosed();
       this.getEmployee();
-      this.getPeriods();
       this.getStatuses();
+      this.getPeriods();
     });
   },
 
@@ -115,6 +116,7 @@ export default {
         .get("http://localhost/api/statuses/get.php")
         .then((response) => {
           this.statuses = response.data;
+          this.status_id = response.data[0].id;
         })
         .catch(() => {
           this.logout();
@@ -144,7 +146,6 @@ export default {
           }`
         )
         .then((response) => {
-          console.log(response.data);
           if (response.data.count != 0) {
             this.closed = true;
           }
@@ -190,8 +191,8 @@ export default {
           employee_id: this.employee.id,
           status_id: this.status_id,
           start: this.start,
-          end: this.status == 0 ? this.start : this.end,
-          hours: this.status == 0 ? this.hours : null,
+          end: this.hourly == 1 ? this.start : this.end,
+          hours: this.hourly == 1 ? this.hours : null,
           shift_id: this.employee.shift_id,
         })
         .then(() => {
@@ -204,19 +205,26 @@ export default {
     },
 
     getData(period) {
-      let elem = [
-        { id: "id", name: period.id, hidden: true },
-        { id: "name", name: period.status_id },
-        {
-          id: "delete",
-          delete: true,
-          request: `http://localhost/api/periods/delete.php?id=${period.id}`,
-        },
-        { id: "start", name: period.start.split("-").reverse().join(".") },
-        { id: "end", name: period.end.split("-").reverse().join(".") },
-        { id: "hours", name: period.hours },
-      ];
-      this.data.push(elem);
+      let status_name;
+
+      for (let status of this.statuses) {
+        if (status.id == period.status_id) {
+          let elem = [
+            { id: "id", name: period.id, hidden: true },
+            { id: "name", name: status.name },
+            {
+              id: "delete",
+              delete: true,
+              request: `http://localhost/api/periods/delete.php?id=${period.id}`,
+            },
+            { id: "start", name: period.start.split("-").reverse().join(".") },
+            { id: "end", name: period.end.split("-").reverse().join(".") },
+            { id: "hours", name: period.hours },
+          ];
+          this.data.push(elem);
+          break;
+        }
+      }
     },
 
     normalizeNum(num) {
@@ -252,6 +260,14 @@ export default {
         this.data = [];
         this.getPeriods();
         this.updated = false;
+      }
+    },
+
+    status_id() {
+      for (let status of this.statuses) {
+        if (status.id == this.status_id) {
+          this.hourly = status.hourly;
+        }
       }
     },
   },

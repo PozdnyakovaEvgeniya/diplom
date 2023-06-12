@@ -164,7 +164,6 @@ export default {
                   : currentDate.employee_status,
                 currentDate.plan_hours,
                 currentDate.hours,
-                currentDate.time_off,
                 currentDate.date,
               ],
               hours: true,

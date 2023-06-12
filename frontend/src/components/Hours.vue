@@ -3,7 +3,6 @@
     <div class="status">Статус: {{ status }}</div>
     <div v-if="status != 'ОТ' && status != 'Б'">План: {{ values[1] }}</div>
     <div v-if="status != 'ОТ' && status != 'Б'">Факт: {{ values[2] }}</div>
-    <div v-if="status != 'ОТ' && status != 'Б'">Отгул: {{ values[3] }}</div>
   </div>
 </template>
 
@@ -26,7 +25,7 @@ export default {
 
   methods: {
     getStatus() {
-      this.status = ["Я", "В", "ОВ", "ОТ", "Б"][this.values[0]];
+      this.status = this.values[0];
 
       if (
         this.status == "Я" &&
@@ -41,8 +40,7 @@ export default {
       if (
         this.status != "ОТ" &&
         this.status != "Б" &&
-        this.values[2] == 0 &&
-        this.values[1] > 0
+        this.values[2] < this.values[1]
       ) {
         this.status = "НН";
       }
@@ -59,6 +57,10 @@ export default {
 
       return num;
     },
+  },
+
+  mounted() {
+    console.log(this.values);
   },
 };
 </script>

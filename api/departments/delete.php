@@ -2,6 +2,7 @@
 	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/department.php";
+	include_once "../objects/employee.php";
 
 	$database = new Database();
 	$db = $database->getConnection();
@@ -10,7 +11,14 @@
 
     $department->id = $_GET['id'];
 
-	if ($department->delete()) {
+    $employee = new Employee($db);
+    $employee->department_id = $_GET['id'];
+    $stmt = $employee->getOfDepartment();
+
+    $num = $stmt->rowCount();
+
+	if ($num == 0) {
+        $department->delete();
         $stmt = $department->get();
         $num = $stmt->rowCount();
     
@@ -31,5 +39,6 @@
         echo json_encode($departments);
     } else {
         http_response_code(400);
+        echo json_encode(array("message" => "Невозможно удалить отдел с работниками"));
     };
 ?>

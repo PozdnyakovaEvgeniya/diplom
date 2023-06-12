@@ -3,7 +3,7 @@
     <Modal :show="modalUpd" @close="closeUpd">
       <form class="form" @submit.prevent="updatePassword">
         <h4>Изменить пароль</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
           <span>Текущий пароль</span>
           <input type="password" v-model="password_old" />
@@ -21,15 +21,11 @@
         </div>
       </form>
     </Modal>
-    <Modal :show="modalConfirm" @close="closeConfirm">
+    <Modal :show="modalMessage" @close="closeMessage">
       <div class="form">
-        <h4>Подтверждение</h4>
-        <div class="form-field">
-          <span>Сообщение</span>
-          <input type="text" :value="confirm" disabled />
-        </div>
+        <div class="form-field">{{ message }}</div>
         <div class="form-button">
-          <button @click="closeConfirm">OK</button>
+          <button @click="closeMessage">OK</button>
         </div>
       </div>
     </Modal>
@@ -67,8 +63,8 @@ export default {
       password_confirm: "",
       modalUpd: false,
       error: "",
-      modalConfirm: false,
-      confirm: "",
+      modalMessage: false,
+      message: "",
     };
   },
 
@@ -101,7 +97,7 @@ export default {
         .then((response) => {
           localStorage.setItem("token", response.data.token);
           this.closeUpd();
-          this.showConfirm("Вы изменили пароль");
+          this.showMessage("Вы изменили пароль");
         })
         .catch((error) => {
           this.error = error.response.data.message;
@@ -126,7 +122,7 @@ export default {
         })
         .then((response) => {
           localStorage.setItem("token", response.data.token);
-          this.showConfirm("Вы вышли со всех устройств кроме текущего");
+          this.showMessage("Вы вышли со всех устройств кроме текущего");
         });
     },
 
@@ -142,13 +138,13 @@ export default {
       this.modalUpd = false;
     },
 
-    showConfirm(confirm) {
-      this.modalConfirm = true;
-      this.confirm = confirm;
+    showMessage(message) {
+      this.modalMessage = true;
+      this.message = message;
     },
 
-    closeConfirm() {
-      this.modalConfirm = false;
+    closeMessage() {
+      this.modalMessage = false;
     },
   },
 };

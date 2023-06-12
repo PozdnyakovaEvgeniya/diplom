@@ -3,7 +3,7 @@
     <Modal :show="modalAdd" @close="closeAdd">
       <form class="form" @submit.prevent="addDepartment">
         <h4>Добавить отдел</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
           <span>Наименование</span>
           <input type="text" v-model="name" />
@@ -374,6 +374,7 @@ li {
 .form-button {
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
 }
 
 .error {

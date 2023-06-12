@@ -3,7 +3,7 @@
     <Modal :show="modalAdd" @close="closeAdd">
       <form class="form" @submit.prevent="addEmployee">
         <h4>Добавить работника</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
           <span>Табельный номер</span>
           <input type="text" v-model="employee.number" />
@@ -61,7 +61,7 @@
     <Modal :show="modalUpdate" @close="closeUpdate">
       <form class="form" @submit.prevent="updateEmployee">
         <h4>Редактировать работника</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
           <span>Фамилия</span>
           <input type="text" v-model="employee.surname" />
@@ -125,7 +125,7 @@
     <Modal :show="modalEdit" @close="closeEdit">
       <form class="form" @submit.prevent="editDepartment">
         <h4>Редактировать отдел</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
           <span>Название</span>
           <input type="text" v-model="department.name" />
@@ -135,15 +135,33 @@
         </div>
       </form>
     </Modal>
+    <Modal :show="modalConfirm" @close="closeConfirm">
+      <form class="form" @submit.prevent="delDepartment">
+        <div class="form-field">Вы уверены?</div>
+        <div v-if="error" class="error">{{ error }}</div>
+        <div class="form-button">
+          <button>Удалить</button>
+          <button type="button" @click="closeConfirm">Отменить</button>
+        </div>
+      </form>
+    </Modal>
     <div class="content">
       <div class="content-header">
         <Add @click="showAdd">Добавить работника</Add>
         <BigUpdate @click="showEdit">Редактировать отдел</BigUpdate>
-        <BigDelete @click="delDepartment">Удалить отдел</BigDelete>
+        <BigDelete
+          @click="
+            showConfirm(
+              `http://localhost/api/departments/delete.php?id=${this.$route.params.department_id}`
+            )
+          "
+          >Удалить отдел</BigDelete
+        >
       </div>
       <Table
         :headers="headers"
         :data="data"
+        @confirm="showConfirm"
         @update="update"
         @edit="edit"
       ></Table>
@@ -192,6 +210,7 @@ export default {
       modalAdd: false,
       modalUpdate: false,
       modalEdit: false,
+      modalConfirm: false,
       updated: false,
       shifts: {},
       statuses: [
@@ -353,20 +372,28 @@ export default {
               department_id: this.departments[0].id,
             },
           });
+        })
+        .catch((error) => {
+          console.log(error.response.data.message);
+          this.error = error.response.data.message;
         });
     },
 
     async editDepartment() {
-      axios
-        .post(`http://localhost/api/departments/update.php`, this.department)
-        .then(() => {
-          this.$emit("update");
-          this.$emit("updateHeader");
-          this.closeEdit();
-        })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+      if (this.department.name == "") {
+        this.error = 'Поле "Наименование" не может быть пустым';
+      } else {
+        axios
+          .post(`http://localhost/api/departments/update.php`, this.department)
+          .then(() => {
+            this.$emit("update");
+            this.$emit("updateHeader");
+            this.closeEdit();
+          })
+          .catch((error) => {
+            this.error = error.response.data.message;
+          });
+      }
     },
 
     async getShifts(id) {
@@ -454,6 +481,15 @@ export default {
       this.department.name = "";
       this.error = "";
       this.modalEdit = false;
+    },
+
+    showConfirm() {
+      this.modalConfirm = true;
+    },
+
+    closeConfirm() {
+      this.error = "";
+      this.modalConfirm = false;
     },
   },
 

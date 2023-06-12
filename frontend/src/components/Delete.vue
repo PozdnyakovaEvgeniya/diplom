@@ -1,5 +1,15 @@
 <template>
-  <button @click="click">
+  <Modal :show="modalConfirm" @close="closeConfirm">
+    <form class="form" @submit.prevent="submit">
+      <div class="form-field">Вы уверены?</div>
+      <div v-if="error" class="error">{{ error }}</div>
+      <div class="form-button">
+        <button>Удалить</button>
+        <button type="button" @click="closeConfirm">Отменить</button>
+      </div>
+    </form>
+  </Modal>
+  <button class="delete" @click="showConfirm">
     <svg
       class="icon"
       height="22"
@@ -28,21 +38,37 @@
 
 <script>
 import axios from "axios";
+import Modal from "@/components/Modal.vue";
 
 export default {
+  components: {
+    Modal,
+  },
+
   props: {
     request: String,
   },
 
   data() {
-    return {};
+    return {
+      modalConfirm: false,
+    };
   },
 
   methods: {
-    async click() {
+    async submit() {
       await axios.get(this.request).then(() => {
         this.$emit("update");
       });
+    },
+
+    showConfirm() {
+      this.modalConfirm = true;
+    },
+
+    closeConfirm() {
+      this.error = "";
+      this.modalConfirm = false;
     },
   },
 };
@@ -55,7 +81,7 @@ export default {
   fill: var(--white);
 }
 
-button {
+.delete {
   padding: 0;
   width: 23px;
   height: 23px;

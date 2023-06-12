@@ -1,5 +1,4 @@
-<?php
-  
+<?php  
 	include "../config/headers.php";
 	include_once "../config/database.php";
 	include_once "../objects/employee.php";

@@ -24,6 +24,7 @@
 			"short_name" => $employee->getShortName(),
       		"status" => $employee->status,
 			"department_id" => $employee->department_id,
+			"shift_id" => $employee->shift_id,
 			"job_title" => $employee->job_title,
 		);
 

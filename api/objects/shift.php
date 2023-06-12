@@ -41,5 +41,16 @@
 
       return $stmt;
     }  
+
+    function getOne() {
+      $query = "SELECT * FROM `shifts` WHERE `id` = ?";
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute(array($this->id));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $this->name = $row["name"];
+    }
+
   }
 ?>

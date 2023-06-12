@@ -284,7 +284,8 @@ li {
 
 .form-field input:not([type="checkbox"]) {
   padding: 10px 20px;
-  width: 450px;
+  min-width: 450px;
+  width: 100%;
 }
 
 .wrapper {

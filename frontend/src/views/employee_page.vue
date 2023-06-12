@@ -3,9 +3,9 @@
     <Modal :show="modalAdd" @close="closeAdd">
       <form class="form" @submit.prevent="addPeriod">
         <h4>Добавить период</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
-          <span>Название периода</span>
+          <span>Наименование периода</span>
           <Multiselect
             v-model="status_id"
             label="name"
@@ -53,7 +53,7 @@
     <Modal :show="modalAddStatus" @close="closeAddStatus">
       <form class="form" @submit.prevent="addStatus">
         <h4>Добавить статус</h4>
-        <div class="error">{{ error }}</div>
+        <div v-if="error" class="error">{{ error }}</div>
         <div class="form-field">
           <span>Наименование</span>
           <input type="text" v-model="newStatus.name" />
@@ -154,6 +154,7 @@ export default {
       shift_id: "",
       modalAddStatus: false,
       newStatus: {},
+      error: "",
     };
   },
 
@@ -273,52 +274,72 @@ export default {
     },
 
     async addPeriod() {
-      await axios
-        .post("http://localhost/api/periods/add.php", {
-          employee_id: this.employee.id,
-          status_id: this.status_id,
-          start: this.start,
-          end: this.hourly == 1 ? this.start : this.end,
-          hours: this.hourly == 1 ? this.hours : null,
-          shift_id: this.employee.shift_id,
-        })
-        .then(() => {
-          this.update();
-          this.closeAdd();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (this.status_id == null) {
+        this.error = 'Поле "Наименование периода" не может быть пустым';
+      } else if (this.start == "") {
+        this.error = 'Поле "Начало периода" не может быть пустым';
+      } else if (this.end == "" && this.hourly == 0) {
+        this.error = 'Поле "Конец периода" не может быть пустым';
+      } else if (this.hours == "" && this.hourly == 1) {
+        this.error = 'Поле "Количество часов" не может быть пустым';
+      } else {
+        await axios
+          .post("http://localhost/api/periods/add.php", {
+            employee_id: this.employee.id,
+            status_id: this.status_id,
+            start: this.start,
+            end: this.hourly == 1 ? this.start : this.end,
+            hours: this.hourly == 1 ? this.hours : null,
+            shift_id: this.employee.shift_id,
+          })
+          .then(() => {
+            this.update();
+            this.closeAdd();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
 
     async addStatus() {
-      this.newStatus.hourly = this.newStatus.hourly ? 1 : 0;
-      await axios
-        .post("http://localhost/api/statuses/add.php", this.newStatus)
-        .then(() => {
-          this.getStatuses();
-          this.closeAddStatus();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (this.newStatus.name == null) {
+        this.error = 'Поле "Наименование" не может быть пустым';
+      } else if (this.newStatus.short_name == null) {
+        this.error = 'Поле "Сокращенное наименование" не может быть пустым';
+      } else {
+        this.newStatus.hourly = this.newStatus.hourly ? 1 : 0;
+        await axios
+          .post("http://localhost/api/statuses/add.php", this.newStatus)
+          .then(() => {
+            this.getStatuses();
+            this.closeAddStatus();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
 
     async updShift() {
-      await axios
-        .post("http://localhost/api/employees/updateShift.php", {
-          id: this.employee.id,
-          shift_id: this.shift_id,
-        })
-        .then(() => {
-          this.getEmployee().then(() => {
-            this.getShift();
-            this.closeUpd();
+      if (this.shift_id == null) {
+        this.error = 'Поле "Смена" не может быть пустым';
+      } else {
+        await axios
+          .post("http://localhost/api/employees/updateShift.php", {
+            id: this.employee.id,
+            shift_id: this.shift_id,
+          })
+          .then(() => {
+            this.getEmployee().then(() => {
+              this.getShift();
+              this.closeUpd();
+            });
+          })
+          .catch((error) => {
+            this.error = error.response.data.message;
           });
-        })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+      }
     },
 
     getData(period) {
@@ -355,6 +376,7 @@ export default {
     },
 
     closeAdd() {
+      this.error = "";
       this.status_id = this.statuses[1].id;
       this.start = "";
       this.end = "";
@@ -367,7 +389,8 @@ export default {
     },
 
     closeAddStatus() {
-      this.newStatus = "";
+      this.error = "";
+      this.newStatus = {};
       this.modalAddStatus = false;
     },
 
@@ -376,6 +399,7 @@ export default {
     },
 
     closeUpd() {
+      this.error = "";
       this.shift_id = this.employee.shift_id;
       this.modalUpd = false;
     },

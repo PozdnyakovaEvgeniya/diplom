@@ -75,11 +75,13 @@ export default {
 
     async close() {
       await axios
-        .post("http://localhost/api/months/add.php", {
-          department_id: this.department_id,
-          year: this.$route.params.year,
-          month: +this.$route.params.month + 1,
-        })
+        .get(
+          `http://localhost/api/months/add.php?department_id=${
+            this.department_id
+          }&year=${this.$route.params.year}&month=${
+            +this.$route.params.month + 1
+          }`
+        )
         .then(() => {
           this.closed = true;
         });

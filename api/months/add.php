@@ -8,11 +8,9 @@
 
     $month = new Month($db);
 
-    $data = json_decode(file_get_contents("php://input"));
-
-    $month->department_id = $data->department_id;
-    $month->year = $data->year;
-    $month->month = $data->month;
+    $month->department_id = $_GET['department_id'];
+    $month->year = $_GET['year'];
+    $month->month = $_GET['month'];
     $month->add();
    
     http_response_code(200);    

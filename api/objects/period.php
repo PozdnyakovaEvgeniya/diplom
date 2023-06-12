@@ -5,7 +5,7 @@
     private $table_name = "periods";
 
     public $id;
-    public $status;
+    public $status_id;
     public $employee_id;
     public $start;
     public $end;
@@ -18,16 +18,16 @@
 
     function add() 
     {
-      $this->status = htmlspecialchars(strip_tags($this->status));
+      $this->status_id = htmlspecialchars(strip_tags($this->status_id));
       $this->employee_id = htmlspecialchars(strip_tags($this->employee_id));
       $this->start = htmlspecialchars(strip_tags($this->start));
       $this->end = htmlspecialchars(strip_tags($this->end));
       $this->hours = $this->hours ? htmlspecialchars(strip_tags($this->hours)) : NULL;
       
-      $query = "INSERT INTO `periods`(`status`, `employee_id`, `start`, `end`, `hours`) VALUES (?, ?, ?, ?, ?)";
+      $query = "INSERT INTO `periods`(`status_id`, `employee_id`, `start`, `end`, `hours`) VALUES (?, ?, ?, ?, ?)";
       $stmt = $this->conn->prepare($query);
 
-      return $stmt->execute(array($this->status, $this->employee_id, $this->start, $this->end, $this->hours));
+      return $stmt->execute(array($this->status_id, $this->employee_id, $this->start, $this->end, $this->hours));
     }
 
     function delete() 
@@ -48,9 +48,9 @@
     }  
 
     function getOne() {
-      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND `start` = ? AND `status` = ?";
+      $query = "SELECT * FROM `periods` WHERE `employee_id` = ? AND `start` = ? AND `status_id` = ?";
       $stmt = $this->conn->prepare($query);
-      $stmt->execute(array($this->employee_id, $this->start, $this->status));
+      $stmt->execute(array($this->employee_id, $this->start, $this->status_id));
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -64,7 +64,7 @@
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      $this->status = $row["status"];
+      $this->status_id = $row["status_id"];
     }
   }
 ?>

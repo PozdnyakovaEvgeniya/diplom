@@ -81,12 +81,8 @@ export default {
     return {
       user: {},
       employee: {},
-      statuses: [
-        { id: 0, name: "Отгул" },
-        { id: 1, name: "Отпуск" },
-        { id: 2, name: "Больничный" },
-      ],
-      status: 0,
+      statuses: [],
+      status_id: 0,
       modalAdd: false,
       start: "",
       end: "",
@@ -109,10 +105,22 @@ export default {
       this.getClosed();
       this.getEmployee();
       this.getPeriods();
+      this.getStatuses();
     });
   },
 
   methods: {
+    async getStatuses() {
+      await axios
+        .get("http://localhost/api/statuses/get.php")
+        .then((response) => {
+          this.statuses = response.data;
+        })
+        .catch(() => {
+          this.logout();
+        });
+    },
+
     async getUser() {
       await axios
         .post("http://localhost/api/employees/getUser.php", {
@@ -180,7 +188,7 @@ export default {
       await axios
         .post("http://localhost/api/periods/add.php", {
           employee_id: this.employee.id,
-          status: this.status,
+          status_id: this.status_id,
           start: this.start,
           end: this.status == 0 ? this.start : this.end,
           hours: this.status == 0 ? this.hours : null,
@@ -198,7 +206,7 @@ export default {
     getData(period) {
       let elem = [
         { id: "id", name: period.id, hidden: true },
-        { id: "name", name: ["Отгул", "Отпуск", "Больничный"][period.status] },
+        { id: "name", name: period.status_id },
         {
           id: "delete",
           delete: true,

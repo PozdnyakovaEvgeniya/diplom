@@ -51,7 +51,7 @@
 						"date" => $row['date'],
 						"plan_hours" => $row['hours'],
 						"date_status" => $row['status'],
-						"employee_status" => $period->status ? $period->status + 2 : "",
+						// "employee_status" => $period->status_id ? $period->status_id + 2 : "",
 					);
 					array_push($dates, $date_item);
 				}
@@ -68,11 +68,11 @@
 					$period = new Period($db);
 					$period->employee_id = $employees[$i]['id'];
 					$period->start = $dates[$j]['date'];
-					$period->status = 0;
+					$period->status_id = 0;
 					
 					$stmt = $period->getOne();
 
-					$dates[$j]['time_off'] = $period->hours ? $period->hours : 0;
+					// $dates[$j]['time_off'] = $period->hours ? $period->hours : 0;
 				}
 			} else {
 				$dates = array();

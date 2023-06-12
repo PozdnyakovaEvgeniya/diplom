@@ -15,26 +15,24 @@
 
 	$stmt = $period->getOfMonth($start, $end);
     $num = $stmt->rowCount();
+    $periods = array();
 
 	if ($num > 0) {
-        $periods = array();
         
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $period_item = array(
                 "id" => $id,
                 "employee_id" => $employee_id,
-                "status" => $status,
+                "status_id" => $status_id,
                 "start" => $start,
                 "end" => $end,
                 "hours" => $hours,
             );
             array_push($periods, $period_item);
         }
+    } 
     
-        http_response_code(200);
-        echo json_encode($periods);
-    } else {
-        http_response_code(404);
-    }	
+    http_response_code(200);
+    echo json_encode($periods);
 ?>

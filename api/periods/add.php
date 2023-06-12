@@ -10,7 +10,7 @@
 
     $data = json_decode(file_get_contents("php://input"));
 
-    $period->status = $data->status;
+    $period->status_id = $data->status_id;
     $period->employee_id = $data->employee_id;
     $period->start = $data->start;
     $period->end = $data->end;

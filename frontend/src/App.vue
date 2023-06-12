@@ -367,8 +367,12 @@ li {
   gap: 5px;
 }
 
-.form-field span {
+.form-field span,
+.form-field label {
   font-size: 13px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .form-button {

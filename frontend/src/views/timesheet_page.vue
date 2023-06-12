@@ -137,6 +137,7 @@ export default {
           date.getDate() + 1
         );
       }
+      this.headers.push({ id: "total", name: "Итого" });
     },
 
     getData(employee) {
@@ -147,6 +148,8 @@ export default {
         { id: "name", name: employee.name },
         { id: "job_title", name: employee.job_title },
       ];
+      let totalPlan = 0;
+      let totalFact = 0;
       while (this.$route.params.month == date.getMonth()) {
         let flag = false;
         for (let currentDate of employee.dates) {
@@ -156,6 +159,8 @@ export default {
               date.getMonth() + 1
             )}-${this.normalizeNum(date.getDate())}`
           ) {
+            totalPlan += currentDate.plan_hours;
+            totalFact += currentDate.hours;
             elem.push({
               id: "date",
               name: [
@@ -186,6 +191,11 @@ export default {
           date.getDate() + 1
         );
       }
+      elem.push({
+        id: "total",
+        name: ["total", totalPlan, totalFact],
+        hours: true,
+      });
       this.data.push(elem);
     },
 

@@ -49,20 +49,12 @@
       $this->department_id = htmlspecialchars(strip_tags($this->department_id));
       $this->status = htmlspecialchars(strip_tags($this->status));
       $this->shift_id = htmlspecialchars(strip_tags($this->shift_id));
-      
-      $query = "UPDATE `employees` SET `number` = ?, `surname` = ?, `name` = ?, `patronymic` = ?, `job_title` = ?, `department_id` = ?, `shift_id` = ?, `status` = ?,`password` = ? WHERE `id` = ?";
+      $this->overtime = htmlspecialchars(strip_tags($this->overtime));
+              
+      $query = "UPDATE `employees` SET `number` = ?, `surname` = ?, `name` = ?, `patronymic` = ?, `job_title` = ?, `department_id` = ?, `shift_id` = ?, `status` = ?, `overtime` = ?,`password` = ? WHERE `id` = ?";
       $stmt = $this->conn->prepare($query);
 
-      return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->shift_id, $this->status, $this->password, $this->id));
-    }
-
-    function login() {
-      $this->token = sha1(random_bytes(100)) . sha1(random_bytes(100));
-      
-      $query = "UPDATE `employees` SET `token` = ? WHERE `id` = ?";
-      $stmt = $this->conn->prepare($query);
-
-      return $stmt->execute(array($this->token, $this->id));
+      return $stmt->execute(array($this->number, $this->surname, $this->name, $this->patronymic, $this->job_title, $this->department_id, $this->shift_id, $this->status, $this->overtime, $this->password, $this->id));
     }
 
     function getOfDepartment() {

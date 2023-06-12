@@ -80,4 +80,12 @@ export default {
 .status {
   font-weight: 500;
 }
+
+.total .status {
+  color: var(--white);
+}
+
+.total * {
+  font-weight: 600;
+}
 </style>

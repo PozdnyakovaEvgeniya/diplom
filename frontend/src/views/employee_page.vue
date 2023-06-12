@@ -50,6 +50,29 @@
         </div>
       </form>
     </Modal>
+    <Modal :show="modalAddStatus" @close="closeAddStatus">
+      <form class="form" @submit.prevent="addStatus">
+        <h4>Добавить статус</h4>
+        <div class="error">{{ error }}</div>
+        <div class="form-field">
+          <span>Наименование</span>
+          <input type="text" v-model="newStatus.name" />
+        </div>
+        <div class="form-field">
+          <span>Сокращенное наименование</span>
+          <input type="text" v-model="newStatus.short_name" />
+        </div>
+        <div class="form-field">
+          <label>
+            <input type="checkbox" v-model="newStatus.hourly" />
+            Почасовой
+          </label>
+        </div>
+        <div class="form-button">
+          <button>Добавить</button>
+        </div>
+      </form>
+    </Modal>
     <div class="content">
       <div class="content-header">
         <Back
@@ -129,6 +152,8 @@ export default {
       shifts: [],
       modalUpd: false,
       shift_id: "",
+      modalAddStatus: false,
+      newStatus: {},
     };
   },
 
@@ -176,7 +201,8 @@ export default {
         .get("http://localhost/api/statuses/get.php")
         .then((response) => {
           this.statuses = response.data;
-          this.status_id = response.data[0].id;
+          this.statuses.unshift({ id: -1, name: "+ Добавить" });
+          this.status_id = response.data[1].id;
         })
         .catch((error) => {
           console.log(error);
@@ -265,6 +291,18 @@ export default {
         });
     },
 
+    async addStatus() {
+      this.newStatus.hourly = this.newStatus.hourly ? 1 : 0;
+      await axios
+        .post("http://localhost/api/statuses/add.php", this.newStatus)
+        .then(() => {
+          this.getShifts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     async updShift() {
       await axios
         .post("http://localhost/api/employees/updateShift.php", {
@@ -316,11 +354,20 @@ export default {
     },
 
     closeAdd() {
-      this.status_id = this.statuses[0].id;
+      this.status_id = this.statuses[1].id;
       this.start = "";
       this.end = "";
       this.hours = "";
       this.modalAdd = false;
+    },
+
+    showAddStatus() {
+      this.modalAddStatus = true;
+    },
+
+    closeAddStatus() {
+      this.newStatus = "";
+      this.modalAddStatus = false;
     },
 
     showUpd() {
@@ -346,15 +393,22 @@ export default {
     updated() {
       if (this.updated == true) {
         this.data = [];
+        this.getEmployee();
         this.getPeriods();
         this.updated = false;
       }
     },
 
     status_id() {
-      for (let status of this.statuses) {
-        if (status.id == this.status_id) {
-          this.hourly = status.hourly;
+      if (this.status_id == -1) {
+        this.closeAdd();
+        this.showAddStatus();
+      } else {
+        for (let status of this.statuses) {
+          if (status.id == this.status_id) {
+            this.hourly = status.hourly;
+            break;
+          }
         }
       }
     },

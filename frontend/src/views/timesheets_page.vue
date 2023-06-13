@@ -30,7 +30,7 @@ export default {
   methods: {
     async getDepartments() {
       await axios
-        .get("http://localhost/api/departments/get.php")
+        .get("http://jenya2ay.beget.tech/departments/get.php")
         .then((response) => {
           this.departments = response.data;
         });

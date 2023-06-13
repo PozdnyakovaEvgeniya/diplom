@@ -42,7 +42,7 @@ export default {
       e.preventDefault();
       await axios
         .get(
-          `http://localhost/api/employees/login.php?number=${this.number}&password=${this.password}`
+          `http://jenya2ay.beget.tech/employees/login.php?number=${this.number}&password=${this.password}`
         )
         .then((response) => {
           this.error = "";
@@ -58,7 +58,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -96,7 +96,7 @@ export default {
 
     async getDepartments() {
       await axios
-        .get("http://localhost/api/departments/get.php")
+        .get("http://jenya2ay.beget.tech/departments/get.php")
         .then((response) => {
           this.departments = response.data;
         });

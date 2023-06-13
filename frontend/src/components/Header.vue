@@ -76,7 +76,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -91,7 +91,7 @@ export default {
     async updatePassword() {
       await axios
         .get(
-          `http://localhost/api/employees/updatePassword.php?id=${this.user.id}&password_old=${this.password_old}&password_new=${this.password_new}&password_confirm=${this.password_confirm}`
+          `http://jenya2ay.beget.tech/employees/updatePassword.php?id=${this.user.id}&password_old=${this.password_old}&password_new=${this.password_new}&password_confirm=${this.password_confirm}`
         )
         .then((response) => {
           localStorage.setItem("token", response.data.token);
@@ -106,7 +106,7 @@ export default {
     async logout() {
       await axios
         .get(
-          `http://localhost/api/employees/logout.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/logout.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -118,7 +118,9 @@ export default {
 
     async logoutAll() {
       await axios
-        .get(`http://localhost/api/employees/logoutAll.php?id=${this.user.id}`)
+        .get(
+          `http://jenya2ay.beget.tech/employees/logoutAll.php?id=${this.user.id}`
+        )
         .then((response) => {
           localStorage.setItem("token", response.data.token);
           this.showMessage("Вы вышли со всех устройств кроме текущего");

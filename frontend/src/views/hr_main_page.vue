@@ -31,7 +31,7 @@ export default {
   methods: {
     async getDepartment(id) {
       await axios
-        .get(`http://localhost/api/departments/getOne.php?id=${id}`)
+        .get(`http://jenya2ay.beget.tech/departments/getOne.php?id=${id}`)
         .then((response) => {
           this.department = response.data;
         })

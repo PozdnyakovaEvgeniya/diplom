@@ -81,7 +81,7 @@ export default {
   methods: {
     async getDepartments() {
       await axios
-        .get("http://localhost/api/departments/get.php")
+        .get("http://jenya2ay.beget.tech/departments/get.php")
         .then((response) => {
           this.departments = response.data;
         });
@@ -109,7 +109,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -129,7 +129,9 @@ export default {
         this.error = 'Поле "Наименование" не может быть пустым';
       } else {
         await axios
-          .get(`http://localhost/api/departments/add.php?name=${this.name}`)
+          .get(
+            `http://jenya2ay.beget.tech/departments/add.php?name=${this.name}`
+          )
           .then((response) => {
             this.update();
             this.closeAdd();
@@ -149,7 +151,7 @@ export default {
     async logout() {
       await axios
         .get(
-          `http://localhost/api/employees/logout.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/logout.php?token=${localStorage.getItem(
             "token"
           )}`
         )

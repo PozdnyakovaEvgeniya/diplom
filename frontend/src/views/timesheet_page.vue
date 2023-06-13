@@ -60,7 +60,7 @@ export default {
     async getClosed() {
       await axios
         .get(
-          `http://localhost/api/months/get.php?department_id=${
+          `http://jenya2ay.beget.tech/months/get.php?department_id=${
             this.department_id
           }&year=${this.$route.params.year}&month=${
             +this.$route.params.month + 1
@@ -76,7 +76,7 @@ export default {
     async close() {
       await axios
         .get(
-          `http://localhost/api/months/add.php?department_id=${
+          `http://jenya2ay.beget.tech/months/add.php?department_id=${
             this.department_id
           }&year=${this.$route.params.year}&month=${
             +this.$route.params.month + 1
@@ -90,7 +90,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -106,7 +106,7 @@ export default {
     async get() {
       await axios
         .post(
-          `http://localhost/api/hours/get.php?id=${
+          `http://jenya2ay.beget.tech/hours/get.php?id=${
             this.department_id
           }&start=${this.normalizeNum(
             this.$route.params.year

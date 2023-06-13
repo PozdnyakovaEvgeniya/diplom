@@ -152,7 +152,7 @@
         <BigDelete
           @click="
             showConfirm(
-              `http://localhost/api/departments/delete.php?id=${this.$route.params.department_id}`
+              `http://jenya2ay.beget.tech/departments/delete.php?id=${this.$route.params.department_id}`
             )
           "
           >Удалить отдел</BigDelete
@@ -234,7 +234,7 @@ export default {
   methods: {
     async getDepartments() {
       await axios
-        .get("http://localhost/api/departments/get.php")
+        .get("http://jenya2ay.beget.tech/departments/get.php")
         .then((response) => {
           this.departments = response.data;
           for (let department of this.departments) {
@@ -245,7 +245,9 @@ export default {
 
     async getEmployees(id) {
       await axios
-        .get(`http://localhost/api/employees/getOfDepartment.php?id=${id}`)
+        .get(
+          `http://jenya2ay.beget.tech/employees/getOfDepartment.php?id=${id}`
+        )
         .then((response) => {
           this.employees = response.data;
           for (let employee of response.data) {
@@ -287,7 +289,7 @@ export default {
         {
           id: "delete",
           delete: true,
-          request: `http://localhost/api/employees/delete.php?id=${employee.id}`,
+          request: `http://jenya2ay.beget.tech/employees/delete.php?id=${employee.id}`,
         },
         { id: "name", name: employee.name },
         { id: "job_title", name: employee.job_title },
@@ -319,7 +321,7 @@ export default {
       } else {
         await axios
           .get(
-            `http://localhost/api/employees/signup.php?number=${this.employee.number}&surname=${this.employee.surname}&name=${this.employee.name}&patronymic=${this.employee.patronymic}&job_title=${this.employee.job_title}&department_id=${this.employee.department_id}&shift_id=${this.employee.shift_id}&status=${this.employee.status}&password=${this.employee.password}&`,
+            `http://jenya2ay.beget.tech/employees/signup.php?number=${this.employee.number}&surname=${this.employee.surname}&name=${this.employee.name}&patronymic=${this.employee.patronymic}&job_title=${this.employee.job_title}&department_id=${this.employee.department_id}&shift_id=${this.employee.shift_id}&status=${this.employee.status}&password=${this.employee.password}&`,
             this.employee
           )
           .then(() => {
@@ -352,7 +354,7 @@ export default {
       } else {
         await axios
           .get(
-            `http://localhost/api/employees/update.php?id=${this.employee.id}&number=${this.employee.number}&surname=${this.employee.surname}&name=${this.employee.name}&patronymic=${this.employee.patronymic}&job_title=${this.employee.job_title}&department_id=${this.employee.department_id}&shift_id=${this.employee.shift_id}&status=${this.employee.status}&password=${this.employee.password}`
+            `http://jenya2ay.beget.tech/employees/update.php?id=${this.employee.id}&number=${this.employee.number}&surname=${this.employee.surname}&name=${this.employee.name}&patronymic=${this.employee.patronymic}&job_title=${this.employee.job_title}&department_id=${this.employee.department_id}&shift_id=${this.employee.shift_id}&status=${this.employee.status}&password=${this.employee.password}`
           )
           .then(() => {
             this.update();
@@ -367,7 +369,7 @@ export default {
     async delDepartment() {
       axios
         .get(
-          `http://localhost/api/departments/delete.php?id=${this.$route.params.department_id}`
+          `http://jenya2ay.beget.tech/departments/delete.php?id=${this.$route.params.department_id}`
         )
         .then((response) => {
           this.departments = response.data;
@@ -390,7 +392,7 @@ export default {
       } else {
         axios
           .get(
-            `http://localhost/api/departments/update.php?id=${this.$route.params.department_id}&name=${this.department.name}`
+            `http://jenya2ay.beget.tech/departments/update.php?id=${this.$route.params.department_id}&name=${this.department.name}`
           )
           .then(() => {
             this.$emit("update");
@@ -405,7 +407,7 @@ export default {
 
     async getShifts(id) {
       await axios
-        .get(`http://localhost/api/shifts/getOfDepartment.php?id=${id}`)
+        .get(`http://jenya2ay.beget.tech/shifts/getOfDepartment.php?id=${id}`)
         .then((response) => {
           this.shifts[id] = response.data;
           if (id == this.$route.params.department_id) {
@@ -419,7 +421,7 @@ export default {
 
     async edit(id) {
       await axios
-        .get(`http://localhost/api/employees/getOne.php?id=${id}`)
+        .get(`http://jenya2ay.beget.tech/employees/getOne.php?id=${id}`)
         .then((response) => {
           this.employee = response.data;
           this.showUpdate();
@@ -429,7 +431,7 @@ export default {
     async getDepartment() {
       await axios
         .get(
-          `http://localhost/api/departments/getOne.php?id=${this.$route.params.department_id}`
+          `http://jenya2ay.beget.tech/departments/getOne.php?id=${this.$route.params.department_id}`
         )
         .then((response) => {
           this.department = response.data;

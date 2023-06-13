@@ -26,7 +26,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -40,7 +40,7 @@ export default {
 
     async getDepartment(id) {
       await axios
-        .get(`http://localhost/api/departments/getOne.php?id=${id}`)
+        .get(`http://jenya2ay.beget.tech/departments/getOne.php?id=${id}`)
         .then((response) => {
           this.department = response.data;
         })

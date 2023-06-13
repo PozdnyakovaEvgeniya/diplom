@@ -174,7 +174,7 @@ export default {
     async getShifts() {
       await axios
         .get(
-          `http://localhost/api/shifts/getOfDepartment.php?id=${this.user.department_id}`
+          `http://jenya2ay.beget.tech/shifts/getOfDepartment.php?id=${this.user.department_id}`
         )
         .then((response) => {
           this.shifts = response.data;
@@ -187,7 +187,7 @@ export default {
     async getShift() {
       await axios
         .get(
-          `http://localhost/api/shifts/getOne.php?id=${this.employee.shift_id}`
+          `http://jenya2ay.beget.tech/shifts/getOne.php?id=${this.employee.shift_id}`
         )
         .then((response) => {
           this.shift = response.data;
@@ -199,7 +199,7 @@ export default {
 
     async getStatuses() {
       await axios
-        .get("http://localhost/api/statuses/get.php")
+        .get("http://jenya2ay.beget.tech/statuses/get.php")
         .then((response) => {
           this.statuses = response.data;
           this.statuses.unshift({ id: -1, name: "+ Добавить" });
@@ -213,7 +213,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -228,7 +228,7 @@ export default {
     async getClosed() {
       await axios
         .get(
-          `http://localhost/api/months/get.php?department_id=${
+          `http://jenya2ay.beget.tech/months/get.php?department_id=${
             this.user.department_id
           }&year=${this.$route.params.year}&month=${
             +this.$route.params.month + 1
@@ -244,7 +244,7 @@ export default {
     async getEmployee() {
       await axios
         .get(
-          `http://localhost/api/employees/getOne.php?id=${this.$route.params.id}`
+          `http://jenya2ay.beget.tech/employees/getOne.php?id=${this.$route.params.id}`
         )
         .then((response) => {
           this.employee = response.data;
@@ -255,7 +255,7 @@ export default {
     async getPeriods() {
       await axios
         .get(
-          `http://localhost/api/periods/getOfMonth.php?id=${
+          `http://jenya2ay.beget.tech/periods/getOfMonth.php?id=${
             this.$route.params.id
           }&start=${this.normalizeNum(
             this.$route.params.year
@@ -287,7 +287,7 @@ export default {
       } else {
         await axios
           .get(
-            `http://localhost/api/periods/add.php?employee_id=${
+            `http://jenya2ay.beget.tech/periods/add.php?employee_id=${
               this.employee.id
             }&status_id=${this.status_id}&start=${this.start}&end=${
               this.hourly == 1 ? this.start : this.end
@@ -314,7 +314,7 @@ export default {
         this.newStatus.hourly = this.newStatus.hourly ? 1 : 0;
         await axios
           .get(
-            `http://localhost/api/statuses/add.php?name=${this.newStatus.name}&short_name=${this.newStatus.short_name}&hourly=${this.newStatus.hourly}`
+            `http://jenya2ay.beget.tech/statuses/add.php?name=${this.newStatus.name}&short_name=${this.newStatus.short_name}&hourly=${this.newStatus.hourly}`
           )
           .then(() => {
             this.getStatuses();
@@ -332,7 +332,7 @@ export default {
       } else {
         await axios
           .get(
-            `http://localhost/api/employees/updateShift.php?id=${this.employee.id}&shift_id=${this.shift_id}`
+            `http://jenya2ay.beget.tech/employees/updateShift.php?id=${this.employee.id}&shift_id=${this.shift_id}`
           )
           .then(() => {
             this.getEmployee().then(() => {
@@ -355,7 +355,7 @@ export default {
             {
               id: "delete",
               delete: true,
-              request: `http://localhost/api/periods/delete.php?id=${period.id}`,
+              request: `http://jenya2ay.beget.tech/periods/delete.php?id=${period.id}`,
             },
             { id: "start", name: period.start.split("-").reverse().join(".") },
             { id: "end", name: period.end.split("-").reverse().join(".") },

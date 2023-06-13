@@ -74,7 +74,7 @@ export default {
     async getUser() {
       await axios
         .get(
-          `http://localhost/api/employees/getUser.php?token=${localStorage.getItem(
+          `http://jenya2ay.beget.tech/employees/getUser.php?token=${localStorage.getItem(
             "token"
           )}`
         )
@@ -89,7 +89,7 @@ export default {
     async getClosed() {
       await axios
         .get(
-          `http://localhost/api/months/get.php?department_id=${
+          `http://jenya2ay.beget.tech/months/get.php?department_id=${
             this.user.department_id
           }&year=${this.$route.params.year}&month=${
             +this.$route.params.month + 1
@@ -106,7 +106,7 @@ export default {
     async getShifts() {
       await axios
         .get(
-          `http://localhost/api/shifts/getOfDepartment.php?id=${this.user.department_id}`
+          `http://jenya2ay.beget.tech/shifts/getOfDepartment.php?id=${this.user.department_id}`
         )
         .then((response) => {
           this.shifts = response.data;
@@ -124,7 +124,7 @@ export default {
     async getDates(id, index) {
       await axios
         .get(
-          `http://localhost/api/dates/getOfMonth.php?id=${id}&start=${this.normalizeNum(
+          `http://jenya2ay.beget.tech/dates/getOfMonth.php?id=${id}&start=${this.normalizeNum(
             this.$route.params.year
           )}-${this.normalizeNum(
             +this.$route.params.month + 1
@@ -172,7 +172,7 @@ export default {
         {
           id: "delete",
           delete: true,
-          request: `http://localhost/api/shifts/delete.php?id=${shift.id}`,
+          request: `http://jenya2ay.beget.tech/shifts/delete.php?id=${shift.id}`,
         },
       ];
 
@@ -196,7 +196,7 @@ export default {
               ],
               date: true,
               closed: this.closed,
-              request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
+              request: `http://jenya2ay.beget.tech/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
             });
             flag = true;
             break;
@@ -208,7 +208,7 @@ export default {
             name: [0, 0, false],
             date: true,
             closed: this.closed,
-            request: `http://localhost/api/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
+            request: `http://jenya2ay.beget.tech/dates/add.php?date=${date_string}&shift_id=${shift.id}`,
           });
         }
         newDate = new Date(
@@ -234,7 +234,7 @@ export default {
       } else {
         await axios
           .get(
-            `http://localhost/api/shifts/add.php?name=${this.name}&department_id=${department_id}`
+            `http://jenya2ay.beget.tech/shifts/add.php?name=${this.name}&department_id=${department_id}`
           )
           .then(() => {
             this.update();

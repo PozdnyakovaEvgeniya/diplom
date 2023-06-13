@@ -293,15 +293,7 @@ export default {
               this.hourly == 1 ? this.start : this.end
             }&hours=${this.hourly == 1 ? this.hours : null}&shift_id=${
               this.employee.shift_id
-            }`,
-            {
-              employee_id: this.employee.id,
-              status_id: this.status_id,
-              start: this.start,
-              end: this.hourly == 1 ? this.start : this.end,
-              hours: this.hours,
-              shift_id: this.employee.shift_id,
-            }
+            }`
           )
           .then(() => {
             this.update();
@@ -321,7 +313,9 @@ export default {
       } else {
         this.newStatus.hourly = this.newStatus.hourly ? 1 : 0;
         await axios
-          .post("http://localhost/api/statuses/add.php", this.newStatus)
+          .get(
+            `http://localhost/api/statuses/add.php?name=${this.newStatus.name}&short_name=${this.newStatus.short_name}&hourly=${this.newStatus.hourly}`
+          )
           .then(() => {
             this.getStatuses();
             this.closeAddStatus();

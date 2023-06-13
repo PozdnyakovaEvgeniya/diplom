@@ -7,11 +7,9 @@
 	$db = $database->getConnection();
 
     $status = new Status($db);
-
-    $data = json_decode(file_get_contents("php://input"));
-    $status->name = $data->name;
-    $status->short_name = $data->short_name;
-    $status->hourly = $data->hourly;
+    $status->name = $_GET['name'];
+    $status->short_name = $_GET['short_name'];
+    $status->hourly = $_GET['hourly'];
 
     $status->add();
     http_response_code(200);   

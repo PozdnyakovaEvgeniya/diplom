@@ -8,16 +8,9 @@
 
     $shift = new Shift($db);
 
-    $data = json_decode(file_get_contents("php://input"));
-
-    $shift->name = $data->name;
-    $shift->department_id = $data->department_id;
+    $shift->name = $_GET['name'];
+    $shift->department_id = $_GET['department_id'];
 
     $shift->add();
-
-	if ($shift->add()) {
-        http_response_code(200);
-    } else {
-        http_response_code(400);
-    };
+    http_response_code(200);
 ?>

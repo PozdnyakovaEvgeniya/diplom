@@ -5,7 +5,7 @@
         <h4>Добавить смену</h4>
         <div class="error">{{ error }}</div>
         <div class="form-field">
-          <span>Название</span>
+          <span>Наименование</span>
           <input type="text" v-model="name" />
         </div>
         <div class="form-button">
@@ -229,18 +229,21 @@ export default {
     },
 
     async addShift(department_id) {
-      await axios
-        .post("http://localhost/api/shifts/add.php", {
-          name: this.name,
-          department_id,
-        })
-        .then(() => {
-          this.update();
-          this.closeAdd();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (this.name == "") {
+        this.error = 'Поле "Наименование" не может быть пустым';
+      } else {
+        await axios
+          .get(
+            `http://localhost/api/shifts/add.php?name=${this.name}&department_id=${department_id}`
+          )
+          .then(() => {
+            this.update();
+            this.closeAdd();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
 
     logout() {
@@ -254,6 +257,7 @@ export default {
 
     closeAdd() {
       this.name = "";
+      this.error = "";
       this.modalAdd = false;
     },
 

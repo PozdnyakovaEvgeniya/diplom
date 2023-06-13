@@ -286,14 +286,23 @@ export default {
         this.error = 'Поле "Количество часов" не может быть пустым';
       } else {
         await axios
-          .post("http://localhost/api/periods/add.php", {
-            employee_id: this.employee.id,
-            status_id: this.status_id,
-            start: this.start,
-            end: this.hourly == 1 ? this.start : this.end,
-            hours: this.hourly == 1 ? this.hours : null,
-            shift_id: this.employee.shift_id,
-          })
+          .get(
+            `http://localhost/api/periods/add.php?employee_id=${
+              this.employee.id
+            }&status_id=${this.status_id}&start=${this.start}&end=${
+              this.hourly == 1 ? this.start : this.end
+            }&hours=${this.hourly == 1 ? this.hours : null}&shift_id=${
+              this.employee.shift_id
+            }`,
+            {
+              employee_id: this.employee.id,
+              status_id: this.status_id,
+              start: this.start,
+              end: this.hourly == 1 ? this.start : this.end,
+              hours: this.hours,
+              shift_id: this.employee.shift_id,
+            }
+          )
           .then(() => {
             this.update();
             this.closeAdd();

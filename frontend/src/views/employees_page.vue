@@ -352,8 +352,7 @@ export default {
       } else {
         await axios
           .get(
-            `http://localhost/api/employees/update.php?id=${this.employee.id}&number=${this.employee.number}&surname=${this.employee.surname}&name=${this.employee.name}&patronymic=${this.employee.patronymic}&job_title=${this.employee.job_title}&department_id=${this.employee.department_id}&shift_id=${this.employee.shift_id}&status=${this.employee.status}&password=${this.employee.password}&`,
-            this.employee
+            `http://localhost/api/employees/update.php?id=${this.employee.id}&number=${this.employee.number}&surname=${this.employee.surname}&name=${this.employee.name}&patronymic=${this.employee.patronymic}&job_title=${this.employee.job_title}&department_id=${this.employee.department_id}&shift_id=${this.employee.shift_id}&status=${this.employee.status}&password=${this.employee.password}`
           )
           .then(() => {
             this.update();

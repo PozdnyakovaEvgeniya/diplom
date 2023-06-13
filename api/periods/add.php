@@ -9,13 +9,11 @@
 
     $period = new Period($db);
 
-    $data = json_decode(file_get_contents("php://input"));
-
-    $period->status_id = $data->status_id;
-    $period->employee_id = $data->employee_id;
-    $period->start = $data->start;
-    $period->end = $data->end;
-    $period->hours = $data->hours;
+    $period->status_id = $_GET['status_id'];
+    $period->employee_id = $_GET['employee_id'];
+    $period->start = $_GET['start'];
+    $period->end = $_GET['end'];
+    $period->hours = $_GET['hours'] == "null" ? NULL : $_GET['hours'];
     
     $period->add();
 

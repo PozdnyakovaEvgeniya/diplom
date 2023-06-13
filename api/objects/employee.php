@@ -32,6 +32,7 @@
       $this->shift_id = htmlspecialchars(strip_tags($this->shift_id));
       
       $this->password = empty($this->password) ? NULL : password_hash($this->password, PASSWORD_BCRYPT);
+      print_r($this);
       
       $query = "INSERT INTO `employees`(`number`, `surname`, `name`, `patronymic`, `job_title`, `department_id`, `shift_id`, `status`, `password`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
       $stmt = $this->conn->prepare($query);

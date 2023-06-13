@@ -22,7 +22,8 @@
       $this->employee_id = htmlspecialchars(strip_tags($this->employee_id));
       $this->start = htmlspecialchars(strip_tags($this->start));
       $this->end = htmlspecialchars(strip_tags($this->end));
-      $this->hours = $this->hours ? htmlspecialchars(strip_tags($this->hours)) : NULL;
+      
+      $this->hours = empty($this->hours) ? NULL : htmlspecialchars(strip_tags($this->hours));
       
       $query = "INSERT INTO `periods`(`status_id`, `employee_id`, `start`, `end`, `hours`) VALUES (?, ?, ?, ?, ?)";
       $stmt = $this->conn->prepare($query);
